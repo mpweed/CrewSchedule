@@ -131,27 +131,6 @@
     <Reference Include="Microsoft.AspNet.TelemetryCorrelation">
       <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.0\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ApplicationInsights">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.2.5.1\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AI.Agent.Intercept">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AI.DependencyCollector">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.5.1\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AI.PerfCounterCollector">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.5.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AI.ServerTelemetryChannel">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.5.1\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AI.WindowsServer">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.5.1\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AI.Web">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.5.1\lib\net45\Microsoft.AI.Web.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -162,36 +141,72 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MobileController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
-    <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="components\desktop\cs-desktop-shell.js" />
+    <Content Include="components\mobile\cs-mobile-shell.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\dist\compiled\bower_components\shadycss\apply-shim.html" />
+    <Content Include="components\shared\external\%40polymer\polymer\dist\compiled\bower_components\shadycss\custom-style-interface.html" />
+    <Content Include="components\shared\external\%40polymer\polymer\dist\compiled\index.html" />
+    <Content Include="components\shared\external\%40polymer\polymer\dist\compiled\polymer.html" />
+    <Content Include="components\shared\external\%40polymer\polymer\externs\closure-types.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\externs\polymer-externs.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\externs\polymer-internal-shared-types.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\externs\polymer-internal-types.html" />
+    <Content Include="components\shared\external\%40polymer\polymer\externs\webcomponents-externs.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\gulpfile.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\index.html" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\elements\array-selector.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\elements\custom-style.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\elements\dom-bind.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\elements\dom-if.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\elements\dom-module.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\elements\dom-repeat.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\legacy\class.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\legacy\legacy-element-mixin.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\legacy\mutable-data-behavior.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\legacy\polymer-fn.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\legacy\polymer.dom.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\legacy\templatizer-behavior.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\mixins\dir-mixin.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\mixins\disable-upgrade-mixin.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\mixins\element-mixin.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\mixins\gesture-event-listeners.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\mixins\mutable-data.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\mixins\properties-changed.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\mixins\properties-mixin.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\mixins\property-accessors.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\mixins\property-effects.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\mixins\strict-binding-parser.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\mixins\template-stamp.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\array-splice.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\async.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\boot.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\case-map.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\debounce.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\flattened-nodes-observer.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\flush.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\gestures.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\html-tag.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\mixin.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\path.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\render-status.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\resolve-url.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\settings.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\style-gather.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\templatize.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\lib\utils\unresolved.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\LICENSE.txt" />
+    <Content Include="components\shared\external\%40polymer\polymer\polymer-element.js" />
+    <Content Include="components\shared\external\%40polymer\polymer\polymer-legacy.js" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="Scripts\jquery-3.3.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.3.1.js" />
-    <Content Include="Scripts\jquery-3.3.1.min.js" />
-    <Content Include="Scripts\jquery-3.3.1.slim.js" />
-    <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="images\JICLogo.png" />
+    <Content Include="style.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -203,26 +218,32 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="components\desktop\views\sections\regions\" />
+    <Folder Include="components\mobile\views\sections\regions\" />
+    <Folder Include="components\shared\controls\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="components\shared\external\%40polymer\polymer\.eslintrc.json" />
+    <Content Include="components\shared\external\%40polymer\polymer\.gitattributes" />
+    <Content Include="components\shared\external\%40polymer\polymer\.github\CODEOWNERS" />
+    <Content Include="components\shared\external\%40polymer\polymer\.github\ISSUE_TEMPLATE.md" />
+    <Content Include="components\shared\external\%40polymer\polymer\.github\PULL_REQUEST_TEMPLATE.md" />
+    <Content Include="components\shared\external\%40polymer\polymer\.travis.yml" />
+    <Content Include="components\shared\external\%40polymer\polymer\.vscode\launch.json" />
+    <Content Include="components\shared\external\%40polymer\polymer\CHANGELOG.md" />
+    <Content Include="components\shared\external\%40polymer\polymer\CONTRIBUTING.md" />
+    <Content Include="components\shared\external\%40polymer\polymer\gen-tsd.json" />
+    <Content Include="components\shared\external\%40polymer\polymer\manifest.json" />
+    <Content Include="components\shared\external\%40polymer\polymer\package.json" />
+    <Content Include="components\shared\external\%40polymer\polymer\README.md" />
+    <Content Include="components\shared\external\%40polymer\polymer\wct.conf.json" />
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <Content Include="Views\Mobile\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

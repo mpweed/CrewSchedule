@@ -1,0 +1,72 @@
+﻿body {
+    font-family: 'Roboto', 'Noto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    line-height: 1.5;
+    background-color: #212121;
+    color: #ffffff;
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+::-ms-clear {
+    display: none;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #616161;
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #424242;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #757575;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: #424242;
+}
+
+.frownFace {    
+    text-align: center;
+    font-size: 120px;    
+    color: #ffd800;
+}
+
+.oldBrowserMessage {
+    text-align: center;
+    font-size: 20px;
+    color: #ff0000
+}
+
+.dialogButtons {
+    margin-top: 20px;
+}
+
+.saveButton {
+    --jic-button-color: var(--paper-pink-400);
+    --jic-button-focus-color: var(--paper-pink-300);
+    --jic-button-hover-color: var(--paper-pink-300);
+    --jic-button-active-color: var(--paper-pink-600);
+}
+
+.cancelButton {
+    margin-left: 10px;
+}
+

@@ -2,7 +2,7 @@
 
 namespace CrewSchedule.Controllers
 {
-    public class HomeController : Controller
+    public class MobileController : Controller
     {
         public ActionResult Index()
         {
