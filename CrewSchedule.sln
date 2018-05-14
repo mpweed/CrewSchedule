@@ -5,6 +5,13 @@ VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrewSchedule", "CrewSchedule\CrewSchedule.csproj", "{BF5C54A6-07EE-442E-AD82-F2828C52CB8C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Design Assets", "Design Assets", "{DC5DEC3A-A63E-4981-A807-8DF09D38C93B}"
+	ProjectSection(SolutionItems) = preProject
+		ScratchPad.html = ScratchPad.html
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database Backup", "Database Backup", "{719D5A96-899A-4787-A02F-413E861A4ACF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

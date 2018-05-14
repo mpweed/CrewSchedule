@@ -1,0 +1,76 @@
+{
+  "_from": "@polymer/paper-tooltip",
+  "_id": "@polymer/paper-tooltip@3.0.0-pre.19",
+  "_inBundle": false,
+  "_integrity": "sha512-RGIMurBOkTdD394UilrvJHfr8vIKZxA8QWCKoCSNypDThKOtdqHbGzwgdcWr33XY1lO0JyK51PrCWSmmWYzP2Q==",
+  "_location": "/@polymer/paper-tooltip",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@polymer/paper-tooltip",
+    "name": "@polymer/paper-tooltip",
+    "escapedName": "@polymer%2fpaper-tooltip",
+    "scope": "@polymer",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@polymer/paper-tooltip/-/paper-tooltip-3.0.0-pre.19.tgz",
+  "_shasum": "c69af83392bbee30da74bd138782fdbabdb8dbd3",
+  "_spec": "@polymer/paper-tooltip",
+  "_where": "C:\\Users\\e90168\\Downloads\\Polymer3\\node_modules",
+  "author": {
+    "name": "The Polymer Authors"
+  },
+  "bugs": {
+    "url": "https://github.com/PolymerElements/paper-tooltip/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "@polymer/paper-styles": "^3.0.0-pre.19",
+    "@polymer/polymer": "^3.0.0"
+  },
+  "deprecated": false,
+  "description": "Material design tooltip popup for content",
+  "devDependencies": {
+    "@polymer/gen-typescript-declarations": "^1.2.0",
+    "@polymer/iron-component-page": "^3.0.0-pre.19",
+    "@polymer/iron-demo-helpers": "^3.0.0-pre.19",
+    "@polymer/iron-test-helpers": "^3.0.0-pre.19",
+    "@polymer/paper-icon-button": "^3.0.0-pre.19",
+    "@webcomponents/webcomponentsjs": "^2.0.0",
+    "bower": "^1.8.0",
+    "wct-browser-legacy": "^0.0.1-pre.11",
+    "webmat": "^0.2.0"
+  },
+  "homepage": "https://github.com/PolymerElements/paper-tooltip",
+  "keywords": [
+    "web-components",
+    "polymer",
+    "tooltip"
+  ],
+  "license": "BSD-3-Clause",
+  "main": "paper-tooltip.js",
+  "name": "@polymer/paper-tooltip",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/paper-tooltip.git"
+  },
+  "resolutions": {
+    "inherits": "2.0.3",
+    "samsam": "1.1.3",
+    "supports-color": "3.1.2",
+    "type-detect": "1.0.0",
+    "@webcomponents/webcomponentsjs": "2.0.0-beta.2"
+  },
+  "scripts": {
+    "format": "webmat && npm run update-types",
+    "update-types": "bower install && gen-typescript-declarations --deleteExisting --outDir ."
+  },
+  "version": "3.0.0-pre.19"
+}

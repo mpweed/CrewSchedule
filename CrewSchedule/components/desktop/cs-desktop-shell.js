@@ -1,18 +1,17 @@
 ﻿import { PolymerElement, html } from '../shared/external/@polymer/polymer/polymer-element.js';
-
-class CsDesktopShell extends PolymerElement {    
+import { GestureEventListeners } from '../shared/external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
+import '../shared/cs-shared-styles.js';
+class CsDesktopShell extends GestureEventListeners(PolymerElement) {    
     static get template() {
         return html`
             <style>
                 /* CSS rules for your element */
             </style>
-
-            <!-- shadow DOM for your element -->
-
-            <div>[[greeting]]</div> <!-- data bindings in shadow DOM -->
+            <cs-timeline></cs-timeline>
             `;
     }
-    
+
+    // Public Properties
     static get properties() {
         return {
             greeting: {
@@ -21,15 +20,13 @@ class CsDesktopShell extends PolymerElement {
         }
     }
 
-    constructor() {
-        super();
-        this.greeting = 'Hello Desktop!';
+    // Lifecycle Callbacks
+    connectedCallback() {
+        super.connectedCallback();
+        this.greeting = "Hello Desktop";
     }
 
-    // Add methods to the element's public API
-    greetMe() {
-        console.log(this.greeting);
-    }
+    // Event Handlers
 
 }
 customElements.define('cs-desktop-shell', CsDesktopShell);
