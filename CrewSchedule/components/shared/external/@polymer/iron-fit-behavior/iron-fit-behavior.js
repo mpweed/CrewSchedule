@@ -7,9 +7,9 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
-import '@polymer/polymer/polymer-legacy.js';
+import '../../@polymer/polymer/polymer-legacy.js';
 
-import { dom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
+import { dom } from '../../@polymer/polymer/lib/legacy/polymer.dom.js';
 
 /**
   `Polymer.IronFitBehavior` fits an element in another element using `max-height`

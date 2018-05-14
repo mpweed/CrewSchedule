@@ -1,5 +1,5 @@
 import '../../@polymer/polymer/polymer-legacy.js';
-import '../../@polymer/iron-flex-layout/iron-flex-layout.js';
+import '../iron-flex-layout/iron-flex-layout.js';
 import './color.js';
 import './typography.js';
 import './shadow.js';

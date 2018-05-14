@@ -28,16 +28,16 @@ style this element.
   from HTML and may be out of place here. Review them and
   then delete this comment!
 */
-import '@polymer/polymer/polymer-legacy.js';
+import '../../@polymer/polymer/polymer-legacy.js';
 
-import '@polymer/iron-autogrow-textarea/iron-autogrow-textarea.js';
-import { IronFormElementBehavior } from '@polymer/iron-form-element-behavior/iron-form-element-behavior.js';
+import '../iron-autogrow-textarea/iron-autogrow-textarea.js';
+import { IronFormElementBehavior } from '../iron-form-element-behavior/iron-form-element-behavior.js';
 import { PaperInputBehavior } from './paper-input-behavior.js';
 import './paper-input-char-counter.js';
 import './paper-input-container.js';
 import './paper-input-error.js';
-import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
+import { html } from '../../@polymer/polymer/lib/utils/html-tag.js';
 Polymer({
   _template: html`
     <style>

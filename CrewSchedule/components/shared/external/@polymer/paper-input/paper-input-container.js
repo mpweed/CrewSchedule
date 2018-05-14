@@ -114,15 +114,15 @@ This element is `display:block` by default, but you can set the `inline` attribu
   from HTML and may be out of place here. Review them and
   then delete this comment!
 */
-import '@polymer/polymer/polymer-legacy.js';
+import '../../@polymer/polymer/polymer-legacy.js';
 
-import '@polymer/iron-flex-layout/iron-flex-layout.js';
-import '@polymer/paper-styles/default-theme.js';
-import '@polymer/paper-styles/typography.js';
-import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { dashToCamelCase } from '@polymer/polymer/lib/utils/case-map.js';
-import { dom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
+import '../iron-flex-layout/iron-flex-layout.js';
+import '../paper-styles/default-theme.js';
+import '../paper-styles/typography.js';
+import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
+import { html } from '../../@polymer/polymer/lib/utils/html-tag.js';
+import { dashToCamelCase } from '../../@polymer/polymer/lib/utils/case-map.js';
+import { dom } from '../../@polymer/polymer/lib/legacy/polymer.dom.js';
 const $_documentContainer = document.createElement('template');
 $_documentContainer.setAttribute('style', 'display: none;');
 

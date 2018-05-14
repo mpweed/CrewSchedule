@@ -83,8 +83,8 @@ Custom property | Description | Default
 */
 import { Base } from '../../@polymer/polymer/polymer-legacy.js';
 
-import '../../@polymer/iron-meta/iron-meta.js';
-import '../../@polymer/iron-flex-layout/iron-flex-layout.js';
+import '../iron-meta/iron-meta.js';
+import '../iron-flex-layout/iron-flex-layout.js';
 import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
 import { html } from '../../@polymer/polymer/lib/utils/html-tag.js';
 import { dom } from '../../@polymer/polymer/lib/legacy/polymer.dom.js';

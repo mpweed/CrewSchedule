@@ -6,33 +6,114 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         return html`
             <style include="iron-flex iron-flex-alignment">
                 .timelineContainer {
-                    height: 300px;
                     width: 600px;
+                    height: 300px;                    
+                }
+
+                .dayContainer {
+                    width: 34px;
+                    height: 600px;
+                }
+
+                .monthHeader {
+                    border: 1px solid var(--paper-red-600);
+                    border-right: 1px solid var(--paper-grey-800);
+                    background-color: var(--paper-red-600);
                 }
 
                 .dayHeader {
-                    border: 1px solid var(--paper-grey-600);
+                    width: 34px;
+                    border-right: 1px solid var(--paper-grey-800);
+                    border-bottom: 1px solid var(--paper-grey-600);
+                    text-align: center;
+                    font-size: .8em;
                 }
 
                 .day {
-                    border: 1px solid var(--paper-grey-600);
-                    background-color: var(--paper-grey-600);
+                    width: 34px;                    
+                    border-right: 1px solid var(--paper-grey-800);
                 }
         
                 .weekend {
-                    border: 1px solid var(--paper-grey-600);
-                    background-color: var(--paper-grey-700);
-                }
+                    background-color: var(--paper-grey-800);
+                }                
             </style>
-            <div class="timelineContainer>
-                <div class="vertical layout flex">
+            
+            <div class="horizontal layout">
+                <div class="vertical layout dayContainer">
                     <div class="dayHeader">
+                        <div class="monthHeader">MAY</div>
                         <div>Mon</div>
                         <div>14</div>
                     </div>
-                    <div class="day flex"></div>
+                    <div class="flex day"></div>
+                </div>
+                <div class="vertical layout dayContainer">
+                    <div class="dayHeader">
+                        <div class="monthHeader">MAY</div>
+                        <div>Tue</div>
+                        <div>15</div>
+                    </div>
+                    <div class="flex day"></div>
+                </div>
+                <div class="vertical layout dayContainer">
+                    <div class="dayHeader">
+                        <div class="monthHeader">MAY</div>
+                        <div>Wed</div>
+                        <div>16</div>
+                    </div>
+                    <div class="flex day"></div>
+                </div>
+                <div class="vertical layout dayContainer">
+                    <div class="dayHeader">
+                        <div class="monthHeader">MAY</div>
+                        <div>Thu</div>
+                        <div>17</div>
+                    </div>
+                    <div class="flex day"></div>
+                </div>
+                <div class="vertical layout dayContainer">
+                    <div class="dayHeader">
+                        <div class="monthHeader">MAY</div>
+                        <div>Fri</div>
+                        <div>18</div>
+                    </div>
+                    <div class="flex day"></div>
+                </div>
+                <div class="vertical layout dayContainer">
+                    <div class="dayHeader weekend">
+                        <div class="monthHeader">MAY</div>
+                        <div>Sat</div>
+                        <div>19</div>
+                    </div>
+                    <div class="flex day weekend"></div>
+                </div>
+                <div class="vertical layout dayContainer">
+                    <div class="dayHeader weekend">
+                        <div class="monthHeader">MAY</div>
+                        <div>Sun</div>
+                        <div>20</div>
+                    </div>
+                    <div class="flex day weekend"></div>
+                </div>
+                <div class="vertical layout dayContainer">
+                    <div class="dayHeader">
+                        <div class="monthHeader">MAY</div>
+                        <div>Mon</div>
+                        <div>21</div>
+                    </div>
+                    <div class="flex day"></div>
+                </div>
+                <div class="vertical layout dayContainer">
+                    <div class="dayHeader">
+                        <div class="monthHeader">MAY</div>
+                        <div>Tue</div>
+                        <div>22</div>
+                    </div>
+                    <div class="flex day"></div>
                 </div>
             </div>
+
             `;
     }
 

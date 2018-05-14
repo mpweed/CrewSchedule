@@ -26,7 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 import '../../@polymer/polymer/polymer-legacy.js';
 
-import { IronResizableBehavior } from '../../@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
+import { IronResizableBehavior } from '../iron-resizable-behavior/iron-resizable-behavior.js';
 import { NeonAnimatableBehavior } from './neon-animatable-behavior.js';
 import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
 import { html } from '../../@polymer/polymer/lib/utils/html-tag.js';

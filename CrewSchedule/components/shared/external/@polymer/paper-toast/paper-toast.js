@@ -62,12 +62,12 @@ In order to apply the `Roboto` font to this element, make sure you've imported `
   from HTML and may be out of place here. Review them and
   then delete this comment!
 */
-import { Base } from '@polymer/polymer/polymer-legacy.js';
+import { Base } from '../../@polymer/polymer/polymer-legacy.js';
 
-import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
-import { IronOverlayBehavior, IronOverlayBehaviorImpl } from '@polymer/iron-overlay-behavior/iron-overlay-behavior.js';
-import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import { IronA11yAnnouncer } from '../iron-a11y-announcer/iron-a11y-announcer.js';
+import { IronOverlayBehavior, IronOverlayBehaviorImpl } from '../iron-overlay-behavior/iron-overlay-behavior.js';
+import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
+import { html } from '../../@polymer/polymer/lib/utils/html-tag.js';
 
 // Keeps track of the toast currently opened.
 var currentToast = null;

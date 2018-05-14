@@ -37,8 +37,8 @@ Example:
 */
 import '../../@polymer/polymer/polymer-legacy.js';
 
-import { IronResizableBehavior } from '../../@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { IronSelectableBehavior } from '../../@polymer/iron-selector/iron-selectable.js';
+import { IronResizableBehavior } from '../iron-resizable-behavior/iron-resizable-behavior.js';
+import { IronSelectableBehavior } from '../iron-selector/iron-selectable.js';
 import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
 import { html } from '../../@polymer/polymer/lib/utils/html-tag.js';
 Polymer({

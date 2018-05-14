@@ -72,17 +72,17 @@ Custom property | Description | Default
   from HTML and may be out of place here. Review them and
   then delete this comment!
 */
-import '@polymer/polymer/polymer-legacy.js';
+import '../../@polymer/polymer/polymer-legacy.js';
 
-import { IronFormElementBehavior } from '@polymer/iron-form-element-behavior/iron-form-element-behavior.js';
-import '@polymer/iron-input/iron-input.js';
+import { IronFormElementBehavior } from '../iron-form-element-behavior/iron-form-element-behavior.js';
+import '../iron-input/iron-input.js';
 import { PaperInputBehavior } from './paper-input-behavior.js';
 import './paper-input-char-counter.js';
 import './paper-input-container.js';
 import './paper-input-error.js';
-import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-import { DomModule } from '@polymer/polymer/lib/elements/dom-module.js';
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
+import { DomModule } from '../../@polymer/polymer/lib/elements/dom-module.js';
+import { PolymerElement } from '../../@polymer/polymer/polymer-element.js';
 const $_documentContainer = document.createElement('template');
 $_documentContainer.setAttribute('style', 'display: none;');
 

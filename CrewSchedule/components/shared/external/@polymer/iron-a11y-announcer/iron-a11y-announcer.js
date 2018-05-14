@@ -45,10 +45,10 @@ Note: announcements are only audible if you have a screen reader enabled.
   from HTML and may be out of place here. Review them and
   then delete this comment!
 */
-import '@polymer/polymer/polymer-legacy.js';
+import '../../@polymer/polymer/polymer-legacy.js';
 
-import { Polymer as Polymer$0 } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import { Polymer as Polymer$0 } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
+import { html } from '../../@polymer/polymer/lib/utils/html-tag.js';
 
 export const IronA11yAnnouncer = Polymer$0({
   _template: html`

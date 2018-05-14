@@ -7,12 +7,12 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
-import '@polymer/polymer/polymer-legacy.js';
+import '../../@polymer/polymer/polymer-legacy.js';
 
-import { IronA11yKeysBehavior } from '@polymer/iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
+import { IronA11yKeysBehavior } from '../iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
 import './iron-overlay-backdrop.js';
-import * as gestures from '@polymer/polymer/lib/utils/gestures.js';
-import { dom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
+import * as gestures from '../../@polymer/polymer/lib/utils/gestures.js';
+import { dom } from '../../@polymer/polymer/lib/legacy/polymer.dom.js';
 
 /**
  * @struct

@@ -1,4 +1,4 @@
-import '../../@polymer/polymer/polymer-legacy.js';
+import '../../../@polymer/polymer/polymer-legacy.js';
 import '../shadow.js';
 const $_documentContainer = document.createElement('template');
 $_documentContainer.setAttribute('style', 'display: none;');

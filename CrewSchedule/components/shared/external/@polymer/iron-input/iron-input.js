@@ -89,13 +89,13 @@ is separate from validation, and `allowed-pattern` does not affect how the input
   from HTML and may be out of place here. Review them and
   then delete this comment!
 */
-import '@polymer/polymer/polymer-legacy.js';
+import '../../@polymer/polymer/polymer-legacy.js';
 
-import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
-import { IronValidatableBehavior } from '@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
-import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { dom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
+import { IronA11yAnnouncer } from '../iron-a11y-announcer/iron-a11y-announcer.js';
+import { IronValidatableBehavior } from '../iron-validatable-behavior/iron-validatable-behavior.js';
+import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
+import { html } from '../../@polymer/polymer/lib/utils/html-tag.js';
+import { dom } from '../../@polymer/polymer/lib/legacy/polymer.dom.js';
 Polymer({
   _template: html`
     <style>

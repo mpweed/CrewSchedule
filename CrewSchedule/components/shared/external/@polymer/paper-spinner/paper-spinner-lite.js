@@ -44,12 +44,12 @@ Custom property | Description | Default
   from HTML and may be out of place here. Review them and
   then delete this comment!
 */
-import '@polymer/polymer/polymer-legacy.js';
+import '../../@polymer/polymer/polymer-legacy.js';
 
-import '@polymer/paper-styles/color.js';
+import '../paper-styles/color.js';
 import { PaperSpinnerBehavior } from './paper-spinner-behavior.js';
 import './paper-spinner-styles.js';
-import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
+import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
 const $_documentContainer = document.createElement('template');
 $_documentContainer.setAttribute('style', 'display: none;');
 

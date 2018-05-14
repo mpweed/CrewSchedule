@@ -1,5 +1,5 @@
 import '../../@polymer/polymer/polymer-legacy.js';
-import '../../@polymer/font-roboto/roboto.js';
+import '../font-roboto/roboto.js';
 const $_documentContainer = document.createElement('template');
 $_documentContainer.setAttribute('style', 'display: none;');
 

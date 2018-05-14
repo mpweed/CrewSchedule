@@ -36,7 +36,7 @@ element.
   from HTML and may be out of place here. Review them and
   then delete this comment!
 */
-import { Base } from '../../../../@polymer/polymer/polymer-legacy.js';
+import { Base } from '../../@polymer/polymer/polymer-legacy.js';
 
 import './iron-request.js';
 import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';

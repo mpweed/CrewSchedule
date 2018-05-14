@@ -1,4 +1,4 @@
-import '../../@polymer/polymer/polymer-legacy.js';
+import '../../../@polymer/polymer/polymer-legacy.js';
 import '../color.js';
 import '../default-theme.js';
 import '../typography.js';

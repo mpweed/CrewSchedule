@@ -69,9 +69,9 @@ Custom property | Description | Default
 */
 import '../../@polymer/polymer/polymer-legacy.js';
 
-import '../../@polymer/iron-icon/iron-icon.js';
-import { PaperInkyFocusBehavior } from '../../@polymer/paper-behaviors/paper-inky-focus-behavior.js';
-import '../../@polymer/paper-styles/default-theme.js';
+import '../iron-icon/iron-icon.js';
+import { PaperInkyFocusBehavior } from '../paper-behaviors/paper-inky-focus-behavior.js';
+import '../paper-styles/default-theme.js';
 import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
 const $_documentContainer = document.createElement('template');
 $_documentContainer.setAttribute('style', 'display: none;');

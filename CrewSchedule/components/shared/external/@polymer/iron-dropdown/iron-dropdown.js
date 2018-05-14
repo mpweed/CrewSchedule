@@ -38,16 +38,16 @@ method is called on the element.
   from HTML and may be out of place here. Review them and
   then delete this comment!
 */
-import '@polymer/polymer/polymer-legacy.js';
+import '../../@polymer/polymer/polymer-legacy.js';
 
-import { IronControlState } from '@polymer/iron-behaviors/iron-control-state.js';
-import { IronOverlayBehavior, IronOverlayBehaviorImpl } from '@polymer/iron-overlay-behavior/iron-overlay-behavior.js';
-import { NeonAnimationRunnerBehavior } from '@polymer/neon-animation/neon-animation-runner-behavior.js';
+import { IronControlState } from '../iron-behaviors/iron-control-state.js';
+import { IronOverlayBehavior, IronOverlayBehaviorImpl } from '../iron-overlay-behavior/iron-overlay-behavior.js';
+import { NeonAnimationRunnerBehavior } from '../neon-animation/neon-animation-runner-behavior.js';
 import './iron-dropdown-scroll-manager.js';
-import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { IronA11yKeysBehavior } from '@polymer/iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
-import { dom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
+import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
+import { html } from '../../@polymer/polymer/lib/utils/html-tag.js';
+import { IronA11yKeysBehavior } from '../iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
+import { dom } from '../../@polymer/polymer/lib/legacy/polymer.dom.js';
 
 Polymer({
   _template: html`

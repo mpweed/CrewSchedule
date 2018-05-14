@@ -1,4 +1,4 @@
-import '@polymer/paper-styles/default-theme.js';
+import '../paper-styles/default-theme.js';
 const $_documentContainer = document.createElement('template');
 $_documentContainer.setAttribute('style', 'display: none;');
 

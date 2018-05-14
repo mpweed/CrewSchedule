@@ -9,7 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 import '../../@polymer/polymer/polymer-legacy.js';
 
-import { IronMeta } from '../../@polymer/iron-meta/iron-meta.js';
+import { IronMeta } from '../iron-meta/iron-meta.js';
 import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
 import { dom } from '../../@polymer/polymer/lib/legacy/polymer.dom.js';
 /**

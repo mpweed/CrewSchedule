@@ -85,23 +85,23 @@ To style it:
   from HTML and may be out of place here. Review them and
   then delete this comment!
 */
-import '@polymer/polymer/polymer-legacy.js';
+import '../../@polymer/polymer/polymer-legacy.js';
 
-import '@polymer/iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
-import { IronButtonState } from '@polymer/iron-behaviors/iron-button-state.js';
-import { IronControlState } from '@polymer/iron-behaviors/iron-control-state.js';
-import { IronFormElementBehavior } from '@polymer/iron-form-element-behavior/iron-form-element-behavior.js';
-import '@polymer/iron-icon/iron-icon.js';
-import { IronValidatableBehavior } from '@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
-import { PaperRippleBehavior } from '@polymer/paper-behaviors/paper-ripple-behavior.js';
-import '@polymer/paper-menu-button/paper-menu-button.js';
-import '@polymer/paper-styles/default-theme.js';
+import '../iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
+import { IronButtonState } from '../iron-behaviors/iron-button-state.js';
+import { IronControlState } from '../iron-behaviors/iron-control-state.js';
+import { IronFormElementBehavior } from '../iron-form-element-behavior/iron-form-element-behavior.js';
+import '../iron-icon/iron-icon.js';
+import { IronValidatableBehavior } from '../iron-validatable-behavior/iron-validatable-behavior.js';
+import { PaperRippleBehavior } from '../paper-behaviors/paper-ripple-behavior.js';
+import '../paper-menu-button/paper-menu-button.js';
+import '../paper-styles/default-theme.js';
 import './paper-dropdown-menu-icons.js';
 import './paper-dropdown-menu-shared-styles.js';
-import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { dom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
-import * as gestures from '@polymer/polymer/lib/utils/gestures.js';
+import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
+import { html } from '../../@polymer/polymer/lib/utils/html-tag.js';
+import { dom } from '../../@polymer/polymer/lib/legacy/polymer.dom.js';
+import * as gestures from '../../@polymer/polymer/lib/utils/gestures.js';
 Polymer({
   _template: html`
     <style include="paper-dropdown-menu-shared-styles">

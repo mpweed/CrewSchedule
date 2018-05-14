@@ -7,15 +7,15 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
-import '@polymer/polymer/polymer-legacy.js';
+import '../../@polymer/polymer/polymer-legacy.js';
 
-import { IronFitBehavior } from '@polymer/iron-fit-behavior/iron-fit-behavior.js';
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
+import { IronFitBehavior } from '../iron-fit-behavior/iron-fit-behavior.js';
+import { IronResizableBehavior } from '../iron-resizable-behavior/iron-resizable-behavior.js';
 import { IronOverlayManager } from './iron-overlay-manager.js';
 import { removeScrollLock, pushScrollLock } from './iron-scroll-manager.js';
 import { IronFocusablesHelper } from './iron-focusables-helper.js';
-import { dom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
-import { useShadow } from '@polymer/polymer/lib/utils/settings.js';
+import { dom } from '../../@polymer/polymer/lib/legacy/polymer.dom.js';
+import { useShadow } from '../../@polymer/polymer/lib/utils/settings.js';
 
 /** @polymerBehavior */
 export const IronOverlayBehaviorImpl = {

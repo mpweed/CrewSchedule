@@ -45,7 +45,7 @@ Custom property | Description | Default
 */
 import '../../@polymer/polymer/polymer-legacy.js';
 
-import { PaperRippleBehavior } from '../../@polymer/paper-behaviors/paper-ripple-behavior.js';
+import { PaperRippleBehavior } from '../paper-behaviors/paper-ripple-behavior.js';
 import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
 import { afterNextRender } from '../../@polymer/polymer/lib/utils/render-status.js';
 const $_documentContainer = document.createElement('template');

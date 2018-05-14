@@ -7,9 +7,9 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
-import '@polymer/polymer/polymer-legacy.js';
+import '../../@polymer/polymer/polymer-legacy.js';
 
-import { IronMeta } from '@polymer/iron-meta/iron-meta.js';
+import { IronMeta } from '../iron-meta/iron-meta.js';
 
 /**
  * Singleton IronMeta instance.

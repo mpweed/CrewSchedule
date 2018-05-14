@@ -81,9 +81,9 @@ Custom property | Description | Default
 */
 import '../../@polymer/polymer/polymer-legacy.js';
 
-import '../../@polymer/iron-flex-layout/iron-flex-layout.js';
-import { PaperButtonBehavior, PaperButtonBehaviorImpl } from '../../@polymer/paper-behaviors/paper-button-behavior.js';
-import '../../@polymer/paper-styles/element-styles/paper-material-styles.js';
+import '../iron-flex-layout/iron-flex-layout.js';
+import { PaperButtonBehavior, PaperButtonBehaviorImpl } from '../paper-behaviors/paper-button-behavior.js';
+import '../paper-styles/element-styles/paper-material-styles.js';
 import { Polymer } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
 const $_documentContainer = document.createElement('template');
 $_documentContainer.setAttribute('style', 'display: none;');

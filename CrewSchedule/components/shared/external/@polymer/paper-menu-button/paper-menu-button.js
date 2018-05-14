@@ -53,19 +53,19 @@ Custom property | Description | Default
   from HTML and may be out of place here. Review them and
   then delete this comment!
 */
-import '@polymer/polymer/polymer-legacy.js';
+import '../../@polymer/polymer/polymer-legacy.js';
 
-import { IronA11yKeysBehavior } from '@polymer/iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
-import { IronControlState } from '@polymer/iron-behaviors/iron-control-state.js';
-import '@polymer/iron-dropdown/iron-dropdown.js';
-import '@polymer/neon-animation/animations/fade-in-animation.js';
-import '@polymer/neon-animation/animations/fade-out-animation.js';
-import '@polymer/paper-styles/default-theme.js';
-import '@polymer/paper-styles/shadow.js';
+import { IronA11yKeysBehavior } from '../iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
+import { IronControlState } from '../iron-behaviors/iron-control-state.js';
+import '../iron-dropdown/iron-dropdown.js';
+import '../neon-animation/animations/fade-in-animation.js';
+import '../neon-animation/animations/fade-out-animation.js';
+import '../paper-styles/default-theme.js';
+import '../paper-styles/shadow.js';
 import './paper-menu-button-animations.js';
-import { Polymer as Polymer$0 } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { dom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
+import { Polymer as Polymer$0 } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
+import { html } from '../../@polymer/polymer/lib/utils/html-tag.js';
+import { dom } from '../../@polymer/polymer/lib/legacy/polymer.dom.js';
 
 var config = {
   ANIMATION_CUBIC_BEZIER: 'cubic-bezier(.3,.95,.5,1)',
