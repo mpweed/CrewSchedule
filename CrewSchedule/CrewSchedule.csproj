@@ -244,6 +244,8 @@
     <Content Include="components\shared\external\%40polymer\polymer\wct.conf.json" />
     <None Include="packages.config" />
     <Content Include="Views\Mobile\Index.cshtml" />
+    <None Include="Properties\PublishProfiles\crewschedule - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\crewschedule - Web Deploy.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
