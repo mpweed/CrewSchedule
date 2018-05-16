@@ -28,5 +28,8 @@ import './external/@polymer/iron-selector/iron-selector.js';
 import './external/@polymer/neon-animation/neon-animations.js';
 import './external/@polymer/iron-ajax/iron-ajax.js';
 
+// Vaadin Imports
+import './external/@vaadin/vaadin-date-picker/vaadin-date-picker.js';
+
 // Local Imports
 import './controls/cs-timeline.js';
