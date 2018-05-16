@@ -86,8 +86,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 }
             </style>
             <div class="horizontal layout datepickerPanel">
-                <vaadin-date-picker placeholder="Start Date" value="{{startDate}}"></vaadin-date-picker>
-                <vaadin-date-picker placeholder="End Date" value="{{endDate}}"></vaadin-date-picker>
+                <vaadin-date-picker value="{{startDate}}"></vaadin-date-picker>
+                <vaadin-date-picker value="{{endDate}}"></vaadin-date-picker>
             </div>
             <div class="timelineContainer scroll">
                 <div class="horizontal layout">
@@ -124,8 +124,30 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     }
 
     // Lifecycle Callbacks
+    constructor() {
+        super();        
+    }
+
+    ready() {
+        super.ready();       
+    }
+
     connectedCallback() {
         super.connectedCallback();
+        Date.prototype.getMonthName = function () {
+            let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            return months[this.getMonth()];
+        };
+        Date.prototype.getDayName = function () {
+            let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            return days[this.getDay()];
+        };
+        let today = new Date(Date.now());
+        let start = today.toLocaleDateString();
+        this.startDate = start;
+        let endDt = new Date(today.setDate(today.getDate() + 31));
+        let end = endDt.toLocaleDateString();
+        this.endDate = end;
     }
 
     // Event Handlers
@@ -139,17 +161,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         }
     }
 
-
     generateTimeSpan() {
         this.timelineArray = new Array();
-        let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-        Date.prototype.getMonthName = function () {
-            return months[this.getMonth()];
-        };
-        Date.prototype.getDayName = function () {
-            return days[this.getDay()];
-        };
         //let timeSpanStart = new Date('12/11/2018');
         //let timeSpanEnd = new Date('03/23/2019');
         let timeSpanStart = new Date(this.startDate);
