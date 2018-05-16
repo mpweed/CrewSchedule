@@ -86,7 +86,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 }
             </style>
             <div class="horizontal layout datepickerPanel">
-                <vaadin-date-picker placeholder="Start Date"></vaadin-date-picker>
+                <vaadin-date-picker placeholder="Start Date" value="{{startDate}}"></vaadin-date-picker>
+                <vaadin-date-picker placeholder="End Date" value="{{endDate}}"></vaadin-date-picker>
             </div>
             <div class="timelineContainer scroll">
                 <div class="horizontal layout">
@@ -111,6 +112,13 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         return {
             timelineArray: {
                 type: Array
+            },
+            startDate: {
+                type: String
+            },
+            endDate: {
+                type: String,
+                observer: "_endDateChanged"
             }
         }
     }
@@ -118,10 +126,19 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     // Lifecycle Callbacks
     connectedCallback() {
         super.connectedCallback();
-        this.generateTimeSpan();
     }
 
     // Event Handlers
+    _endDateChanged(newValue, oldValue) {
+        if (this.startDate && this.endDate && this.startDate != this.endDate) {
+            if (this.endDate < this.startDate) {
+                // TODO: SHOW ERROR MESSAGE THAT END DATE MUST BE GREATER THAN START DATE
+            } else {
+                this.generateTimeSpan();
+            }
+        }
+    }
+
 
     generateTimeSpan() {
         this.timelineArray = new Array();
@@ -133,8 +150,21 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         Date.prototype.getDayName = function () {
             return days[this.getDay()];
         };
-        let timeSpanStart = new Date('12/11/2018');
-        let timeSpanEnd = new Date('03/23/2019');
+        //let timeSpanStart = new Date('12/11/2018');
+        //let timeSpanEnd = new Date('03/23/2019');
+        let timeSpanStart = new Date(this.startDate);
+        let timeSpanEnd = new Date(this.endDate);
+        let timezoneOffset = timeSpanStart.getTimezoneOffset();
+        let timezoneOffsetDays = (timezoneOffset / 1440);
+        if (timezoneOffsetDays > 0) {
+            timeSpanStart.setDate(timeSpanStart.getDate() + timezoneOffsetDays);
+            timeSpanEnd.setDate(timeSpanEnd.getDate() + timezoneOffsetDays);
+        } else {
+            timeSpanStart.setDate(timeSpanStart.getDate() - timezoneOffsetDays);
+            timeSpanEnd.setDate(timeSpanEnd.getDate() - timezoneOffsetDays);
+        }
+
+        
         let currentDate = timeSpanStart;
         let currentDayFullYear = currentDate.getFullYear();
         let currentMonthName = currentDate.getMonthName();
