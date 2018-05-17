@@ -5,6 +5,14 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
             <style include="iron-flex iron-flex-alignment">
+                #startDate {
+                    [part="input-field"] {
+                        border-radius: 0;
+                        background-color: var(--paper-grey-800);
+                        color: #ffffff;
+                    }
+                }
+
                 .datepickerPanel {
                     background-color: var(--paper-grey-200);
                 }
@@ -86,8 +94,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 }
             </style>
             <div class="horizontal layout datepickerPanel">
-                <vaadin-date-picker placeholder="Start Date" value="{{startDate}}"></vaadin-date-picker>
-                <vaadin-date-picker placeholder="End Date" value="{{endDate}}"></vaadin-date-picker>
+                <vaadin-date-picker value="{{startDate}}"></vaadin-date-picker>
+                <vaadin-date-picker value="{{endDate}}"></vaadin-date-picker> 
             </div>
             <div class="timelineContainer scroll">
                 <div class="horizontal layout">
@@ -126,6 +134,14 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     // Lifecycle Callbacks
     connectedCallback() {
         super.connectedCallback();
+        Date.prototype.getMonthName = function () {
+            let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            return months[this.getMonth()];
+        };
+        Date.prototype.getDayName = function () {
+            let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            return days[this.getDay()];
+        };
     }
 
     // Event Handlers
@@ -139,21 +155,13 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         }
     }
 
-
     generateTimeSpan() {
         this.timelineArray = new Array();
-        let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-        Date.prototype.getMonthName = function () {
-            return months[this.getMonth()];
-        };
-        Date.prototype.getDayName = function () {
-            return days[this.getDay()];
-        };
         //let timeSpanStart = new Date('12/11/2018');
         //let timeSpanEnd = new Date('03/23/2019');
         let timeSpanStart = new Date(this.startDate);
         let timeSpanEnd = new Date(this.endDate);
+
         let timezoneOffset = timeSpanStart.getTimezoneOffset();
         let timezoneOffsetDays = (timezoneOffset / 1440);
         if (timezoneOffsetDays > 0) {

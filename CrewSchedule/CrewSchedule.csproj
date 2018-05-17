@@ -150,6 +150,7 @@
   <ItemGroup>
     <Content Include="components\desktop\cs-desktop-shell.js" />
     <Content Include="components\mobile\cs-mobile-shell.js" />
+    <Content Include="components\shared\controls\cs-input.js" />
     <Content Include="components\shared\controls\cs-timeline.js" />
     <Content Include="components\shared\cs-shared-styles.js" />
     <Content Include="components\shared\external\%40polymer\app-route\app-location.js" />

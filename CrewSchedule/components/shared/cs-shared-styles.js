@@ -32,4 +32,5 @@ import './external/@polymer/iron-ajax/iron-ajax.js';
 import './external/@vaadin/vaadin-date-picker/vaadin-date-picker.js';
 
 // Local Imports
+import './controls/cs-input.js';
 import './controls/cs-timeline.js';
