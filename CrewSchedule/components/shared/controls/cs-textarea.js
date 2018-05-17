@@ -1,7 +1,7 @@
 ﻿import { PolymerElement, html } from '../external/@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '../external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '../cs-shared-styles.js';
-class CsInput extends GestureEventListeners(PolymerElement) {
+class CsTextarea extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
             <style include="iron-flex iron-flex-alignment cs-shared-styles">
@@ -9,39 +9,41 @@ class CsInput extends GestureEventListeners(PolymerElement) {
                     width: 100%;
                 }
 
-                .internalInput {
+                .internalTextarea {
                     font-family: 'Roboto', 'Noto', sans-serif;
                     -webkit-font-smoothing: antialiased;
                     text-rendering: optimizeLegibility;
                     font-weight: 200;
                     font-size: .9em;
-                    height: 26px;
+                    height: 150px;
                     width: calc(100% - 44px);
+                    padding-top: 5px;
+                    padding-bottom: 5px;
                     padding-left: 20px;
                     padding-right: 20px;
-                    border: none;
                     border: 1px solid var(--paper-grey-900);
                     color: #ffffff;
                     background-color: var(--paper-grey-900);
                     outline: 0;
                 }
 
-                .internalInputLight {
+                .internalTextareaLight {
                     border-color: var(--paper-grey-800);
                     background-color: var(--paper-grey-800);
                 }
 
-                .internalInput:focus {
+                .internalTextarea:focus {
                     border: 1px solid #ffffff
                 }
 
-                .internalInputLight:focus {
+                .internalTextareaLight:focus {
                     border: 1px solid #ffffff
                 }
 
                 .counterField {
                     width: 100%;
                     font-size: .8em;
+                    margin-top: -6px;
                 }
 
                 .counter {
@@ -57,7 +59,7 @@ class CsInput extends GestureEventListeners(PolymerElement) {
                 }
             </style>
             <div class="inputField">
-                <input tabindex="1" id="internalInput" type="text" placeholder="[[placeholder]]" value="{{value::input}}" class="internalInput" on-blur="_checkRequired" />
+                <textarea tabindex="1" id="internalInput" placeholder="[[placeholder]]" class="internalTextarea scroll" value="{{value::input}}" on-blur="_checkRequired"></textarea>
                 <template is="dom-if" if="[[characterCounter]]">
                     <div class="horizontal end-justified layout counterField">
                         <div class="counter">[[counter]]</div>
@@ -104,21 +106,18 @@ class CsInput extends GestureEventListeners(PolymerElement) {
                 type: Boolean,
                 value: false,
                 observer: "_lightChanged"
-            },
-            inputType: {
-                type: String,
-                observer: "_inputTypeChanged"
             }
         }
     }
 
-    // Lifecycle Callbacks
+    // Lifecycle Callbacks           
     connectedCallback() {
         super.connectedCallback();
         this._valueChanged(this.value);
-        this.isValid = true;        
+        this.isValid = true;
     }
 
+    // Event Handlers
     _requiredChanged(newValue, oldValue) {
         if (this.required) {
             this.isValid = false;
@@ -155,25 +154,15 @@ class CsInput extends GestureEventListeners(PolymerElement) {
 
     _lightChanged(newValue, oldValue) {
         if (newValue) {
-            this.$.internalInput.classList.add("internalInputLight");
+            this.$.internalInput.classList.add("internalTextareaLight");
         } else {
-            this.$.internalInput.classList.remove("internalInputLight");
+            this.$.internalInput.classList.remove("internalTextareaLight");
         }
     }
 
     _maxLengthChanged(newValue, oldValue) {
         if (newValue) {
             this.characterCounter = true;
-        }
-    }
-
-    _inputTypeChanged(newValue, oldValue) {
-        if (newValue) {
-            switch (newValue) {
-                case "Phone":
-                    this.placeholder = "XXX.XXX.XXXX";
-                    break;
-            }
         }
     }
 
@@ -192,36 +181,13 @@ class CsInput extends GestureEventListeners(PolymerElement) {
             if (!this.value) {
                 this.isValid = !this.isValid;
                 this.isValid = false;
-            } else if (this.inputType) {
-                switch (this.inputType) {
-                    case "Phone":
-                        this.isValid = !this.isValid;
-                        this.isValid = this._isInputValid();
-                        break;
-                }
             } else {
                 this.isValid = !this.isValid;
                 this.isValid = true;
             }
-        } else if (this.inputType && this.value) {
-            switch (this.inputType) {
-                case "Phone":
-                    this.isValid = !this.isValid;
-                    this.isValid = this._isInputValid();
-                    break;
-            }
         } else {
             this.isValid = !this.isValid;
             this.isValid = true;
-        }
-    }
-
-    _isInputValid(input) {
-        switch (this.inputType) {
-            case "Phone":
-                var re = /[2-9]{1}\d{2}\.[2-9]{1}\d{2}\.\d{4}/;
-                return re.test(this.value);
-                break;
         }
     }
 
@@ -241,4 +207,4 @@ class CsInput extends GestureEventListeners(PolymerElement) {
         this.$.internalInput.classList.remove("requiredIndicator");
     }    
 }
-customElements.define('cs-input', CsInput);
+customElements.define('cs-textarea, CsTextarea);

@@ -59,11 +59,19 @@
     margin-top: 20px;
 }
 
+cs-button {
+    --cs-button-color: var(--paper-blue-grey-300);
+    --cs-button-focus-color: var(--paper-blue-grey-100);
+    --cs-button-hover-color: var(--paper-blue-grey-100);
+    --cs-button-active-color: var(--paper-blue-grey-400);
+    --cs-button-disabled-color: var(--paper-grey-600);
+}
+
 .saveButton {
-    --jic-button-color: var(--paper-pink-400);
-    --jic-button-focus-color: var(--paper-pink-300);
-    --jic-button-hover-color: var(--paper-pink-300);
-    --jic-button-active-color: var(--paper-pink-600);
+    --cs-button-color: var(--paper-pink-400);
+    --cs-button-focus-color: var(--paper-pink-300);
+    --cs-button-hover-color: var(--paper-pink-300);
+    --cs-button-active-color: var(--paper-pink-600);
 }
 
 .cancelButton {

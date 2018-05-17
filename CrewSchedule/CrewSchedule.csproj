@@ -150,6 +150,15 @@
   <ItemGroup>
     <Content Include="components\desktop\cs-desktop-shell.js" />
     <Content Include="components\mobile\cs-mobile-shell.js" />
+    <Content Include="components\shared\controls\cs-title-bar.js" />
+    <Content Include="components\shared\controls\cs-textarea.js" />
+    <Content Include="components\shared\controls\cs-notification-panel.js" />
+    <Content Include="components\shared\controls\cs-nav-bar.js" />
+    <Content Include="components\shared\controls\cs-dropdown.js" />
+    <Content Include="components\shared\controls\cs-dialog.js" />
+    <Content Include="components\shared\controls\cs-confirm.js" />
+    <Content Include="components\shared\controls\cs-button.js" />
+    <Content Include="components\shared\controls\cs-accordion.js" />
     <Content Include="components\shared\controls\cs-input.js" />
     <Content Include="components\shared\controls\cs-timeline.js" />
     <Content Include="components\shared\cs-shared-styles.js" />

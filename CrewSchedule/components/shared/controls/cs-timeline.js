@@ -4,15 +4,7 @@ import '../cs-shared-styles.js';
 class CsTimeline extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
-            <style include="iron-flex iron-flex-alignment">
-                #startDate {
-                    [part="input-field"] {
-                        border-radius: 0;
-                        background-color: var(--paper-grey-800);
-                        color: #ffffff;
-                    }
-                }
-
+            <style include="iron-flex iron-flex-alignment cs-shared-styles">
                 .datepickerPanel {
                     background-color: var(--paper-grey-200);
                 }
@@ -111,8 +103,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     </div>
                     </template>                
                 </div>
-            </div>
-            `;
+            </div>`;
     }
 
     // Public Properties

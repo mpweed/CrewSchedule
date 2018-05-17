@@ -32,5 +32,158 @@ import './external/@polymer/iron-ajax/iron-ajax.js';
 import './external/@vaadin/vaadin-date-picker/vaadin-date-picker.js';
 
 // Local Imports
+import './controls/cs-accordion.js';
+import './controls/cs-button.js';
+import './controls/cs-confirm.js';
+import './controls/cs-dialog.js';
+import './controls/cs-dropdown.js';
 import './controls/cs-input.js';
+import './controls/cs-nav-bar.js';
+import './controls/cs-notification-panel.js';
+import './controls/cs-textarea.js';
 import './controls/cs-timeline.js';
+import './controls/cs-title-bar.js';
+
+// Shared Styles
+const styleElement = document.createElement('dom-module');
+styleElement.innerHTML =
+    `<template>
+        <style>
+            .scroll::-webkit-scrollbar {
+                width: 12px;
+                height: 12px;
+            }
+
+            .scroll::-webkit-scrollbar-thumb {
+                background-color: #616161;
+                border-radius: 20px;
+            }
+
+            .scroll::-webkit-scrollbar-track {
+                background-color: #424242;
+            }
+
+            .scroll::-webkit-scrollbar-thumb:hover {
+                background-color: #757575;
+            }
+
+            .scroll::-webkit-scrollbar-corner {
+                background-color: #424242;
+            }
+
+            cs-button {
+                --cs-button-color: var(--paper-blue-grey-300);
+                --cs-button-focus-color: var(--paper-blue-grey-100);
+                --cs-button-hover-color: var(--paper-blue-grey-100);
+                --cs-button-active-color: var(--paper-blue-grey-400);
+                --cs-button-disabled-color: var(--paper-grey-600);
+            }
+
+            .panel {
+                margin-left: 20px;
+                margin-right: 20px;
+                height: calc(100vh - 68px);
+                overflow: hidden;
+            }
+
+            .panelScrollable {
+                margin-left: 20px;
+                margin-right: 20px;
+            }
+
+            .viewCaption {
+                margin-top: 20px;                
+                font-weight: 100;
+                font-size: 2.5em;
+                color: var(--paper-grey-600);
+            }
+
+            .subViewCaption {
+                margin-top: 16px;
+                font-weight: 100;
+                font-size: 2.5em;
+                color: var(--paper-grey-600);
+            }
+
+            .dataField {
+                margin-right: 20px;
+            }
+
+            .dataLabel {
+                color: var(--paper-grey-500);
+                font-weight: 200;
+                padding-right: 10px;
+                padding-top: 10px;
+            }
+
+            .data {
+                color: #ffffff;
+                font-weight: 200;
+                padding-right: 10px;
+                padding-bottom: 10px;                
+            }
+
+            .dataLabelSmall {
+                color: var(--paper-grey-500);
+                font-weight: 200;
+                padding-right: 10px;
+                padding-top: 10px;
+                font-size: .8em;
+            }
+
+            .dataSmall {
+                color: #ffffff;
+                font-weight: 200;
+                padding-right: 10px;
+                padding-bottom: 10px;
+                font-size: .8em;
+            }
+
+            .dataHorizontal {
+                color: #ffffff;
+                font-weight: 200;
+                padding-top: 4px;
+                padding-bottom: 4px;
+                padding-left: 10px;
+            }
+
+            .removed {
+                display: none;
+            }
+
+            .dialogButtons {
+                margin-top: 20px;
+            }
+
+            .saveButton {
+                --cs-button-color: var(--paper-pink-400);
+                --cs-button-focus-color: var(--paper-pink-300);
+                --cs-button-hover-color: var(--paper-pink-300);
+                --cs-button-active-color: var(--paper-pink-600);
+            }
+
+            .cancelButton {
+                margin-left: 10px;
+            }
+        </style>
+    </template>`;
+styleElement.register('cs-shared-styles');
+
+const $_documentContainer = document.createElement('template');
+$_documentContainer.setAttribute('style', 'display: none;');
+$_documentContainer.innerHTML = `<dom-module id="cs-date-picker" theme-for="vaadin-date-picker">
+  <template>
+        <style>
+            :host {
+                outline: none;
+            }
+
+            [part="input-field"] {
+                border-radius: 0;
+                background-color: var(--paper-grey-800);
+                color: #ffffff;
+            }
+        </style>
+    </template>
+</dom-module>`;
+document.head.appendChild($_documentContainer.content);
