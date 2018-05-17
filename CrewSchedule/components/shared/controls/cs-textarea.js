@@ -207,4 +207,4 @@ class CsTextarea extends GestureEventListeners(PolymerElement) {
         this.$.internalInput.classList.remove("requiredIndicator");
     }    
 }
-customElements.define('cs-textarea, CsTextarea);
+customElements.define('cs-textarea', CsTextarea);

@@ -62,28 +62,6 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 .weekend {
                     background-color: var(--paper-grey-800);
                 }
-
-                .scroll::-webkit-scrollbar {
-                    width: 12px;
-                    height: 12px;
-                }
-
-                .scroll::-webkit-scrollbar-thumb {
-                    background-color: #616161;
-                    border-radius: 20px;
-                }
-
-                .scroll::-webkit-scrollbar-track {
-                    background-color: #424242;
-                }
-
-                .scroll::-webkit-scrollbar-thumb:hover {
-                    background-color: #757575;
-                }
-
-                .scroll::-webkit-scrollbar-corner {
-                    background-color: #424242;
-                }
             </style>
             <div class="horizontal layout datepickerPanel">
                 <vaadin-date-picker value="{{startDate}}"></vaadin-date-picker>

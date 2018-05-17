@@ -302,4 +302,4 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
         this.$.bootstrapDataXhr.generateRequest();
     }    
 }
-customElements.define('cs-title-bar, CsTitleBar);
+customElements.define('cs-title-bar', CsTitleBar);

@@ -74,4 +74,4 @@ class CsButton extends GestureEventListeners(PolymerElement) {
         }
     }    
 }
-customElements.define('cs-button, CsButton);
+customElements.define('cs-button', CsButton);

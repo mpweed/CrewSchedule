@@ -82,4 +82,4 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
         }
     }    
 }
-customElements.define('cs-nav-bar, CsNavBar);
+customElements.define('cs-nav-bar', CsNavBar);

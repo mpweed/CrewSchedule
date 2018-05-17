@@ -311,4 +311,4 @@ class CsNotificationPanel extends GestureEventListeners(PolymerElement) {
         }
     }    
 }
-customElements.define('cs-notification-panel, CsNotificationPanel);
+customElements.define('cs-notification-panel', CsNotificationPanel);

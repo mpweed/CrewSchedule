@@ -138,4 +138,4 @@ class CsConfirm extends GestureEventListeners(PolymerElement) {
         this.$.confirmPanelBackground.classList.add("noPointerEvents");
     }    
 }
-customElements.define('cs-confirm, CsConfirm);
+customElements.define('cs-confirm', CsConfirm);

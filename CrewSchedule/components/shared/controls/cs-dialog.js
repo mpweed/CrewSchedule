@@ -39,4 +39,4 @@ class CsDialog extends GestureEventListeners(PolymerElement) {
         this.$.container.classList.remove("dialogShown");
     }    
 }
-customElements.define('cs-dialog, CsDialog);
+customElements.define('cs-dialog', CsDialog);
