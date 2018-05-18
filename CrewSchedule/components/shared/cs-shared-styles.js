@@ -169,21 +169,21 @@ styleElement.innerHTML =
     </template>`;
 styleElement.register('cs-shared-styles');
 
-const $_documentContainer = document.createElement('template');
-$_documentContainer.setAttribute('style', 'display: none;');
-$_documentContainer.innerHTML = `<dom-module id="cs-date-picker" theme-for="vaadin-date-picker">
-  <template>
-        <style>
-            :host {
-                outline: none;
-            }
+//const $_documentContainer = document.createElement('template');
+//$_documentContainer.setAttribute('style', 'display: none;');
+//$_documentContainer.innerHTML = `<dom-module id="cs-date-picker" theme-for="vaadin-date-picker">
+//  <template>
+//        <style>
+//            :host {
+//                outline: none;
+//            }
 
-            [part="input-field"] {
-                border-radius: 0;
-                background-color: var(--paper-grey-800);
-                color: #ffffff;
-            }
-        </style>
-    </template>
-</dom-module>`;
-document.head.appendChild($_documentContainer.content);
+//            :host(.cs-datepicker) [part="input-field"] {                
+//                --lumo-border-radius: 0;
+//                --lumo-shade-10pct: #212121;                
+//                color: #ffffff;
+//            }
+//        </style>
+//    </template>
+//</dom-module>`;
+//document.head.appendChild($_documentContainer.content);

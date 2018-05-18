@@ -4,9 +4,21 @@ import '../cs-shared-styles.js';
 class CsTimeline extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
-            <style include="iron-flex iron-flex-alignment cs-shared-styles">
+            <style include="iron-flex iron-flex-alignment cs-shared-styles">                
                 .datepickerPanel {
                     background-color: var(--paper-grey-200);
+                }
+
+                cs-input {
+                    margin-top: 8px;
+                    margin-left: 20px;
+                }
+
+                .datepickerLabel {
+                    color: var(--paper-grey-900);
+                    margin-top: 10px;
+                    margin-left: 20px;
+                    margin-right: 20px;                    
                 }
 
                 .timelineContainer {
@@ -64,8 +76,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 }
             </style>
             <div class="horizontal layout datepickerPanel">
-                <vaadin-date-picker value="{{startDate}}"></vaadin-date-picker>
-                <vaadin-date-picker value="{{endDate}}"></vaadin-date-picker> 
+                <div class="datepickerLabel">Start Date</div>
+                <vaadin-date-picker class="cs-datepicker" value="{{startDate}}"></vaadin-date-picker>
+                <div class="datepickerLabel">End Date</div>
+                <vaadin-date-picker class-"cs-datepicker" value="{{endDate}}"></vaadin-date-picker>
+                <cs-input></cs-input>
             </div>
             <div class="timelineContainer scroll">
                 <div class="horizontal layout">

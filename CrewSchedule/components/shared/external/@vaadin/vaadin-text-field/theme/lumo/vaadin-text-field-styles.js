@@ -11,9 +11,11 @@ $_documentContainer.innerHTML = `<dom-module id="lumo-text-field" theme-for="vaa
     <style>
       :host {
         --lumo-text-field-size: var(--lumo-size-m);
-        color: var(--lumo-body-text-color);
-        font-size: var(--lumo-font-size-m);
-        font-family: var(--lumo-font-family);
+        /* color: var(--lumo-body-text-color);
+        font-size: var(--lumo-font-size-m); */
+        color: #FFFFFF;
+        font-size: .9em;
+        /* font-family: var(--lumo-font-family) */;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         -webkit-tap-highlight-color: transparent;
@@ -122,10 +124,13 @@ $_documentContainer.innerHTML = `<dom-module id="lumo-text-field" theme-for="vaa
       }
 
       [part="input-field"] {
-        border-radius: var(--lumo-border-radius);
-        background-color: var(--lumo-contrast-10pct);
+        /* border-radius: var(--lumo-border-radius); */
+        border-radius: 0;
+        /* background-color: var(--lumo-contrast-10pct); */
+        background-color: #212121;
         padding: 0 calc(0.375em + var(--lumo-border-radius) / 4 - 1px);
-        font-weight: 500;
+        /* font-weight: 500; */
+        font-weight: 200;
         line-height: 1;
         position: relative;
         cursor: text;
