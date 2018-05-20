@@ -11,11 +11,9 @@ $_documentContainer.innerHTML = `<dom-module id="lumo-text-field" theme-for="vaa
     <style>
       :host {
         --lumo-text-field-size: var(--lumo-size-m);
-        /* color: var(--lumo-body-text-color);
-        font-size: var(--lumo-font-size-m); */
-        color: #FFFFFF;
-        font-size: .9em;
-        /* font-family: var(--lumo-font-family) */;
+        color: var(--lumo-body-text-color);
+        font-size: var(--lumo-font-size-m);        
+        font-family: var(--lumo-font-family);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         -webkit-tap-highlight-color: transparent;
@@ -124,13 +122,10 @@ $_documentContainer.innerHTML = `<dom-module id="lumo-text-field" theme-for="vaa
       }
 
       [part="input-field"] {
-        /* border-radius: var(--lumo-border-radius); */
-        border-radius: 0;
-        /* background-color: var(--lumo-contrast-10pct); */
-        background-color: #212121;
+        border-radius: var(--lumo-border-radius);
+        background-color: var(--lumo-contrast-10pct);
         padding: 0 calc(0.375em + var(--lumo-border-radius) / 4 - 1px);
-        /* font-weight: 500; */
-        font-weight: 200;
+        font-weight: 500;
         line-height: 1;
         position: relative;
         cursor: text;
@@ -346,6 +341,35 @@ $_documentContainer.innerHTML = `<dom-module id="lumo-text-field" theme-for="vaa
         padding: 0.25em;
         box-sizing: border-box !important;
       }
+
+        /* CS Style Overrides */
+        
+        :host {
+            padding: 0;
+            --lumo-text-field-size: 30px;
+            --lumo-contrast-60pct: #9e9e9e;
+            --lumo-contrast-90pct: #ffffff;
+        }
+
+        [part="input-field"] {            
+            font-family: 'Roboto', 'Noto', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            font-weight: 200;
+            font-size: .9em;
+            height: 26px;            
+            width: 100%;
+            padding-left: 10px;;
+            padding-top: 0;
+            padding-bottom: 0;
+            border: none;
+            border: 1px solid var(--paper-grey-900);
+            border-radius: 0;
+            color: #ffffff;
+            background-color: var(--paper-grey-900);
+            outline: 0;
+        }
+
     </style>
   </template>
 </dom-module>`;
