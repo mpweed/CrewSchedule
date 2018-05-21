@@ -15,7 +15,6 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     width: 100 %;
                     height: 600px;
                     overflow: auto;
-                    margin-left: 10px;
                     margin-right: 10px;
                     position: relative;
                 }
@@ -70,24 +69,36 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
 
                 .job {
                     height:24px;
+                    border-left: 1px solid #ffffff;
+                    border-right: 1px solid #ffffff;
                     text-align:center;
                     cursor:default;
+                    overflow: hidden;
                     position:absolute; 
                 }
 
                 .job:hover {
                     opacity: .8
                 }
+
+                .horizontalDataLabel {
+                    margin-top: 4px;
+                }
+
+                .horizontalDataField {
+                    padding-top: 10px;
+                    margin-right: 20px;
+                }
             </style>
-            <div class="horizontal layout flex datepickerPanel">
-                <div class="dataField">
-                    <div class="dataLabel">Start Date</div>
+            <div class="horizontal layout flex datepickerPanel">                
+                <div class="dataLabel horizontalDataLabel">Start Date</div>
+                <div class="horizontalDataField">
                     <vaadin-date-picker class="cs-datepicker" value="{{startDate}}"></vaadin-date-picker>
                 </div>
-                <div class="flex">
-                    <div class="dataLabel">End Date</div>
+                <div class="dataLabel horizontalDataLabel">End Date</div>
+                <div class="horizontalDataField">
                     <vaadin-date-picker class-"cs-datepicker" value="{{endDate}}"></vaadin-date-picker>
-                </div>           
+                </div>
             </div>
             <div id="timelineContainer" class="timelineContainer scroll">
                 <div class="horizontal layout">
@@ -103,8 +114,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                         </div>                        
                     </template>                
                 </div>
-                <div id="jobContainer">
-                    <!-- <div crew="1" job="2" style="background-color:red; top:80px; left:68px; width:340px;" class="job" on-tap="_jobTapped">Port Authority - NJ</div> -->
+                <div id="jobContainer">                    
                 </div>                
             </div>`;
     }
@@ -116,11 +126,12 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 type: Array
             },
             startDate: {
-                type: String
+                type: String,
+                observer: "_dateChanged"
             },
             endDate: {
                 type: String,
-                observer: "_endDateChanged"
+                observer: "_dateChanged"
             },
             crews: {
                 type: Array
@@ -134,8 +145,25 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     // Lifecycle Callbacks
     connectedCallback() {
         super.connectedCallback();
+        Date.prototype.getMonthName = function () {
+            let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            return months[this.getMonth()];
+        };
+        Date.prototype.getDayName = function () {
+            let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            return days[this.getDay()];
+        };
+        let defaultStartDate = new Date(Date.now());
+        let defaultEndDate = new Date(Date.now());
+        defaultEndDate.setDate(defaultEndDate.getDate() + 31);
+        this.startDate = (defaultStartDate.getFullYear() + '-' + (defaultStartDate.getMonth() + 1) + '-' + defaultStartDate.getDate()).toString();        
+        this.endDate = (defaultEndDate.getFullYear() + '-' + (defaultEndDate.getMonth() + 1) + '-' + defaultEndDate.getDate()).toString();        
+    }
 
-        // **TEMPORARY** - Static data used for layout design and development
+
+    // **TEMPORARY** - Static data used for layout design and development
+    generateCrews() {
+        this.crews = null;
         let crews = [
             {
                 "id": "1",
@@ -167,32 +195,50 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                         "endDate": "2018-7-12"
                     }
                 ]
+            },
+            {
+                "id": "2",
+                "name": "Crew 2",
+                "color": "#795548",
+                "jobs": [
+                    {
+                        "id": "1",
+                        "name": "Job 1",
+                        "startDate": "2018-5-25",
+                        "endDate": "2018-6-4"
+                    },
+                    {
+                        "id": "2",
+                        "name": "Job 2",
+                        "startDate": "2018-5-20",
+                        "endDate": "2018-5-24"
+                    },
+                    {
+                        "id": "3",
+                        "name": "Job 3",
+                        "startDate": "2018-6-6",
+                        "endDate": "2018-6-28"
+                    },
+                    {
+                        "id": "4",
+                        "name": "Job 4",
+                        "startDate": "2018-6-1",
+                        "endDate": "2018-6-7"
+                    }
+                ]
             }
         ];
         this.crews = crews;
-
-        // **PERMANENT** - Component initialization logic
-        Date.prototype.getMonthName = function () {
-            let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-            return months[this.getMonth()];
-        };
-        Date.prototype.getDayName = function () {
-            let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            return days[this.getDay()];
-        };
-        let defaultStartDate = new Date(Date.now());
-        let defaultEndDate = new Date(Date.now());
-        defaultEndDate.setDate(defaultEndDate.getDate() + 31);
-        this.startDate = (defaultStartDate.getFullYear() + '-' + (defaultStartDate.getMonth() + 1) + '-' + defaultStartDate.getDate()).toString();        
-        this.endDate = (defaultEndDate.getFullYear() + '-' + (defaultEndDate.getMonth() + 1) + '-' + defaultEndDate.getDate()).toString();        
     }
 
     // Event Handlers
-    _endDateChanged(newValue, oldValue) {
+    _dateChanged(newValue, oldValue) {
         if (this.startDate && this.endDate && this.startDate != this.endDate) {
             if (this.endDate < this.startDate) {
                 // TODO: SHOW ERROR MESSAGE THAT END DATE MUST BE GREATER THAN START DATE
             } else {
+                // **TEMPORARY** - Static data used for layout design and development
+                this.generateCrews()
                 this.generateTimeSpan();
             }
         }
@@ -214,7 +260,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         }
     }
 
-    setUtcAdjustedDate(localDate) {
+    setUtcAdjustedDate(localDate) {        
         let timezoneOffset = localDate.getTimezoneOffset();
         let timezoneOffsetDays = (timezoneOffset / 1440);
         if (timezoneOffsetDays > 0) {
@@ -278,24 +324,20 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     }
 
     clearJobs() {
-        while (this.$.jobContainer.firstChild) {
-            this.$.jobContainer.removeChild(this.$.jobContainer.firstChild);
+        while (this.$.jobContainer.lastChild) {
+            this.$.jobContainer.removeChild(this.$.jobContainer.lastChild);
         }
     }
 
     generateJobs() {
-        if (this.crews && this.crews.length > 0 && this.startDate && this.endDate) {            
-            let currentCrew = this.crews[0];
-            let previousCrewHeight = 0;
+        if (this.crews && this.crews.length > 0 && this.startDate && this.endDate) {
+            let crewHeight = 0;
             for (var crew of this.crews) {
-                if (crew.id === currentCrew.id) { // Same crew
-                    this.removeOutOfRangeJobsForCrew(crew);
-                    this.adjustJobDatesForCrew(crew);
-                    this.generateSwimlanesForCrew(crew);
-                    previousCrewHeight = this.generateJobHtmlForCrew(crew, previousCrewHeight);
-                } else { // New Crew
-                    currentCrew = crew;
-                }
+                this.removeOutOfRangeJobsForCrew(crew);
+                this.adjustJobDatesForCrew(crew);
+                this.generateSwimlanesForCrew(crew);
+                crewHeight = this.generateJobHtmlForCrew(crew, crewHeight);
+                crew.height = crewHeight;
             }
         }
     }
@@ -303,10 +345,12 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     removeOutOfRangeJobsForCrew(crew) {
         let startDate = new Date(this.startDate);
         let endDate = new Date(this.endDate);
+        this.setUtcAdjustedDate(startDate);
+        this.setUtcAdjustedDate(endDate);
         if (crew.jobs && crew.jobs.length > 0) {
             for (var i = 0; i < crew.jobs.length; i++) {
                 let currentStartDate = new Date(crew.jobs[i].startDate);
-                let currentEndDate = new Date(crew.jobs[i].endDate);                
+                let currentEndDate = new Date(crew.jobs[i].endDate);
                 if (currentEndDate < startDate) { // Job ends before start of timeline range
                     crew.jobs.splice(i, 1);
                 }
@@ -324,6 +368,10 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             for (var job of crew.jobs) {
                 let currentStartDate = new Date(job.startDate);
                 let currentEndDate = new Date(job.endDate);
+
+                this.setUtcAdjustedDate(currentStartDate);
+                this.setUtcAdjustedDate(currentEndDate);
+
                 job.originalStartDate = job.startDate;
                 job.originalEndDate = job.endDate;
                 if (currentStartDate < startDate) {
@@ -376,9 +424,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         let currentJob = null;
         let crewHeight = 0;
         let topOffset = TOP_OFFSET + previousCrewHeight;
-
         if (crew.swimlanes && crew.swimlanes.length > 0) {
-            let swimlaneIndex = 1;
             for (var swimlane of crew.swimlanes) {
                 for (var i = 0; i < swimlane.length; i++) {
                     currentJob = swimlane[i];
@@ -391,28 +437,38 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     this.generateJobHtml(currentJob);
                 }
                 topOffset = topOffset + JOB_TOP_MARGIN + JOB_HEIGHT;
-                crewHeight = JOB_TOP_MARGIN + JOB_HEIGHT;
-            }
+                crewHeight = crewHeight + JOB_TOP_MARGIN + JOB_HEIGHT;
+            }            
         }
         return crewHeight;
     }
 
     calculateLeftOffset(job) {
         const MILLISECONDS_IN_DAY = 86400000;
-        const DAY_WIDTH = 35;
+        const DAY_WIDTH = 34;
         let timeSpanStart = new Date(this.startDate);
         let jobStartDate = new Date(job.startDate);
-        let jobEndDate = new Date(job.endDate);
-        let leftOffsetDays = (jobStartDate - timeSpanStart) / MILLISECONDS_IN_DAY;
+
+        this.setUtcAdjustedDate(timeSpanStart);
+        this.setUtcAdjustedDate(jobStartDate)
+
+        let leftOffsetDays = Math.round((jobStartDate - timeSpanStart) / MILLISECONDS_IN_DAY);
         return (leftOffsetDays * DAY_WIDTH);
     }
 
     calculateWidth(job) {
         const MILLISECONDS_IN_DAY = 86400000;
-        const DAY_WIDTH = 35;
+        const DAY_WIDTH = 34;
         let jobStartDate = new Date(job.startDate);
         let jobEndDate = new Date(job.endDate);
-        let lengthInDays = (jobEndDate - jobStartDate) / MILLISECONDS_IN_DAY;
+
+        this.setUtcAdjustedDate(jobStartDate);
+        this.setUtcAdjustedDate(jobEndDate);
+
+        // Adjust end date so that the full day is included in the width calculation
+        jobEndDate.setDate(jobEndDate.getDate() + 1);
+
+        let lengthInDays = Math.round((jobEndDate - jobStartDate) / MILLISECONDS_IN_DAY);
         return (lengthInDays * DAY_WIDTH);
     }
 
