@@ -214,20 +214,23 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         }
     }
 
+    setUtcAdjustedDate(localDate) {
+        let timezoneOffset = localDate.getTimezoneOffset();
+        let timezoneOffsetDays = (timezoneOffset / 1440);
+        if (timezoneOffsetDays > 0) {
+            localDate.setDate(localDate.getDate() + timezoneOffsetDays);
+        } else {
+            localDate.setDate(localDate.getDate() - timezoneOffsetDays);
+        }
+    }
+
     generateTimeSpan() {
         this.clearJobs();
         this.timelineArray = new Array();
         let timeSpanStart = new Date(this.startDate);
         let timeSpanEnd = new Date(this.endDate);
-        let timezoneOffset = timeSpanStart.getTimezoneOffset();
-        let timezoneOffsetDays = (timezoneOffset / 1440);
-        if (timezoneOffsetDays > 0) {
-            timeSpanStart.setDate(timeSpanStart.getDate() + timezoneOffsetDays);
-            timeSpanEnd.setDate(timeSpanEnd.getDate() + timezoneOffsetDays);
-        } else {
-            timeSpanStart.setDate(timeSpanStart.getDate() - timezoneOffsetDays);
-            timeSpanEnd.setDate(timeSpanEnd.getDate() - timezoneOffsetDays);
-        }        
+        this.setUtcAdjustedDate(timeSpanStart);
+        this.setUtcAdjustedDate(timeSpanEnd);
         let currentDate = timeSpanStart;
         let currentDayFullYear = currentDate.getFullYear();
         let currentMonthName = currentDate.getMonthName();
