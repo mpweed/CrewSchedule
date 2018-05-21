@@ -173,26 +173,26 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     {
                         "id": "1",
                         "name": "Job 1",
-                        "startDate": "2018-5-16",
-                        "endDate": "2018-6-17"
+                        "startDate": "2018-05-16",
+                        "endDate": "2018-06-17"
                     },
                     {
                         "id": "2",
                         "name": "Job 2",
-                        "startDate": "2018-5-17",
-                        "endDate": "2018-6-13"
+                        "startDate": "2018-05-17",
+                        "endDate": "2018-06-13"
                     },
                     {
                         "id": "3",
                         "name": "Job 3",
-                        "startDate": "2018-6-22",
-                        "endDate": "2018-6-28"
+                        "startDate": "2018-06-22",
+                        "endDate": "2018-06-28"
                     },
                     {
                         "id": "4",
                         "name": "Job 4",
-                        "startDate": "2018-6-18",
-                        "endDate": "2018-7-12"
+                        "startDate": "2018-06-18",
+                        "endDate": "2018-07-12"
                     }
                 ]
             },
@@ -204,26 +204,26 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     {
                         "id": "1",
                         "name": "Job 1",
-                        "startDate": "2018-5-25",
-                        "endDate": "2018-6-4"
+                        "startDate": "2018-05-25",
+                        "endDate": "2018-06-04"
                     },
                     {
                         "id": "2",
                         "name": "Job 2",
-                        "startDate": "2018-5-20",
+                        "startDate": "2018-05-20",
                         "endDate": "2018-5-24"
                     },
                     {
                         "id": "3",
                         "name": "Job 3",
-                        "startDate": "2018-6-6",
-                        "endDate": "2018-6-28"
+                        "startDate": "2018-06-06",
+                        "endDate": "2018-06-28"
                     },
                     {
                         "id": "4",
                         "name": "Job 4",
-                        "startDate": "2018-6-1",
-                        "endDate": "2018-6-7"
+                        "startDate": "2018-06-01",
+                        "endDate": "2018-06-07"
                     }
                 ]
             }
@@ -333,46 +333,49 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         if (this.crews && this.crews.length > 0 && this.startDate && this.endDate) {
             let crewHeight = 0;
             for (var crew of this.crews) {
-                this.removeOutOfRangeJobsForCrew(crew);
-                this.adjustJobDatesForCrew(crew);
-                this.generateSwimlanesForCrew(crew);
-                crewHeight = this.generateJobHtmlForCrew(crew, crewHeight);
+                this.removeOutOfRangeJobs(crew);
+                this.adjustJobDates(crew);
+                this.sortJobs(crew);
+                this.generateSwimlanes(crew);
+                crewHeight = this.generateJobHtml(crew, crewHeight);
                 crew.height = crewHeight;
             }
         }
     }
 
-    removeOutOfRangeJobsForCrew(crew) {
+    removeOutOfRangeJobs(crew) {
         let startDate = new Date(this.startDate);
         let endDate = new Date(this.endDate);
         this.setUtcAdjustedDate(startDate);
         this.setUtcAdjustedDate(endDate);
         if (crew.jobs && crew.jobs.length > 0) {
+            let deletionList = new Array();
             for (var i = 0; i < crew.jobs.length; i++) {
                 let currentStartDate = new Date(crew.jobs[i].startDate);
                 let currentEndDate = new Date(crew.jobs[i].endDate);
-                crew.jobs[i].inRange = true;
                 if (currentEndDate < startDate) { // Job ends before start of timeline range
-                    crew.jobs[i].inRange = false;
+                    deletionList.push(crew.jobs[i]);
                 }
                 if (currentStartDate > endDate) { // Job starts after end of timeline range
-                    crew.jobs[i].inRange = false;
+                    deletionList.push(crew.jobs[i]);
                 }
+            }
+            for (var i = 0; i < deletionList.length; i++) {
+                var indexToDelete = crew.jobs.indexOf(deletionList[i]);
+                crew.jobs.splice(indexToDelete, 1);
             }
         }
     }
 
-    adjustJobDatesForCrew(crew) {
+    adjustJobDates(crew) {
         let startDate = new Date(this.startDate);
         let endDate = new Date(this.endDate);
         if (crew.jobs && crew.jobs.length > 0) {
             for (var job of crew.jobs) {
                 let currentStartDate = new Date(job.startDate);
                 let currentEndDate = new Date(job.endDate);
-
                 this.setUtcAdjustedDate(currentStartDate);
                 this.setUtcAdjustedDate(currentEndDate);
-
                 job.originalStartDate = job.startDate;
                 job.originalEndDate = job.endDate;
                 if (currentStartDate < startDate) {
@@ -385,7 +388,14 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         }
     }
 
-    generateSwimlanesForCrew(crew) {        
+    sortJobs(crew) {
+        crew.jobs.sort(
+            (a, b) => {
+                return (new Date(a.startDate)) - (new Date(b.startDate));
+            });
+    }
+
+    generateSwimlanes(crew) {        
         if (crew.jobs && crew.jobs.length > 0) {
             let clonedJobsArray = JSON.parse(JSON.stringify(crew.jobs));
             crew.swimlanes = new Array();
@@ -395,35 +405,35 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 let previousJobEndDate = null;
                 let currentJobStartDate = null;
                 let currentSwimlane = new Array();
+                let deletionList = new Array();
                 for (var i = 0; i < clonedJobsArray.length; i++) {
                     currentJob = clonedJobsArray[i];
-                    if (currentJob.inRange) {
-                        if (!previousJob) {
-                            previousJob = currentJob;
-                        }
-                        if (previousJob.id === currentJob.id) {
-                            currentSwimlane.push(currentJob);
-                            clonedJobsArray.splice(i, 1);
-                        } else {
-                            previousJobEndDate = new Date(previousJob.endDate);
-                            currentJobStartDate = new Date(currentJob.startDate);
-                            if (currentJobStartDate > previousJobEndDate) {
-                                currentSwimlane.push(currentJob);
-                                clonedJobsArray.splice(i, 1);
-                            }
-                            previousJob = currentJob;
-                        }
-                    } else {
-                        clonedJobsArray.splice(i, 1);
+                    if (!previousJob) {
                         previousJob = currentJob;
                     }
+                    if (previousJob.id === currentJob.id) {
+                        currentSwimlane.push(currentJob);
+                        deletionList.push(currentJob);
+                    } else {
+                        previousJobEndDate = new Date(previousJob.endDate);
+                        currentJobStartDate = new Date(currentJob.startDate);
+                        if (currentJobStartDate > previousJobEndDate) {
+                            currentSwimlane.push(currentJob);
+                            deletionList.push(currentJob);
+                            previousJob = currentJob;
+                        }                        
+                    }
                 }
+                for (var i = 0; i < deletionList.length; i++) {
+                    var indexToDelete = clonedJobsArray.indexOf(deletionList[i]);
+                    clonedJobsArray.splice(indexToDelete, 1);
+                }                
                 crew.swimlanes.push(currentSwimlane);
             }
         }
     }
 
-    generateJobHtmlForCrew(crew, previousCrewHeight) {        
+    generateJobHtml(crew, previousCrewHeight) {        
         const TOP_OFFSET = 90;        
         const JOB_HEIGHT = 24;
         const JOB_TOP_MARGIN = 10;
@@ -440,7 +450,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     currentJob.top = topOffset;
                     currentJob.left = this.calculateLeftOffset(currentJob);
                     currentJob.width = this.calculateWidth(currentJob);
-                    this.generateJobHtml(currentJob);
+                    this.generateHtml(currentJob);
                 }
                 topOffset = topOffset + JOB_TOP_MARGIN + JOB_HEIGHT;
                 crewHeight = crewHeight + JOB_TOP_MARGIN + JOB_HEIGHT;
@@ -478,7 +488,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         return (lengthInDays * DAY_WIDTH);
     }
 
-    generateJobHtml(job) {
+    generateHtml(job) {
         let newJob = document.createElement('div');
         let crewAttr = document.createAttribute('crew');
         crewAttr.value = job.crew;
