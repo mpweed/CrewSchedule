@@ -306,12 +306,13 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         if (crew.jobs && crew.jobs.length > 0) {
             for (var i = 0; i < crew.jobs.length; i++) {
                 let currentStartDate = new Date(crew.jobs[i].startDate);
-                let currentEndDate = new Date(crew.jobs[i].endDate);                
+                let currentEndDate = new Date(crew.jobs[i].endDate);
+                crew.jobs[i].inRange = true;
                 if (currentEndDate < startDate) { // Job ends before start of timeline range
-                    crew.jobs.splice(i, 1);
+                    crew.jobs[i].inRange = false;
                 }
                 if (currentStartDate > endDate) { // Job starts after end of timeline range
-                    crew.jobs.splice(i, 1);
+                    crew.jobs[i].inRange = false;
                 }
             }
         }
@@ -322,15 +323,17 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         let endDate = new Date(this.endDate);
         if (crew.jobs && crew.jobs.length > 0) {
             for (var job of crew.jobs) {
-                let currentStartDate = new Date(job.startDate);
-                let currentEndDate = new Date(job.endDate);
-                job.originalStartDate = job.startDate;
-                job.originalEndDate = job.endDate;
-                if (currentStartDate < startDate) {
-                    job.startDate = this.startDate;
-                }
-                if (currentEndDate > endDate) {
-                    job.endDate = this.endDate;
+                if (job.inRange) {
+                    let currentStartDate = new Date(job.startDate);
+                    let currentEndDate = new Date(job.endDate);
+                    job.originalStartDate = job.startDate;
+                    job.originalEndDate = job.endDate;
+                    if (currentStartDate < startDate) {
+                        job.startDate = this.startDate;
+                    }
+                    if (currentEndDate > endDate) {
+                        job.endDate = this.endDate;
+                    }
                 }
             }
         }
@@ -348,19 +351,24 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 let currentSwimlane = new Array();
                 for (var i = 0; i < clonedJobsArray.length; i++) {
                     currentJob = clonedJobsArray[i];
-                    if (!previousJob) {
-                        previousJob = currentJob;
-                    }
-                    if (previousJob.id === currentJob.id) {
-                        currentSwimlane.push(currentJob);
-                        clonedJobsArray.splice(i, 1);
-                    } else {
-                        previousJobEndDate = new Date(previousJob.endDate);
-                        currentJobStartDate = new Date(currentJob.startDate);
-                        if (currentJobStartDate > previousJobEndDate) {
+                    if (currentJob.inRange) {
+                        if (!previousJob) {
+                            previousJob = currentJob;
+                        }
+                        if (previousJob.id === currentJob.id) {
                             currentSwimlane.push(currentJob);
                             clonedJobsArray.splice(i, 1);
+                        } else {
+                            previousJobEndDate = new Date(previousJob.endDate);
+                            currentJobStartDate = new Date(currentJob.startDate);
+                            if (currentJobStartDate > previousJobEndDate) {
+                                currentSwimlane.push(currentJob);
+                                clonedJobsArray.splice(i, 1);
+                            }
+                            previousJob = currentJob;
                         }
+                    } else {
+                        clonedJobsArray.splice(i, 1);
                         previousJob = currentJob;
                     }
                 }
