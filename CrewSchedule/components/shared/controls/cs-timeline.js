@@ -89,6 +89,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     padding-top: 10px;
                     margin-right: 20px;
                 }
+
+                .hline {
+                    height:1px;
+                    position: absolute;
+                }
             </style>
             <div class="horizontal layout flex datepickerPanel">                
                 <div class="dataLabel horizontalDataLabel">Start Date</div>
@@ -270,7 +275,16 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         }
     }
 
+    clearJobs() {
+        while (this.$.jobContainer.lastChild) {
+            this.$.jobContainer.removeChild(this.$.jobContainer.lastChild);
+        }
+    }
+
     generateTimeSpan() {
+        const DAY_WIDTH = 34;
+        let dayCounter = 0;
+        let timelineWidth = 0;
         this.clearJobs();
         this.timelineArray = new Array();
         let timeSpanStart = new Date(this.startDate);
@@ -319,26 +333,23 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             currentDay.monthHeaderClass = monthHeaderClass;
             this.push('timelineArray', currentDay);
             currentDate.setDate(currentDate.getDate() + 1);
+            dayCounter++;
         }
-        this.generateJobs();
-    }
+        timelineWidth = DAY_WIDTH * dayCounter;
+        this.generateJobs(timelineWidth);
+    }    
 
-    clearJobs() {
-        while (this.$.jobContainer.lastChild) {
-            this.$.jobContainer.removeChild(this.$.jobContainer.lastChild);
-        }
-    }
-
-    generateJobs() {
+    generateJobs(timelineWidth) {
         if (this.crews && this.crews.length > 0 && this.startDate && this.endDate) {
-            let crewHeight = 0;
+            let additionalTopOffset = 0;
             for (var crew of this.crews) {
                 this.removeOutOfRangeJobs(crew);
                 this.adjustJobDates(crew);
                 this.sortJobs(crew);
                 this.generateSwimlanes(crew);
-                crewHeight = this.generateJobHtml(crew, crewHeight);
-                crew.height = crewHeight;
+                additionalTopOffset = this.generateJobHtml(crew, additionalTopOffset);
+                additionalTopOffset = this.generateCrewDivider(additionalTopOffset, timelineWidth, crew.color);
+                crew.height = crew.height + 10;
             }
         }
     }
@@ -433,13 +444,13 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         }
     }
 
-    generateJobHtml(crew, previousCrewHeight) {        
-        const TOP_OFFSET = 90;        
+    generateJobHtml(crew, additionalTopOffset) {        
+        const STARTING_TOP_OFFSET = 90;        
         const JOB_HEIGHT = 24;
         const JOB_TOP_MARGIN = 10;
         let currentJob = null;
         let crewHeight = 0;
-        let topOffset = TOP_OFFSET + previousCrewHeight;
+        let topOffset = STARTING_TOP_OFFSET + additionalTopOffset;
         if (crew.swimlanes && crew.swimlanes.length > 0) {
             for (var swimlane of crew.swimlanes) {
                 for (var i = 0; i < swimlane.length; i++) {
@@ -456,7 +467,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 crewHeight = crewHeight + JOB_TOP_MARGIN + JOB_HEIGHT;
             }            
         }
-        return crewHeight;
+        crew.height = crewHeight;
+        return (topOffset - STARTING_TOP_OFFSET);
     }
 
     calculateLeftOffset(job) {
@@ -464,10 +476,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         const DAY_WIDTH = 34;
         let timeSpanStart = new Date(this.startDate);
         let jobStartDate = new Date(job.startDate);
-
         this.setUtcAdjustedDate(timeSpanStart);
         this.setUtcAdjustedDate(jobStartDate)
-
         let leftOffsetDays = Math.round((jobStartDate - timeSpanStart) / MILLISECONDS_IN_DAY);
         return (leftOffsetDays * DAY_WIDTH);
     }
@@ -477,13 +487,10 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         const DAY_WIDTH = 34;
         let jobStartDate = new Date(job.startDate);
         let jobEndDate = new Date(job.endDate);
-
         this.setUtcAdjustedDate(jobStartDate);
         this.setUtcAdjustedDate(jobEndDate);
-
         // Adjust end date so that the full day is included in the width calculation
         jobEndDate.setDate(jobEndDate.getDate() + 1);
-
         let lengthInDays = Math.round((jobEndDate - jobStartDate) / MILLISECONDS_IN_DAY);
         return (lengthInDays * DAY_WIDTH);
     }
@@ -510,6 +517,23 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         newJob.innerHTML = job.name;
         newJob.context = this;
         this.$.jobContainer.appendChild(newJob);
+    }
+
+    generateCrewDivider(additionalTopOffset, timelineWidth, crewColor) {
+        const STARTING_TOP_OFFSET = 90;
+        let topOffset = STARTING_TOP_OFFSET + additionalTopOffset;
+        let divider = document.createElement('div');
+        let styleAttr = document.createAttribute('style');
+        let styleString = "top:" + topOffset + "px;";
+        styleString = styleString + "width:" + timelineWidth + "px;";
+        styleString = styleString + "background:" + crewColor + ";";
+        styleAttr.value = styleString;
+        divider.setAttributeNode(styleAttr);
+        let classAttr = document.createAttribute('class');
+        classAttr.value = "hline";
+        divider.setAttributeNode(classAttr);
+        this.$.jobContainer.appendChild(divider);
+        return (additionalTopOffset + 10);
     }
 
 }
