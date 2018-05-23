@@ -23,7 +23,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
 
                 .dayContainer {
                     width: 34px;
-                    height: 600px;
+                    /* height: 600px; */
                 }
 
                 .dayHeader {
@@ -117,7 +117,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                                 <div>[[day.day]]</div>
                                 <div>[[day.number]]</div>
                             </div>
-                            <div class$="[[day.dayClassList]]"></div>
+                            <div id$="[[day.id]]" class$="[[day.dayClassList]]" style$="height:[[dayHeight]]"></div>
                         </div>                        
                     </template>                
                 </div>
@@ -145,13 +145,20 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             },
             selectedJob: {
                 type: Object
+            },
+            dayHeight: {
+                type: String
             }
         }
     }
 
     // Lifecycle Callbacks
     connectedCallback() {
-        super.connectedCallback();
+        super.connectedCallback();               
+    }
+
+    ready() {
+        super.ready();
         Date.prototype.getMonthName = function () {
             let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
             return months[this.getMonth()];
@@ -163,8 +170,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         let defaultStartDate = new Date(Date.now());
         let defaultEndDate = new Date(Date.now());
         defaultEndDate.setDate(defaultEndDate.getDate() + 31);
-        this.startDate = (defaultStartDate.getFullYear() + '-' + (defaultStartDate.getMonth() + 1) + '-' + defaultStartDate.getDate()).toString();        
-        this.endDate = (defaultEndDate.getFullYear() + '-' + (defaultEndDate.getMonth() + 1) + '-' + defaultEndDate.getDate()).toString();        
+        this.startDate = (defaultStartDate.getFullYear() + '-' + (defaultStartDate.getMonth() + 1) + '-' + defaultStartDate.getDate()).toString();
+        this.endDate = (defaultEndDate.getFullYear() + '-' + (defaultEndDate.getMonth() + 1) + '-' + defaultEndDate.getDate()).toString();
     }
 
 
@@ -310,10 +317,10 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             currentDay.number = currentDate.getDate();
             if (currentDay.day === 'Sat' || currentDay.day === 'Sun') {
                 currentDay.headerClassList = "dayHeader weekend";
-                currentDay.dayClassList = "flex day weekend";
+                currentDay.dayClassList = "day weekend";
             } else {
                 currentDay.headerClassList = "dayHeader";
-                currentDay.dayClassList = "flex day";
+                currentDay.dayClassList = "day";
             }
             if (previousYear != currentDay.year) {
                 previousYear = currentDay.year;
@@ -333,16 +340,14 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             }
             currentDay.yearHeaderClass = yearHeaderClass;
             currentDay.monthHeaderClass = monthHeaderClass;
+            currentDay.id = "day";
             this.push('timelineArray', currentDay);
             currentDate.setDate(currentDate.getDate() + 1);
             dayCounter++;
         }
         timelineWidth = DAY_WIDTH * dayCounter;
         let timelineHeight = this.generateJobs(timelineWidth);
-        //let styleAttr = document.createAttribute('style');
-        //let styleString = "height:" + timelineHeight + "px;";
-        //styleAttr.value = styleString;
-        //this.$.timelineContainer.setAttributeNode(styleAttr);
+        this.dayHeight = timelineHeight + "px;";
     }    
 
     generateJobs(timelineWidth) {
@@ -354,7 +359,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 this.sortJobs(crew);
                 this.generateSwimlanes(crew);
                 additionalTopOffset = this.generateJobHtml(crew, additionalTopOffset);
-                additionalTopOffset = this.generateCrewDivider(additionalTopOffset, timelineWidth, crew.color);
+                additionalTopOffset = this.generateCrewDivider(additionalTopOffset, timelineWidth);
                 crew.height = crew.height + 10;
             }
         }
@@ -510,35 +515,25 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         let jobAttr = document.createAttribute('job');
         jobAttr.value = job.job;
         newJob.setAttributeNode(jobAttr);
-        let styleAttr = document.createAttribute('style');
-        let styleString = "background-color:" + job.color + ";";
-        styleString = styleString + "top:" + job.top + "px;";
-        styleString = styleString + "left:" + job.left + "px;";
-        styleString = styleString + "width:" + job.width + "px;";
-        styleAttr.value = styleString;
-        newJob.setAttributeNode(styleAttr);
-        let classAttr = document.createAttribute('class');
-        classAttr.value = "job";
-        newJob.setAttributeNode(classAttr);
+        newJob.style.backgroundColor = job.color;
+        newJob.style.top = job.top.toString() + "px";
+        newJob.style.left = job.left.toString() + "px";
+        newJob.style.width = job.width.toString() + "px";        
+        newJob.classList = "job";
         newJob.addEventListener("click", this._jobTapped);
         newJob.innerHTML = job.name;
         newJob.context = this;
         this.$.jobContainer.appendChild(newJob);
     }
 
-    generateCrewDivider(additionalTopOffset, timelineWidth, crewColor) {
+    generateCrewDivider(additionalTopOffset, timelineWidth) {
         const STARTING_TOP_OFFSET = 90;
         let topOffset = STARTING_TOP_OFFSET + additionalTopOffset;
-        let divider = document.createElement('div');
-        let styleAttr = document.createAttribute('style');
-        let styleString = "top:" + topOffset + "px;";
-        styleString = styleString + "width:" + timelineWidth + "px;";
-        styleString = styleString + "background:" + crewColor + ";";
-        styleAttr.value = styleString;
-        divider.setAttributeNode(styleAttr);
-        let classAttr = document.createAttribute('class');
-        classAttr.value = "hline";
-        divider.setAttributeNode(classAttr);
+        let divider = document.createElement('div');       
+        divider.style.top = topOffset.toString() + "px";
+        divider.style.width = timelineWidth.toString() + "px";
+        divider.style.backgroundColor = "#FFFFFF";
+        divider.classList = "hline";
         this.$.jobContainer.appendChild(divider);
         return (additionalTopOffset + 10);
     }
