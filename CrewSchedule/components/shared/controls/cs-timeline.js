@@ -9,11 +9,13 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     background-color: var(--paper-grey-800);
                     padding-left: 10px;
                     padding-bottom: 10px;
+                    margin-right: 10px;
                 }
 
                 .timelineContainer {                    
                     width: 100 %;
-                    height: 600px;
+                    /* height: 600px; */
+                    height: calc(100vh - 130px);
                     overflow: auto;
                     margin-right: 10px;
                     position: relative;
@@ -95,7 +97,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     position: absolute;
                 }
             </style>
-            <div class="horizontal layout flex datepickerPanel">                
+            <div id="datepickerPanel" class="horizontal layout datepickerPanel">                
                 <div class="dataLabel horizontalDataLabel">Start Date</div>
                 <div class="horizontalDataField">
                     <vaadin-date-picker class="cs-datepicker" value="{{startDate}}"></vaadin-date-picker>
@@ -336,12 +338,16 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             dayCounter++;
         }
         timelineWidth = DAY_WIDTH * dayCounter;
-        this.generateJobs(timelineWidth);
+        let timelineHeight = this.generateJobs(timelineWidth);
+        //let styleAttr = document.createAttribute('style');
+        //let styleString = "height:" + timelineHeight + "px;";
+        //styleAttr.value = styleString;
+        //this.$.timelineContainer.setAttributeNode(styleAttr);
     }    
 
     generateJobs(timelineWidth) {
-        if (this.crews && this.crews.length > 0 && this.startDate && this.endDate) {
-            let additionalTopOffset = 0;
+        let additionalTopOffset = 0;
+        if (this.crews && this.crews.length > 0 && this.startDate && this.endDate) {            
             for (var crew of this.crews) {
                 this.removeOutOfRangeJobs(crew);
                 this.adjustJobDates(crew);
@@ -352,6 +358,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 crew.height = crew.height + 10;
             }
         }
+        return additionalTopOffset + 110;
     }
 
     removeOutOfRangeJobs(crew) {
