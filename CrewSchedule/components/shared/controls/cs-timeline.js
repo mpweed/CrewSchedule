@@ -7,23 +7,18 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             <style include="iron-flex iron-flex-alignment cs-shared-styles">                
                 .datepickerPanel {
                     background-color: var(--paper-grey-800);
-                    padding-left: 10px;
+                    padding-left: 100px;
                     padding-bottom: 10px;
-                    margin-right: 10px;
                 }
 
                 .timelineContainer {                    
                     width: 100 %;
-                    /* height: 600px; */
-                    height: calc(100vh - 130px);
                     overflow: auto;
-                    margin-right: 10px;
                     position: relative;
                 }
 
                 .dayContainer {
                     width: 34px;
-                    /* height: 600px; */
                 }
 
                 .dayHeader {
@@ -96,6 +91,32 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     height:1px;
                     position: absolute;
                 }
+
+                .crewPanel {
+                    width: 100px;
+                    min-width: 93px;
+                    background-color: var(--paper-grey-800);
+                    padding-top: 80px;
+                }
+
+                .crew {
+                    border-top: 1px solid var(--paper-grey-600);
+                    color: var(--paper-grey-500);
+                    text-align: center;
+                    cursor: default;                    
+                }
+
+                .crew:hover {
+                    color: #FFFFFF;
+                    border-top-color: #FFFFFF;
+                    background-color: var(--paper-light-blue-400);
+                }
+                
+                .crewName {
+                    position: relative;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
             </style>
             <div id="datepickerPanel" class="horizontal layout datepickerPanel">                
                 <div class="dataLabel horizontalDataLabel">Start Date</div>
@@ -104,25 +125,35 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 </div>
                 <div class="dataLabel horizontalDataLabel">End Date</div>
                 <div class="horizontalDataField">
-                    <vaadin-date-picker class-"cs-datepicker" value="{{endDate}}"></vaadin-date-picker>
+                    <vaadin-date-picker class="cs-datepicker" value="{{endDate}}"></vaadin-date-picker>
                 </div>
             </div>
-            <div id="timelineContainer" class="timelineContainer scroll">
-                <div class="horizontal layout">
-                    <template is="dom-repeat" items="[[timelineArray]]" as="day">
-                        <div class="vertical layout dayContainer">
-                            <div class$="[[day.headerClassList]]">
-                                <div class$="[[day.yearHeaderClass]]">[[day.year]]</div>
-                                <div class$="[[day.monthHeaderClass]]">[[day.month]]</div>
-                                <div>[[day.day]]</div>
-                                <div>[[day.number]]</div>
-                            </div>
-                            <div id$="[[day.id]]" class$="[[day.dayClassList]]" style$="height:[[dayHeight]]"></div>
-                        </div>                        
-                    </template>                
+
+            <div class="horizontal layout">
+                <div class="crewPanel">
+                    <template is="dom-repeat" items="[[crews]]" as="crew">
+                        <div class="crew" style$="height:[[crew.height]]">
+                            <div class="crewName">[[crew.name]]</div>
+                        </div>
+                    </template>
                 </div>
-                <div id="jobContainer">                    
-                </div>                
+                <div id="timelineContainer" class="timelineContainer scroll" style$="height:[[timelineContainerHeight]];width:[[timelineContainerWidth]]">
+                    <div class="horizontal layout">
+                        <template is="dom-repeat" items="[[timelineArray]]" as="day">
+                            <div class="vertical layout dayContainer">
+                                <div class$="[[day.headerClassList]]">
+                                    <div class$="[[day.yearHeaderClass]]">[[day.year]]</div>
+                                    <div class$="[[day.monthHeaderClass]]">[[day.month]]</div>
+                                    <div>[[day.day]]</div>
+                                    <div>[[day.number]]</div>
+                                </div>
+                                <div class$="[[day.dayClassList]]" style$="height:[[dayHeight]]"></div>
+                            </div>                        
+                        </template>                
+                    </div>
+                    <div id="jobContainer">               
+                    </div>                
+                </div>
             </div>`;
     }
 
@@ -147,6 +178,12 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 type: Object
             },
             dayHeight: {
+                type: String
+            },
+            timelineContainerWidth: {
+                type: String
+            },
+            timelineContainerHeight: {
                 type: String
             }
         }
@@ -340,14 +377,15 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             }
             currentDay.yearHeaderClass = yearHeaderClass;
             currentDay.monthHeaderClass = monthHeaderClass;
-            currentDay.id = "day";
             this.push('timelineArray', currentDay);
             currentDate.setDate(currentDate.getDate() + 1);
             dayCounter++;
         }
         timelineWidth = DAY_WIDTH * dayCounter;
-        let timelineHeight = this.generateJobs(timelineWidth);
-        this.dayHeight = timelineHeight + "px;";
+        let dayHeight = this.generateJobs(timelineWidth);
+        this.dayHeight = dayHeight.toString() + "px;";
+        this.timelineContainerWidth = (timelineWidth + 5).toString() + "px";
+        this.timelineContainerHeight = (dayHeight + 100).toString() + "px";
     }    
 
     generateJobs(timelineWidth) {
@@ -360,10 +398,10 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 this.generateSwimlanes(crew);
                 additionalTopOffset = this.generateJobHtml(crew, additionalTopOffset);
                 additionalTopOffset = this.generateCrewDivider(additionalTopOffset, timelineWidth);
-                crew.height = crew.height + 10;
+                crew.height = (crew.height + 9) + "px;";
             }
         }
-        return additionalTopOffset + 110;
+        return additionalTopOffset;
     }
 
     removeOutOfRangeJobs(crew) {
@@ -532,7 +570,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         let divider = document.createElement('div');       
         divider.style.top = topOffset.toString() + "px";
         divider.style.width = timelineWidth.toString() + "px";
-        divider.style.backgroundColor = "#FFFFFF";
+        divider.style.backgroundColor = "#616161";
         divider.classList = "hline";
         this.$.jobContainer.appendChild(divider);
         return (additionalTopOffset + 10);
