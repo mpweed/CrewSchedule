@@ -4,8 +4,13 @@ import '../cs-shared-styles.js';
 class CsTimeline extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
-            <style include="iron-flex iron-flex-alignment cs-shared-styles">                
+            <style include="iron-flex iron-flex-alignment cs-shared-styles">
+                :host {
+                    position: relative;
+                }
+
                 .datepickerPanel {
+                    position: relative;
                     background-color: var(--paper-grey-800);
                     padding-left: 100px;
                     padding-bottom: 10px;
@@ -64,6 +69,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     background-color: var(--paper-grey-800);
                 }
 
+                .jobContainer {
+                    position: absolute;
+                    overflow: visible;
+                }
+
                 .job {
                     height:24px;
                     border-left: 1px solid #ffffff;
@@ -71,7 +81,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     text-align:center;
                     cursor:default;
                     overflow: hidden;
-                    position:absolute; 
+                    position: relative; 
                 }
 
                 .job:hover {
@@ -87,6 +97,10 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     margin-right: 20px;
                 }
 
+                .horizontalDataFieldNoMargin {
+                     padding-top: 10px;
+                }
+
                 .hline {
                     height:1px;
                     position: absolute;
@@ -94,9 +108,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
 
                 .crewPanel {
                     width: 100px;
-                    min-width: 93px;
+                    min-width: 100px;
                     background-color: var(--paper-grey-800);
-                    padding-top: 80px;
                 }
 
                 .crew {
@@ -105,19 +118,83 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     text-align: center;
                     cursor: default;                    
                 }
-
-                .crew:hover {
-                    color: #FFFFFF;
-                    border-top-color: #FFFFFF;
-                    background-color: var(--paper-light-blue-400);
-                }
                 
                 .crewName {
                     position: relative;
                     top: 50%;
                     transform: translateY(-50%);
                 }
-            </style>
+
+                .jobContainer .tooltiptext {
+                    visibility: hidden;
+                    font-size: .9em;
+                    height:24px;
+                    width: 350px;
+                    background-color: var(--paper-grey-900);
+                    color: #FFFFFF;
+                    text-align: center;
+                    border: 1px solid var(--paper-grey-600);
+                    top: -120%;
+                    position: absolute;
+                    z-index: 1;
+                }
+
+                .jobContainer .tooltiptext-left-align {
+                    left: 0;
+                    margin-left: 10px;
+                }
+
+                .jobContainer .tooltiptext-right-align {
+                    right: 0;
+                    margin-right: 10px;
+                }
+
+                .jobContainer .tooltiptext-center-align {
+                    left: 50%;
+                    margin-left: -175px;
+                }
+                
+                .jobContainer:hover .tooltiptext {
+                    visibility: visible;
+                }
+
+                .addJobButton {
+                    width: 60px;
+                    height: 60px;
+                    margin-left: 20px;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                    color: var(--paper-grey-900);
+                    cursor: default;
+                }
+
+                .addJobButton:hover {
+                    color: #ffffff;
+                }
+
+                .endDateErrorMessage {
+                    overflow: visible;
+                    text-align: center;
+                    font-size: .8em;
+                    margin-top: 10px;
+                    padding: 4px;
+                    height: 20px;
+                    width: 250px;
+                    background-color: var(--paper-red-700);
+                    border: 1px solid #FFFFFF;
+                }
+
+                .endDateErrorMessage::before {
+                    content: " ";
+                    position: absolute;
+                    top: 50%;
+                    left: 663px;
+                    margin-top: -10px;
+                    border-width: 10px;
+                    border-style: solid;
+                    border-color: transparent #FFFFFF transparent transparent;
+                }
+            </style>            
             <div id="datepickerPanel" class="horizontal layout datepickerPanel">                
                 <div class="dataLabel horizontalDataLabel">Start Date</div>
                 <div class="horizontalDataField">
@@ -127,10 +204,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 <div class="horizontalDataField">
                     <vaadin-date-picker class="cs-datepicker" value="{{endDate}}"></vaadin-date-picker>
                 </div>
-            </div>
-
+                <div id="endDateErrorMessage" class="endDateErrorMessage hidden">End Date must be greater than Start Date</div>
+            </div>            
             <div class="horizontal layout">
                 <div class="crewPanel">
+                    <paper-icon-button id="createJob" icon="add" class="addJobButton" on-tap="_addJobClick"></paper-icon-button>
                     <template is="dom-repeat" items="[[crews]]" as="crew">
                         <div class="crew" style$="height:[[crew.height]]">
                             <div class="crewName">[[crew.name]]</div>
@@ -287,15 +365,22 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         if (this.startDate && this.endDate && this.startDate != this.endDate) {
             if (this.endDate < this.startDate) {
                 // TODO: SHOW ERROR MESSAGE THAT END DATE MUST BE GREATER THAN START DATE
+                this.$.endDateErrorMessage.classList.remove("hidden");
             } else {
                 // **TEMPORARY** - Static data used for layout design and development
                 this.generateCrews()
+
+                this.$.endDateErrorMessage.classList.add("hidden");
                 this.generateTimeSpan();
             }
         }
     }
 
-    _jobTapped(e) {
+    _addJobClick(e) {
+
+    }
+
+    _jobClick(e) {
         let context = e.path[0].context;
         let crewId = e.path[0].attributes.crew.nodeValue;
         let jobId = e.path[0].attributes.job.nodeValue;
@@ -334,9 +419,13 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         this.clearJobs();
         this.timelineArray = new Array();
         let timeSpanStart = new Date(this.startDate);
+        if (timeSpanStart.getHours() != 0) {
+            this.setUtcAdjustedDate(timeSpanStart);
+        }
         let timeSpanEnd = new Date(this.endDate);
-        this.setUtcAdjustedDate(timeSpanStart);
-        this.setUtcAdjustedDate(timeSpanEnd);
+        if (timeSpanEnd.getHours() != 0) {
+            this.setUtcAdjustedDate(timeSpanEnd);
+        }
         let currentDate = timeSpanStart;
         let currentDayFullYear = currentDate.getFullYear();
         let currentMonthName = currentDate.getMonthName();
@@ -384,7 +473,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         timelineWidth = DAY_WIDTH * dayCounter;
         let dayHeight = this.generateJobs(timelineWidth);
         this.dayHeight = dayHeight.toString() + "px;";
-        this.timelineContainerWidth = (timelineWidth + 5).toString() + "px";
+        this.timelineContainerWidth = (timelineWidth + 10).toString() + "px";
         this.timelineContainerHeight = (dayHeight + 100).toString() + "px";
     }    
 
@@ -406,14 +495,24 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
 
     removeOutOfRangeJobs(crew) {
         let startDate = new Date(this.startDate);
+        if (startDate.getHours() != 0) {
+            this.setUtcAdjustedDate(startDate);
+        }
         let endDate = new Date(this.endDate);
-        this.setUtcAdjustedDate(startDate);
-        this.setUtcAdjustedDate(endDate);
+        if (endDate.getHours() != 0) {
+            this.setUtcAdjustedDate(endDate);
+        }        
         if (crew.jobs && crew.jobs.length > 0) {
             let deletionList = new Array();
             for (var i = 0; i < crew.jobs.length; i++) {
                 let currentStartDate = new Date(crew.jobs[i].startDate);
+                if (currentStartDate.getHours() != 0) {
+                    this.setUtcAdjustedDate(currentStartDate);
+                }
                 let currentEndDate = new Date(crew.jobs[i].endDate);
+                if (currentEndDate.getHours() != 0) {
+                    this.setUtcAdjustedDate(currentEndDate);
+                }
                 if (currentEndDate < startDate) { // Job ends before start of timeline range
                     deletionList.push(crew.jobs[i]);
                 }
@@ -434,9 +533,13 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         if (crew.jobs && crew.jobs.length > 0) {
             for (var job of crew.jobs) {
                 let currentStartDate = new Date(job.startDate);
+                if (currentStartDate.getHours() != 0) {
+                    this.setUtcAdjustedDate(currentStartDate);
+                }
                 let currentEndDate = new Date(job.endDate);
-                this.setUtcAdjustedDate(currentStartDate);
-                this.setUtcAdjustedDate(currentEndDate);
+                if (currentEndDate.getHours() != 0) {
+                    this.setUtcAdjustedDate(currentEndDate);
+                }
                 job.originalStartDate = job.startDate;
                 job.originalEndDate = job.endDate;
                 if (currentStartDate < startDate) {
@@ -477,7 +580,13 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                         deletionList.push(currentJob);
                     } else {
                         previousJobEndDate = new Date(previousJob.endDate);
+                        if (previousJobEndDate.getHours() != 0) {
+                            this.setUtcAdjustedDate(previousJobEndDate);
+                        }
                         currentJobStartDate = new Date(currentJob.startDate);
+                        if (currentJobStartDate.getHours() != 0) {
+                            this.setUtcAdjustedDate(currentJobStartDate);
+                        }
                         if (currentJobStartDate > previousJobEndDate) {
                             currentSwimlane.push(currentJob);
                             deletionList.push(currentJob);
@@ -525,9 +634,13 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         const MILLISECONDS_IN_DAY = 86400000;
         const DAY_WIDTH = 34;
         let timeSpanStart = new Date(this.startDate);
+        if (timeSpanStart.getHours() != 0) {
+            this.setUtcAdjustedDate(timeSpanStart);
+        }
         let jobStartDate = new Date(job.startDate);
-        this.setUtcAdjustedDate(timeSpanStart);
-        this.setUtcAdjustedDate(jobStartDate)
+        if (jobStartDate.getHours() != 0) {
+            this.setUtcAdjustedDate(jobStartDate)
+        }        
         let leftOffsetDays = Math.round((jobStartDate - timeSpanStart) / MILLISECONDS_IN_DAY);
         return (leftOffsetDays * DAY_WIDTH);
     }
@@ -536,9 +649,13 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         const MILLISECONDS_IN_DAY = 86400000;
         const DAY_WIDTH = 34;
         let jobStartDate = new Date(job.startDate);
+        if (jobStartDate.getHours() != 0) {
+            this.setUtcAdjustedDate(jobStartDate);
+        }
         let jobEndDate = new Date(job.endDate);
-        this.setUtcAdjustedDate(jobStartDate);
-        this.setUtcAdjustedDate(jobEndDate);
+        if (jobEndDate.getHours() != 0) {
+            this.setUtcAdjustedDate(jobEndDate);
+        }        
         // Adjust end date so that the full day is included in the width calculation
         jobEndDate.setDate(jobEndDate.getDate() + 1);
         let lengthInDays = Math.round((jobEndDate - jobStartDate) / MILLISECONDS_IN_DAY);
@@ -546,6 +663,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     }
 
     generateHtml(job) {
+        let newJobContainer = document.createElement('div');
+        newJobContainer.classList = "jobContainer";
+        newJobContainer.style.top = job.top.toString() + "px";
+        newJobContainer.style.left = job.left.toString() + "px";
+        newJobContainer.style.width = job.width.toString() + "px";
         let newJob = document.createElement('div');
         let crewAttr = document.createAttribute('crew');
         crewAttr.value = job.crew;
@@ -554,14 +676,35 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         jobAttr.value = job.job;
         newJob.setAttributeNode(jobAttr);
         newJob.style.backgroundColor = job.color;
-        newJob.style.top = job.top.toString() + "px";
-        newJob.style.left = job.left.toString() + "px";
         newJob.style.width = job.width.toString() + "px";        
         newJob.classList = "job";
-        newJob.addEventListener("click", this._jobTapped);
+        newJob.addEventListener("click", this._jobClick);
         newJob.innerHTML = job.name;
         newJob.context = this;
-        this.$.jobContainer.appendChild(newJob);
+        newJobContainer.appendChild(newJob);
+        this.generateJobTooltip(job, newJobContainer);
+        this.$.jobContainer.appendChild(newJobContainer);
+    }
+
+    generateJobTooltip(job, newJobContainer) {
+        if (job.startDate === this.startDate || job.endDate === this.endDate || job.width < 350) {            
+            if (job.startDate === this.startDate && job.width < 350) {               
+                let newTooltip = document.createElement('span');
+                newTooltip.classList = "tooltiptext tooltiptext-left-align";
+                newTooltip.innerHTML = job.name;
+                newJobContainer.appendChild(newTooltip);
+            } else if (job.endDate === this.endDate && job.width < 350) {
+                let newTooltip = document.createElement('span');
+                newTooltip.classList = "tooltiptext tooltiptext-right-align";
+                newTooltip.innerHTML = job.name;
+                newJobContainer.appendChild(newTooltip);
+            } else if (job.width < 350) {
+                let newTooltip = document.createElement('span');
+                newTooltip.classList = "tooltiptext tooltiptext-center-align";
+                newTooltip.innerHTML = job.name;
+                newJobContainer.appendChild(newTooltip);
+            }            
+        }        
     }
 
     generateCrewDivider(additionalTopOffset, timelineWidth) {

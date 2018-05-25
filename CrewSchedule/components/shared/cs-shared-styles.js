@@ -151,6 +151,10 @@ styleElement.innerHTML =
                 display: none;
             }
 
+            .hidden {
+                visibility: hidden;
+            }
+
             .dialogButtons {
                 margin-top: 20px;
             }
