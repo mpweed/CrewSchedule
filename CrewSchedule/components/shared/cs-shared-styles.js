@@ -43,6 +43,7 @@ import './controls/cs-notification-panel.js';
 import './controls/cs-textarea.js';
 import './controls/cs-timeline.js';
 import './controls/cs-title-bar.js';
+import './controls/cs-content-switcher.js';
 
 // Shared Styles
 const styleElement = document.createElement('dom-module');

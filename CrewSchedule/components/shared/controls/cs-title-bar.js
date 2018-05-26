@@ -9,44 +9,28 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                     background-color: var(--paper-grey-800);
                 }
 
-                .jiclogo {
+                .cslogo {
                     margin-top: 6px;
                     margin-left: 6px;
                     margin-bottom: 6px;
-                    width: 36px;
+                    width: 165px;
                     height: 36px;
                 }
 
-                .searchBox {
-                    margin-left: 8px;
-                    margin-right: 8px;
+                .personIcon {
+                    border: 2px solid #DCE775;
+                    border-radius: 50%;
+                    width: 32px;
+                    height: 32px;
+                    margin-top: 6px;
+                    margin-left: 6px;
+                    margin-right: 10px;
                 }
 
-                .searchField {
-                    height: 26px;
-                    padding-left: 20px;
-                    padding-right: 46px;
-                    margin-top: 10px;
-                    border: none;
-                    border-radius: 26px;
-                    color: #ffffff;
-                    background-color: var(--paper-grey-900);
-                    outline: none;
-                }
-
-                #search {
-                    min-width: 5px;
-                    width: 5px;
-                }
-
-                .searchButton {
-                    margin-top: 4px;
-                    margin-left: -40px;
-                    color: var(--paper-grey-800);
-                }
-
-                .searchButton:hover {
-                    color: #ffffff;
+                iron-icon {
+                    width: 30px;
+                    height: 30px;
+                    color: #FFB74D;
                 }
 
                 .userName {
@@ -54,17 +38,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                     margin-left: 10px;
                     font-size: 12px;
                     font-weight: 300;
-                    color: var(--paper-grey-300);
-                }
-
-                .userPhoto {
-                    margin-top: 6px;
-                    margin-left: 10px;
-                    margin-right: 10px;
-                    border-radius: 50%;
-                    width: 32px;
-                    height: 32px;
-                    border: solid 2px var(--paper-blue-grey-300);
+                    color: #FFB74D;
                 }
 
                 .userButton {
@@ -85,6 +59,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                     top: 100%;
                     right: 4px;
                     padding: 20px;
+                    width: 290px;
                     border: 1px solid var(--paper-grey-600);
                     background-color: var(--paper-grey-900);
                     opacity: 0;
@@ -103,12 +78,15 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
 
                 .userInformationDialogJobTitle {
                     min-width: 220px;
-                    color: var(--paper-grey-400);
+                    color: #DCE775;
                 }
 
-                .userInformationDialogDepartment {
-                    min-width: 220px;
-                    color: var(--paper-grey-600);
+                .primaryColor {
+                    color: #FFB74D;
+                }
+
+                .secondaryColor {
+                    color: #DCE775;
                 }
             </style>
             <iron-ajax id="bootstrapDataXhr"
@@ -117,39 +95,30 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                    handle-as="json"
                    on-response="_handleBootstrapDataResponse"
                    on-error="_handleXhrError">
-            </iron-ajax>        
-            <datalist id="jobList">
-                <template is="dom-repeat" items="[[jobs]]">
-                    <option id="[[item.id]] "value="[[item.name]]"></option>
-                </template>
-            </datalist>
+            </iron-ajax>
             <div class="horizontal layout appTitleBar flex">
-                <img class="jiclogo" src="[[logoUrl]]" />
-                <div class="horizontal layout searchBox flex">
-                    <input id="search" type="text" placeholder="Job Name" class="searchField flex" list="jobList" on-keydown="_checkForEnter" />
-                    <paper-icon-button id="searchButton" icon="search" class="searchButton" on-tap="_searchClick"></paper-icon-button>
-                </div>
-                <paper-tooltip for="search">Type the desired Job Name and press the "Enter" key on the keyboard to retrieve the job.</paper-tooltip>
+                <img class="cslogo" src="[[logoUrl]]" />
+                
                 <div id="userButton" class="horizontal layout userButton" on-click="_showUserInfoPanel">
-                    <div class="userName">[[applicationUser.appInfo.name]]</div>
-                    <img class="userPhoto" src="[[applicationUser.appInfo.photoUrl]]" />
+                    <div class="userName">[[applicationUser.name]]</div>
+                    <div class="personIcon">
+                        <iron-icon icon="social:person"></icon>
+                    </div>                    
                     <div id="userInfoPanel" class="userInfoPanel">
-                        <div class="userInformationDialogJobTitle">[[applicationUser.hrInfo.jobTitle]]</div>
-                        <div class="userInformationDialogDepartment">[[applicationUser.hrInfo.departmentName]]</div>
+                        <div class="userInformationDialogJobTitle">[[applicationUser.jobTitle]]</div>
                         <div class="horizontal layout flex">
                             <div class="flex">
-                                <div class="dataLabelSmall">Environment</div>
-                                <div class="dataSmall">[[environment]]</div>
+                                <div class="dataLabelSmall primaryColor">Environment</div>
+                                <div class="dataSmall secondaryColor">[[environment]]</div>
                             </div>
                             <div class="flex">
-                                <div class="dataLabelSmall">Role</div>
-                                <div class="dataSmall">[[applicationUser.appInfo.role]]</div>
+                                <div class="dataLabelSmall primaryColor">Role</div>
+                                <div class="dataSmall secondaryColor">[[applicationUser.role]]</div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            `;
+            </div>`;
     }
 
     constructor() {
@@ -164,7 +133,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                 type: String,
                 value: function () {
                     var href = window.location.href.toUpperCase();
-                    if (href.search("PROD") > -1) {
+                    if (href.search("CREWSEARCH") > -1) {
                         return "Production";
                     } else if (href.search("TEST") > -1) {
                         return "Test";
@@ -194,15 +163,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                 type: Object,
                 notify: true
             },
-            searchJob: {
-                type: Object,
-                notify: true
-            },
-            job: {
-                type: Object,
-                notify: true
-            },
-            jobs: {
+            companies: {
                 type: Array,
                 notify: true
             }
@@ -215,26 +176,16 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
         document.addEventListener("click", this._boundListener);
         this.baseUrl = window.location.href;
         var trailingCharacter = this.baseUrl.slice(-1);
-        if (trailingCharacter === "/") {
-            var trailingPathSegment = this.baseUrl.slice(-4).toLowerCase();
-            if (trailingPathSegment === "com/") {
-                this.logoUrl = this.baseUrl + "jic/Images/JICLogo.png";
-            } else {
-                this.logoUrl = this.baseUrl + "Images/JICLogo.png";
-            }
+        if (trailingCharacter === "/") {            
+            this.logoUrl = this.baseUrl + "images/CSNameLogo.png";
             this.baseUrl = this.baseUrl + "api/BootstrapData/";
-        } else {
-            var trailingPathSegment = this.baseUrl.slice(-3).toLowerCase();
-            if (trailingPathSegment === "com") {
-                this.logoUrl = this.baseUrl + "/jic/Images/JICLogo.png";
-            } else {
-                this.logoUrl = this.baseUrl + "/Images/JICLogo.png";
-            }
+        } else {            
+            this.logoUrl = this.baseUrl + "/images/CSNameLogo.png";
             this.baseUrl = this.baseUrl + "/api/BootstrapData/";
         }
         this.isAdministrator = false;
-        this.dispatchEvent(new CustomEvent('busy', { detail: { status: true } }));
-        this.getBootstrapData();
+        //this.dispatchEvent(new CustomEvent('busy', { detail: { status: true } }));
+        //this.getBootstrapData();
     }
 
     disconnectedCallback() {
@@ -261,26 +212,6 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
     _handleXhrError(e, request) {
         this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
         this.dispatchEvent(new CustomEvent('exception', { detail: e.detail.error.message }));
-    }
-
-    _checkForEnter(e) {
-        if (e.keyCode === 13) {
-            this._searchClick(e);
-        }
-    }
-
-    _searchClick(e) {
-        this.$.searchButton.focus();
-        this.searchJob = null;
-        if (this.$.search.value && this.jobs) {
-            var jobName = this.$.search.value;
-            for (var i = 0; i < this.jobs.length; i++) {
-                if (this.jobs[i].name === jobName.toUpperCase()) {
-                    this.searchJob = this.jobs[i];
-                    break;
-                }
-            }
-        }
     }
 
     _showUserInfoPanel(event) {

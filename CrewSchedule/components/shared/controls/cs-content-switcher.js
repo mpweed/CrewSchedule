@@ -1,0 +1,58 @@
+﻿import { PolymerElement, html } from '../external/@polymer/polymer/polymer-element.js';
+import { GestureEventListeners } from '../external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
+import '../cs-shared-styles.js';
+class CsContentSwitcher extends GestureEventListeners(PolymerElement) {
+    static get template() {
+        return html`
+            <style include="iron-flex iron-flex-alignment jic-shared-styles">
+                :host {
+                    width: 100%;
+                    height: 100%;
+                }
+
+                iron-pages {
+                    height: calc(100vh - 68px);
+                    overflow: auto;
+                }
+            </style>
+            <iron-pages id="ironPages" selected="[[page]]" attr-for-selected="name" fallback-selection="view404" class="scroll">            
+                <cs-schedule-view id="scheduleView" name="scheduleView" is-busy=[[isBusy]]
+                                                                        application-user="[[applicationUser]]">
+                </cs-schedule-view>
+                <cs-admin-view id="adminView" name="adminView" application-user="[[applicationUser]]">
+                </cs-admin-view>
+            </iron-pages>`;
+    }
+
+    // Public Properties
+    static get properties() {
+        return {
+            isBusy: {
+                type: Boolean
+            },
+            page: {
+                type: String,
+                notify: true,
+                observer: "_pageChanged"
+            },
+            applicationUser: {
+                type: Object
+            }
+        }
+    }
+
+    // Event Handlers
+    _pageChanged(newValue, oldValue) {
+        if (newValue) {
+            switch (newValue) {
+                case "scheduleView":
+                    this.$.scheduleView.refreshView();
+                    break;
+                case "adminView":
+                    this.$.adminView.refreshView();
+                    break;
+            }
+        }
+    }    
+}
+customElements.define('cs-content-switcher', CsContentSwitcher);

@@ -5,28 +5,100 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
             <style>
-                /* CSS rules for your element */
+                .content {                
+                    height: calc(100vh - 48px);
+                }
             </style>
-            <cs-timeline></cs-timeline>
-            `;
+            <cs-title-bar on-busy="_handleBusy"
+                          on-exception="_handleException"
+                          is-administrator="{{isAdministrator}}"
+                          application-user="{{applicationUser}}"
+                          companies="{{companies}}">
+            </cs-title-bar>
+            <div class="horizontal layout content flex">
+                <cs-nav-bar page="{{page}}"
+                            is-administrator="{{isAdministrator}}">
+                </cs-nav-bar>
+                <!--<cs-content-switcher on-busy="_handleBusy"
+                                     on-success="_handleSuccess"
+                                     on-exception="_handleException"
+                                     is-busy="isBusy"
+                                     application-user="[[applicationUser]]"
+                                     page="{{page}}">
+                </cs-content-switcher>-->
+            </div>
+            <cs-notification-panel is-busy="[[isBusy]]" 
+                                   is-success="{{isSuccess}}" 
+                                   is-exception="{{isException}}" 
+                                   error-message="[[errorMessage]]">
+            </cs-notification-panel>`;
     }
 
     // Public Properties
     static get properties() {
         return {
-            greeting: {
-                type: String
+            isBusy: {
+                type: Boolean,
+                notify: true
+            },
+            isSuccess: {
+                type: Boolean,
+                notify: true
+            },
+            isException: {
+                type: Boolean,
+                notify: true
+            },
+            errorMessage: {
+                type: String,
+                notify: true
+            },
+            applicationUser: {
+                type: Object
+            },
+            companies: {
+               type: Array
             }
         }
     }
-
+    
     // Lifecycle Callbacks
     connectedCallback() {
         super.connectedCallback();
-        this.greeting = "Hello Desktop";
+
+        // ***TEMPORARY*** FOR LAYOUT DEVELOPMENT ONLY
+        this.applicationUser = {
+            "name": "Michael Weed",
+            "jobTitle": "System Administrator",
+            "role": "System Administrator"
+        };
+
+        this.companies = [
+            {
+                "id": "1",
+                "name": "Control Point",
+                "offices": [
+                    {
+                        "id": "1",
+                        "name": "Warren, NJ"
+                    }
+                ]
+            }
+        ];
     }
 
     // Event Handlers
+    _handleBusy(e) {
+        this.isBusy = e.detail.status;
+    }
 
+    _handleSuccess(e) {
+        this.isSuccess = true;
+    }
+
+    _handleException(e) {
+        this.isException = true;
+        this.errorMessage = e.detail;
+    }
 }
 customElements.define('cs-desktop-shell', CsDesktopShell);

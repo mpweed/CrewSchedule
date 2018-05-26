@@ -30,7 +30,7 @@ class CsNotificationPanel extends GestureEventListeners(PolymerElement) {
                     margin-top: 100px;
                     width: 100px;
                     height: 100px;
-                    --paper-spinner-color: var(--paper-pink-300);
+                    --paper-spinner-color: #DCE775;
                     --paper-spinner-stroke-width: 6px;
                 }
 
@@ -190,8 +190,7 @@ class CsNotificationPanel extends GestureEventListeners(PolymerElement) {
                 <div id="spinnerPanel" class="spinnerPanel noPointerEvents">
                     <paper-spinner-lite active></paper-spinner-lite>
                 </div>
-            </div>
-            `;
+            </div>`;
     }
 
     // Public Properties

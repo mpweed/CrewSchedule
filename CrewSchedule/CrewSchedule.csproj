@@ -150,6 +150,7 @@
   <ItemGroup>
     <Content Include="components\desktop\cs-desktop-shell.js" />
     <Content Include="components\mobile\cs-mobile-shell.js" />
+    <Content Include="components\shared\controls\cs-content-switcher.js" />
     <Content Include="components\shared\controls\cs-title-bar.js" />
     <Content Include="components\shared\controls\cs-textarea.js" />
     <Content Include="components\shared\controls\cs-notification-panel.js" />
@@ -403,7 +404,8 @@
     <Content Include="components\shared\external\%40webcomponents\shadycss\src\template-map.js" />
     <Content Include="components\shared\external\%40webcomponents\shadycss\src\unscoped-style-handler.js" />
     <Content Include="Global.asax" />
-    <Content Include="images\JICLogo.png" />
+    <Content Include="images\CSLogo.png" />
+    <Content Include="images\CSNameLogo.png" />
     <Content Include="style.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

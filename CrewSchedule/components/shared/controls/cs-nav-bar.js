@@ -25,13 +25,9 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
                 }
             </style>
             <div class="appNav">
-                <paper-icon-button id="createJob" icon="add" class="appNavButton" on-tap="_NavButtonClick"></paper-icon-button>
-                <template is="dom-if" if="[[isAdministrator]]">
-                    <paper-icon-button id="maintainUsers" icon="social:person" class="appNavButton" on-tap="_NavButtonClick"></paper-icon-button>
-                    <paper-icon-button id="externalSystems" icon="settings" class="appNavButton" on-tap="_NavButtonClick"></paper-icon-button>
-                </template>
-            </div>
-            `;
+                <paper-icon-button id="scheduleView" icon="list" class="appNavButton" on-tap="_NavButtonClick"></paper-icon-button>
+                <paper-icon-button id="adminView" icon="settings" class="appNavButton" on-tap="_NavButtonClick"></paper-icon-button>
+            </div>`;
     }
 
     // Public Properties

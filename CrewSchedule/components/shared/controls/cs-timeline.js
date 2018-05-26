@@ -5,10 +5,6 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
             <style include="iron-flex iron-flex-alignment cs-shared-styles">
-                :host {
-                    position: relative;
-                }
-
                 .datepickerPanel {
                     position: relative;
                     background-color: var(--paper-grey-800);
@@ -97,8 +93,9 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     margin-right: 20px;
                 }
 
-                .horizontalDataFieldNoMargin {
+                .horizontalDataFieldSmallMargin {
                      padding-top: 10px;
+                     margin-right: 8px;
                 }
 
                 .hline {
@@ -188,9 +185,9 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     content: " ";
                     position: absolute;
                     top: 50%;
-                    left: 663px;
-                    margin-top: -10px;
-                    border-width: 10px;
+                    left: 655px;
+                    margin-top: -8px;
+                    border-width: 8px;
                     border-style: solid;
                     border-color: transparent #FFFFFF transparent transparent;
                 }
@@ -201,7 +198,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     <vaadin-date-picker class="cs-datepicker" value="{{startDate}}"></vaadin-date-picker>
                 </div>
                 <div class="dataLabel horizontalDataLabel">End Date</div>
-                <div class="horizontalDataField">
+                <div class="horizontalDataFieldSmallMargin">
                     <vaadin-date-picker class="cs-datepicker" value="{{endDate}}"></vaadin-date-picker>
                 </div>
                 <div id="endDateErrorMessage" class="endDateErrorMessage hidden">End Date must be greater than Start Date</div>
@@ -216,7 +213,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     </template>
                 </div>
                 <div id="timelineContainer" class="timelineContainer scroll" style$="height:[[timelineContainerHeight]];width:[[timelineContainerWidth]]">
-                    <div class="horizontal layout">
+                    <div id="timelineHeader" class="horizontal layout">
                         <template is="dom-repeat" items="[[timelineArray]]" as="day">
                             <div class="vertical layout dayContainer">
                                 <div class$="[[day.headerClassList]]">
@@ -238,9 +235,9 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
-            timelineArray: {
+            crews: {
                 type: Array
-            },
+            },            
             startDate: {
                 type: String,
                 observer: "_dateChanged"
@@ -249,11 +246,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 type: String,
                 observer: "_dateChanged"
             },
-            crews: {
+            timelineArray: {
                 type: Array
-            },
-            selectedJob: {
-                type: Object
             },
             dayHeight: {
                 type: String
@@ -263,7 +257,10 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             },
             timelineContainerHeight: {
                 type: String
-            }
+            },
+            selectedJob: {
+                type: Object
+            }            
         }
     }
 
@@ -296,63 +293,93 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         let crews = [
             {
                 "id": "1",
-                "name": "Crew 1",
-                "color": "#e53935",
+                "name": "Crew 1",                
                 "jobs": [
                     {
                         "id": "1",
                         "name": "Job 1",
                         "startDate": "2018-05-16",
-                        "endDate": "2018-06-17"
+                        "endDate": "2018-06-17",
+                        "projectManager": {
+                            "id": "1",
+                            "color": "#e53935"
+                        }
                     },
                     {
                         "id": "2",
                         "name": "Job 2",
                         "startDate": "2018-05-17",
-                        "endDate": "2018-06-13"
+                        "endDate": "2018-06-13",
+                        "projectManager": {
+                            "id": "1",
+                            "color": "#e53935"
+                        }
                     },
                     {
                         "id": "3",
                         "name": "Job 3",
                         "startDate": "2018-06-22",
-                        "endDate": "2018-06-28"
+                        "endDate": "2018-06-28",
+                        "projectManager": {
+                            "id": "2",
+                            "color": "#795548"
+                        }
                     },
                     {
                         "id": "4",
                         "name": "Job 4",
                         "startDate": "2018-06-18",
-                        "endDate": "2018-07-12"
+                        "endDate": "2018-07-12",
+                        "projectManager": {
+                            "id": "3",
+                            "color": "#fb8c00"
+                        }
                     }
                 ]
             },
             {
                 "id": "2",
                 "name": "Crew 2",
-                "color": "#795548",
                 "jobs": [
                     {
                         "id": "1",
                         "name": "Job 1",
                         "startDate": "2018-05-25",
-                        "endDate": "2018-06-04"
+                        "endDate": "2018-06-04",
+                        "projectManager": {
+                            "id": "2",
+                            "color": "#795548"
+                        }
                     },
                     {
                         "id": "2",
                         "name": "Job 2",
                         "startDate": "2018-05-20",
-                        "endDate": "2018-5-24"
+                        "endDate": "2018-5-24",
+                        "projectManager": {
+                            "id": "1",
+                            "color": "#795548"
+                        }
                     },
                     {
                         "id": "3",
                         "name": "Job 3",
                         "startDate": "2018-06-06",
-                        "endDate": "2018-06-28"
+                        "endDate": "2018-06-28",
+                        "projectManager": {
+                            "id": "3",
+                            "color": "#fb8c00"
+                        }
                     },
                     {
                         "id": "4",
                         "name": "Job 4",
                         "startDate": "2018-06-01",
-                        "endDate": "2018-06-07"
+                        "endDate": "2018-06-07",
+                        "projectManager": {
+                            "id": "1",
+                            "color": "#795548"
+                        }
                     }
                 ]
             }
@@ -364,7 +391,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     _dateChanged(newValue, oldValue) {
         if (this.startDate && this.endDate && this.startDate != this.endDate) {
             if (this.endDate < this.startDate) {
-                // TODO: SHOW ERROR MESSAGE THAT END DATE MUST BE GREATER THAN START DATE
+                this.crews = null;
+                this.clearTimeline();
                 this.$.endDateErrorMessage.classList.remove("hidden");
             } else {
                 // **TEMPORARY** - Static data used for layout design and development
@@ -404,6 +432,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         } else {
             localDate.setDate(localDate.getDate() - timezoneOffsetDays);
         }
+    }
+
+    clearTimeline() {
+        this.clearJobs();
+        this.timelineArray = null;
     }
 
     clearJobs() {
@@ -615,7 +648,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 for (var i = 0; i < swimlane.length; i++) {
                     currentJob = swimlane[i];
                     currentJob.crew = crew.id;
-                    currentJob.color = crew.color;
+                    currentJob.color = currentJob.projectManager.color;
                     currentJob.job = currentJob.id;
                     currentJob.top = topOffset;
                     currentJob.left = this.calculateLeftOffset(currentJob);
