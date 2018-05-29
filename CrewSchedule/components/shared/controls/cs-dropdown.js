@@ -13,7 +13,7 @@ class CsDropdown extends GestureEventListeners(PolymerElement) {
                     position: relative; /* Enable absolute positioning for children and pseudo elements */
                     height: 26px;
                     padding-top: 2px;
-                    padding-left: 20px;
+                    padding-left: 10px;
                     padding-right: 46px;
                     border: 1px solid var(--paper-grey-900);
                     color: #ffffff;

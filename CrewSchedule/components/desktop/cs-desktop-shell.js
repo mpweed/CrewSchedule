@@ -12,20 +12,20 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
             <cs-title-bar on-busy="_handleBusy"
                           on-exception="_handleException"
                           is-administrator="{{isAdministrator}}"
-                          application-user="{{applicationUser}}"
-                          companies="{{companies}}">
+                          application-user="{{applicationUser}}">
             </cs-title-bar>
             <div class="horizontal layout content flex">
                 <cs-nav-bar page="{{page}}"
                             is-administrator="{{isAdministrator}}">
                 </cs-nav-bar>
-                <!--<cs-content-switcher on-busy="_handleBusy"
+                <cs-content-switcher on-busy="_handleBusy"
                                      on-success="_handleSuccess"
                                      on-exception="_handleException"
                                      is-busy="isBusy"
                                      application-user="[[applicationUser]]"
-                                     page="{{page}}">
-                </cs-content-switcher>-->
+                                     page="{{page}}"
+                                     companies="[[companies]]">
+                </cs-content-switcher>
             </div>
             <cs-notification-panel is-busy="[[isBusy]]" 
                                    is-success="{{isSuccess}}" 

@@ -39,8 +39,7 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
             page: {
                 type: String,
                 value: "search",
-                notify: true,
-                observer: "_pageChanged"
+                notify: true
             },
             selectedNavButton: {
                 type: Object
@@ -51,17 +50,12 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
     // Lifecycle Callbacks
     connectedCallback() {
         super.connectedCallback();
-        this.selectedNavButton = this.$.search;
+        this.selectedNavButton = this.$.scheduleView;
+        this.$.scheduleView.classList.add("appNavSelected");
+        this.page = "scheduleView";
     }
 
     // Event Handlers
-    _pageChanged(newValue, oldValue) {
-        if (newValue == "search" && this.selectedNavButton) {
-            this.selectedNavButton.classList.remove("appNavSelected");
-            this.selectedNavButton = null;
-        }
-    }
-
     _NavButtonClick(e) {
         var btn = e.target;
         if (!this.selectedNavButton) {

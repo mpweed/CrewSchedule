@@ -1,10 +1,11 @@
 ﻿import { PolymerElement, html } from '../external/@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '../external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '../cs-shared-styles.js';
+import '../../desktop/views/cs-schedule-view.js';
 class CsContentSwitcher extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
-            <style include="iron-flex iron-flex-alignment jic-shared-styles">
+            <style include="iron-flex iron-flex-alignment cs-shared-styles">
                 :host {
                     width: 100%;
                     height: 100%;
@@ -17,9 +18,10 @@ class CsContentSwitcher extends GestureEventListeners(PolymerElement) {
             </style>
             <iron-pages id="ironPages" selected="[[page]]" attr-for-selected="name" fallback-selection="view404" class="scroll">            
                 <cs-schedule-view id="scheduleView" name="scheduleView" is-busy=[[isBusy]]
-                                                                        application-user="[[applicationUser]]">
+                                                                        application-user="[[applicationUser]]"
+                                                                        companies="[[companies]]">
                 </cs-schedule-view>
-                <cs-admin-view id="adminView" name="adminView" application-user="[[applicationUser]]">
+                <!--<cs-admin-view id="adminView" name="adminView" application-user="[[applicationUser]]">-->
                 </cs-admin-view>
             </iron-pages>`;
     }
@@ -37,6 +39,10 @@ class CsContentSwitcher extends GestureEventListeners(PolymerElement) {
             },
             applicationUser: {
                 type: Object
+            },
+            companies: {
+                type: Array,
+                notify: true
             }
         }
     }
@@ -46,10 +52,10 @@ class CsContentSwitcher extends GestureEventListeners(PolymerElement) {
         if (newValue) {
             switch (newValue) {
                 case "scheduleView":
-                    this.$.scheduleView.refreshView();
+                    //this.$.scheduleView.refreshView();
                     break;
                 case "adminView":
-                    this.$.adminView.refreshView();
+                    //this.$.adminView.refreshView();
                     break;
             }
         }

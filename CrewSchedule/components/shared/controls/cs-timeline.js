@@ -5,11 +5,29 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
             <style include="iron-flex iron-flex-alignment cs-shared-styles">
+                .companyOfficePanel {
+                    position: relative;
+                    background-color: var(--paper-grey-800);
+                    padding-left: 100px;
+                }
+
                 .datepickerPanel {
                     position: relative;
                     background-color: var(--paper-grey-800);
                     padding-left: 100px;
                     padding-bottom: 10px;
+                }
+
+                .companyField {
+                    width: 192px;
+                    min-width: 192px;
+                    margin-left: 4px;
+                }
+
+                .officeField {
+                    width: 192px;
+                    min-width: 192px;
+                    margin-left: 25px;
                 }
 
                 .timelineContainer {                    
@@ -31,29 +49,30 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 }
 
                 .yearHeader {
-                    border: 1px solid var(--paper-light-blue-200);
+                    border: 1px solid var(--paper-orange-300);
                     border-right: 1px solid var(--paper-grey-800);
-                    background-color: var(--paper-light-blue-200);
+                    background-color: var(--paper-orange-300);
                     color: var(--paper-grey-900);
                 }
 
                 .alternateYearHeader {
-                    border: 1px solid var(--paper-light-blue-300);
+                    border: 1px solid var(--paper-orange-500);
                     border-right: 1px solid var(--paper-grey-800);
-                    background-color: var(--paper-light-blue-300);
+                    background-color: var(--paper-orange-500);
                     color: var(--paper-grey-900);
                 }
 
                 .monthHeader {
-                    border: 1px solid var(--paper-light-blue-400); 
+                    border: 1px solid var(--paper-lime-300); 
                     border-right: 1px solid var(--paper-grey-800);                                       
-                    background-color: var(--paper-light-blue-400);                    
+                    background-color: var(--paper-lime-300);
+                    color: var(--paper-grey-900);
                 }
 
                 .alternateMonthHeader {
-                    border: 1px solid var(--paper-light-blue-500);
+                    border: 1px solid var(--paper-lime-600);
                     border-right: 1px solid var(--paper-grey-800);                                        
-                    background-color: var(--paper-light-blue-500);
+                    background-color: var(--paper-lime-600);
                 }
 
                 .day {
@@ -113,7 +132,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     border-top: 1px solid var(--paper-grey-600);
                     color: var(--paper-grey-500);
                     text-align: center;
-                    cursor: default;                    
+                    cursor: default;
+                    min-height: 34px;
                 }
                 
                 .crewName {
@@ -191,15 +211,25 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     border-style: solid;
                     border-color: transparent #FFFFFF transparent transparent;
                 }
-            </style>            
+            </style>
+            <div id="companyOfficePanel" class="horizontal layout companyOfficePanel">
+                <div class="dataLabel horizontalDataLabel">Company</div>
+                <div class="horizontalDataField companyField">
+                    <cs-dropdown items="{{companies}}" label-field="name" selected="{{selectedCompany}}"></cs-dropdown>
+                </div>
+                <div class="dataLabel horizontalDataLabel">Office</div>
+                <div class="horizontalDataField officeField">
+                    <cs-dropdown items="{{selectedCompany.offices}}" label-field="name" selected="{{selectedOffice}}"></cs-dropdown>
+                </div>
+            </div>
             <div id="datepickerPanel" class="horizontal layout datepickerPanel">                
                 <div class="dataLabel horizontalDataLabel">Start Date</div>
                 <div class="horizontalDataField">
-                    <vaadin-date-picker class="cs-datepicker" value="{{startDate}}"></vaadin-date-picker>
+                    <vaadin-date-picker value="{{startDate}}"></vaadin-date-picker>
                 </div>
                 <div class="dataLabel horizontalDataLabel">End Date</div>
                 <div class="horizontalDataFieldSmallMargin">
-                    <vaadin-date-picker class="cs-datepicker" value="{{endDate}}"></vaadin-date-picker>
+                    <vaadin-date-picker value="{{endDate}}"></vaadin-date-picker>
                 </div>
                 <div id="endDateErrorMessage" class="endDateErrorMessage hidden">End Date must be greater than Start Date</div>
             </div>            
@@ -259,6 +289,16 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 type: String
             },
             selectedJob: {
+                type: Object
+            },
+            companies: {
+                type: Array,
+                notify: true
+            },
+            selectedCompany: {
+                type: Object
+            },
+            selectedOffice: {
                 type: Object
             }            
         }
@@ -659,7 +699,13 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 crewHeight = crewHeight + JOB_TOP_MARGIN + JOB_HEIGHT;
             }            
         }
+        if (crewHeight == 0) {
+            crewHeight = 34;
+        }
         crew.height = crewHeight;
+        if (topOffset == (STARTING_TOP_OFFSET + additionalTopOffset)) {
+            topOffset = topOffset + 34;
+        }
         return (topOffset - STARTING_TOP_OFFSET);
     }
 

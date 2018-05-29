@@ -43,6 +43,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
 
                 .userButton {
                     position: relative;
+                    min-width: 140px;
                 }
 
                 .userButton:hover {
@@ -99,6 +100,12 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
             <div class="horizontal layout appTitleBar flex">
                 <img class="cslogo" src="[[logoUrl]]" />
                 
+                <div class="flex"></div>
+
+                
+
+
+
                 <div id="userButton" class="horizontal layout userButton" on-click="_showUserInfoPanel">
                     <div class="userName">[[applicationUser.name]]</div>
                     <div class="personIcon">
@@ -162,10 +169,6 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
             applicationUser: {
                 type: Object,
                 notify: true
-            },
-            companies: {
-                type: Array,
-                notify: true
             }
         }
     }
@@ -193,6 +196,8 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
     }
 
     // Event Handlers
+    
+
     _handleBootstrapDataResponse(e, request) {
         this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
         this.bootstrapDataResponse = e.detail.response;
