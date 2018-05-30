@@ -26,6 +26,7 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
             </style>
             <div class="appNav">
                 <paper-icon-button id="scheduleView" icon="list" class="appNavButton" on-tap="_NavButtonClick"></paper-icon-button>
+                <paper-icon-button id="notificationView" icon="communication:chat-bubble" class="appNavButton" on-tap="_NavButtonClick"></paper-icon-button>
                 <paper-icon-button id="adminView" icon="settings" class="appNavButton" on-tap="_NavButtonClick"></paper-icon-button>
             </div>`;
     }

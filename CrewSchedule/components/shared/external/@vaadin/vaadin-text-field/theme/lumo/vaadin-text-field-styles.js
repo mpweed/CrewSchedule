@@ -361,14 +361,13 @@ $_documentContainer.innerHTML = `<dom-module id="lumo-text-field" theme-for="vaa
             width: 100%;
             padding-left: 10px;
             padding-top: 0;
-            padding-bottom: 0;
-            border: none;
-            border: 1px solid var(--paper-grey-900);
+            padding-bottom: 0;           
             border-radius: 0;
-            color: #ffffff;
-            background-color: var(--paper-grey-900);
+            color: #ffffff;            
             outline: 0;
-        }
+            border: 1px solid var(--paper-grey-800);
+            background-color: var(--paper-grey-800);                        
+        }       
 
     </style>
   </template>
