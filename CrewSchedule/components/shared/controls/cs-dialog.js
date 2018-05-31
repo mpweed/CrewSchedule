@@ -5,10 +5,27 @@ class CsDialog extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
             <style include="iron-flex iron-flex-alignment cs-shared-styles">
+                .dialogBackground {
+                    width: calc(100% - 48px);
+                    height: calc(100vh - 48px);
+                    background-color: black;
+                    top: 48px;
+                    left: 48px;
+                    width: calc(100% - 48px);
+                    height: calc(100vh - 48px);
+                    opacity: 0;
+                    -webkit-transition: opacity .3s ease-in-out;
+                    -moz-transition: opacity .3s ease-in-out;
+                    -o-transition: opacity .3s ease-in-out;
+                    transition: opacity .3s ease-in-out;
+                    position: fixed;
+                    z-index: 50;
+                }
+
                 .dialog {
                     top: 48px;
                     left: calc(100% + 10px);
-                    width: calc(100% - 48px);
+                    width: calc(100% - 600px);
                     height: calc(100vh - 48px);
                     background-color: var(--paper-grey-800);
                     border: 2px solid var(--paper-grey-900);
@@ -21,9 +38,19 @@ class CsDialog extends GestureEventListeners(PolymerElement) {
                 }
 
                 .dialogShown {
-                    left: 48px;                
+                    left: 600px;                
+                }
+
+                .fadeIn80 {
+                    opacity: .8;
+                    pointer-events: auto;
+                }
+
+                .noPointerEvents {
+                    pointer-events: none;
                 }
             </style>
+            <div id="dialogBackground" class="dialogBackground noPointerEvents"></div>
             <div id="container" class="dialog">
                 <slot></slot>
             </div>
@@ -32,10 +59,12 @@ class CsDialog extends GestureEventListeners(PolymerElement) {
 
     // Public Methods
     show() {
+        this.$.dialogBackground.classList.add("fadeIn80");
         this.$.container.classList.add("dialogShown");
     }
 
     hide() {
+        this.$.dialogBackground.classList.remove("fadeIn80");
         this.$.container.classList.remove("dialogShown");
     }    
 }

@@ -1,11 +1,7 @@
 ﻿import { PolymerElement, html } from '../../shared/external/@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '../../shared/external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '../../shared/cs-shared-styles.js';
-import '../../shared/controls/cs-dialog.js'
-import '../../desktop/views/sections/regions/cs-add-job-region.js'
-import '../../desktop/views/sections/regions/cs-filter-crews-region.js'
-import '../../desktop/views/sections/regions/cs-edit-job-region.js'
-class CsScheduleView extends GestureEventListeners(PolymerElement) {    
+class CsAdminView extends GestureEventListeners(PolymerElement) {    
     static get template() {
         return html`
             <style include="iron-flex iron-flex-alignment cs-shared-styles">
@@ -25,22 +21,7 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
                 }
             </style>
             <div class="viewPanel">
-                <cs-timeline companies="[[companies]]" 
-                             on-addjob="_showAddJobDialog" 
-                             on-filtercrews="_showFilterCrewsDialog" 
-                             on-editjob="_showEditJobDialog"></cs-timeline>
-                <cs-dialog id="addJobDialog">
-                    <cs-add-job-region on-close="_hideAddJobDialog">
-                    </cs-add-job-region>
-                </cs-dialog>
-                <cs-dialog id="filterCrewsDialog">
-                    <cs-filter-crews-region on-close="_hideFilterCrewsDialog">
-                    </cs-filter-crews-region>
-                </cs-dialog>
-                <cs-dialog id="editJobDialog">
-                    <cs-edit-job-region on-close="_hideEditJobDialog">
-                    </cs-edit-job-region>
-                </cs-dialog>
+                Admin View Placeholder
             </div>`;
     }
 
@@ -79,28 +60,5 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
     }
 
     // Event Handlers
-    _showAddJobDialog(e) {
-        this.$.addJobDialog.show();
-    }
-
-    _showFilterCrewsDialog(e) {
-        this.$.filterCrewsDialog.show();
-    }
-
-    _showEditJobDialog(e) {
-        this.$.editJobDialog.show();
-    }
-
-    _hideAddJobDialog(e) {
-        this.$.addJobDialog.hide();
-    }
-
-    _hideFilterCrewsDialog(e) {
-        this.$.filterCrewsDialog.hide();
-    }
-
-    _hideEditJobDialog(e) {
-        this.$.editJobDialog.hide();
-    }
 }
-customElements.define('cs-schedule-view', CsScheduleView);
+customElements.define('cs-admin-view', CsAdminView);

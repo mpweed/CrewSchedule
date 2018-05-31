@@ -2,6 +2,8 @@
 import { GestureEventListeners } from '../external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '../cs-shared-styles.js';
 import '../../desktop/views/cs-schedule-view.js';
+import '../../desktop/views/cs-notification-view.js';
+import '../../desktop/views/cs-admin-view.js';
 class CsContentSwitcher extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
@@ -17,11 +19,13 @@ class CsContentSwitcher extends GestureEventListeners(PolymerElement) {
                 }
             </style>
             <iron-pages id="ironPages" selected="[[page]]" attr-for-selected="name" fallback-selection="view404" class="scroll">            
-                <cs-schedule-view id="scheduleView" name="scheduleView" is-busy=[[isBusy]]
-                                                                        application-user="[[applicationUser]]"
+                <cs-schedule-view id="scheduleView" name="scheduleView" application-user="[[applicationUser]]"
                                                                         companies="[[companies]]">
                 </cs-schedule-view>
-                <!--<cs-admin-view id="adminView" name="adminView" application-user="[[applicationUser]]">-->
+                <cs-notification-view id="notificationView" name="notificationView" application-user="[[applicationUser]]">
+                </cs-notification-view>
+                <cs-admin-view id="adminView" name="adminView" application-user="[[applicationUser]]"
+                                                               companies="[[companies]]">
                 </cs-admin-view>
             </iron-pages>`;
     }

@@ -39,7 +39,7 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
             },
             page: {
                 type: String,
-                value: "search",
+                value: "scheduleView",
                 notify: true
             },
             selectedNavButton: {

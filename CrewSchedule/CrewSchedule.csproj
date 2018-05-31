@@ -149,7 +149,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="components\desktop\cs-desktop-shell.js" />
+    <Content Include="components\desktop\views\cs-admin-view.js" />
+    <Content Include="components\desktop\views\cs-notification-view.js" />
     <Content Include="components\desktop\views\cs-schedule-view.js" />
+    <Content Include="components\desktop\views\sections\regions\cs-filter-crews-region.js" />
+    <Content Include="components\desktop\views\sections\regions\cs-edit-job-region.js" />
+    <Content Include="components\desktop\views\sections\regions\cs-add-job-region.js" />
     <Content Include="components\mobile\cs-mobile-shell.js" />
     <Content Include="components\shared\controls\cs-content-switcher.js" />
     <Content Include="components\shared\controls\cs-title-bar.js" />
@@ -423,7 +428,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="components\desktop\views\sections\regions\" />
     <Folder Include="components\mobile\views\sections\regions\" />
     <Folder Include="Models\" />
   </ItemGroup>

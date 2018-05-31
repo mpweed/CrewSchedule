@@ -5,15 +5,28 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
             <style include="iron-flex iron-flex-alignment cs-shared-styles">
+                :host {
+                    margin-bottom: 10px;
+                    overflow: hidden;
+                }
+        
                 .companyOfficePanel {
                     position: relative;
                     padding-left: 100px;
                 }
 
-                .datepickerPanel {
-                    position: relative;
-                    padding-left: 100px;
-                    padding-bottom: 10px;
+                .horizontalDataLabel {
+                    margin-top: 4px;
+                }
+
+                .horizontalDataField {
+                    padding-top: 10px;
+                    margin-right: 20px;
+                }
+
+                .horizontalDataFieldSmallMargin {
+                     padding-top: 10px;
+                     margin-right: 8px;
                 }
 
                 .companyField {
@@ -26,6 +39,46 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     width: 192px;
                     min-width: 192px;
                     margin-left: 25px;
+                }
+
+                .datepickerPanel {
+                    position: relative;
+                    padding-left: 100px;
+                    padding-bottom: 10px;
+                }
+
+                .endDateErrorMessage {
+                    overflow: visible;
+                    text-align: center;
+                    font-size: .8em;
+                    margin-top: 10px;
+                    padding: 4px;
+                    height: 20px;
+                    width: 250px;
+                    background-color: var(--paper-red-700);
+                    border: 1px solid #FFFFFF;
+                }
+
+                .endDateErrorMessage::before {
+                    content: " ";
+                    position: absolute;
+                    top: 50%;
+                    left: 655px;
+                    margin-top: -8px;
+                    border-width: 8px;
+                    border-style: solid;
+                    border-color: transparent #FFFFFF transparent transparent;
+                }
+
+                .actionButton {
+                    width: 40px;
+                    height: 40px;
+                    color: var(--paper-lime-300);
+                    cursor: default;
+                }
+
+                .actionButton:hover {
+                    color: #ffffff;
                 }
 
                 .timelineContainer {                    
@@ -99,21 +152,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
 
                 .job:hover {
                     opacity: .8
-                }
-
-                .horizontalDataLabel {
-                    margin-top: 4px;
-                }
-
-                .horizontalDataField {
-                    padding-top: 10px;
-                    margin-right: 20px;
-                }
-
-                .horizontalDataFieldSmallMargin {
-                     padding-top: 10px;
-                     margin-right: 8px;
-                }
+                }                
 
                 .hline {
                     height:1px;
@@ -174,49 +213,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     visibility: visible;
                 }
 
-                .addJobButton {
-                    width: 40px;
-                    height: 40px;
-                    color: var(--paper-lime-300);
-                    cursor: default;
-                }
-
-                .addJobButton:hover {
-                    color: #ffffff;
-                }
-
-                .filterCrewsButton {
-                    width: 40px;
-                    height: 40px;
-                    color: var(--paper-lime-300);
-                    cursor: default;
-                }
-
-                .filterCrewsButton:hover {
-                    color: #ffffff;
-                }
-
-                .endDateErrorMessage {
-                    overflow: visible;
-                    text-align: center;
-                    font-size: .8em;
-                    margin-top: 10px;
-                    padding: 4px;
-                    height: 20px;
-                    width: 250px;
-                    background-color: var(--paper-red-700);
-                    border: 1px solid #FFFFFF;
-                }
-
-                .endDateErrorMessage::before {
-                    content: " ";
-                    position: absolute;
-                    top: 50%;
-                    left: 655px;
-                    margin-top: -8px;
-                    border-width: 8px;
-                    border-style: solid;
-                    border-color: transparent #FFFFFF transparent transparent;
+                .scheduleContainer {
+                    overflow: auto;
                 }
             </style>
             <div id="companyOfficePanel" class="horizontal layout companyOfficePanel">
@@ -229,7 +227,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     <cs-dropdown light items="{{selectedCompany.offices}}" label-field="name" selected="{{selectedOffice}}"></cs-dropdown>
                 </div>
                 <div class="horizontal layout flex end-justified">
-                    <paper-icon-button id="createJob" icon="add" class="addJobButton" on-tap="_addJobClick"></paper-icon-button>
+                    <paper-icon-button id="createJob" icon="add" class="actionButton" on-tap="_addJobClick"></paper-icon-button>
                 </div>
             </div>
             <div id="datepickerPanel" class="horizontal layout datepickerPanel">                
@@ -243,33 +241,35 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 </div>
                 <div id="endDateErrorMessage" class="endDateErrorMessage hidden">End Date must be greater than Start Date</div>
                 <div class="horizontal layout flex end-justified">
-                    <paper-icon-button id="filterCrews" icon="filter-list" class="filterCrewsButton" on-tap="_filterCrewsClick"></paper-icon-button>
+                    <paper-icon-button id="filterCrews" icon="filter-list" class="actionButton" on-tap="_filterCrewsClick"></paper-icon-button>
                 </div>
-            </div>            
-            <div class="horizontal layout">
-                <div class="crewPanel">                    
-                    <template is="dom-repeat" items="[[crews]]" as="crew">
-                        <div class="crew" style$="height:[[crew.height]]">
-                            <div class="crewName">[[crew.name]]</div>
-                        </div>
-                    </template>
-                </div>
-                <div id="timelineContainer" class="timelineContainer scroll" style$="height:[[timelineContainerHeight]];width:[[timelineContainerWidth]]">
-                    <div id="timelineHeader" class="horizontal layout">
-                        <template is="dom-repeat" items="[[timelineArray]]" as="day">
-                            <div class="vertical layout dayContainer">
-                                <div class$="[[day.headerClassList]]">
-                                    <div class$="[[day.yearHeaderClass]]">[[day.year]]</div>
-                                    <div class$="[[day.monthHeaderClass]]">[[day.month]]</div>
-                                    <div>[[day.day]]</div>
-                                    <div>[[day.number]]</div>
-                                </div>
-                                <div class$="[[day.dayClassList]]" style$="height:[[dayHeight]]"></div>
-                            </div>                        
-                        </template>                
+            </div>
+            <div id="scheduleContainer" class="scheduleContainer scroll" style$="height:[[scheduleContainerHeight]]">
+                <div class="horizontal layout">
+                    <div class="crewPanel">                    
+                        <template is="dom-repeat" items="[[crews]]" as="crew">
+                            <div class="crew" style$="height:[[crew.height]]">
+                                <div class="crewName">[[crew.name]]</div>
+                            </div>
+                        </template>
                     </div>
-                    <div id="jobContainer">               
-                    </div>                
+                    <div id="timelineContainer" class="timelineContainer scroll" style$="height:[[timelineContainerHeight]]; width:[[timelineContainerWidth]]">
+                        <div id="timelineHeader" class="horizontal layout">
+                            <template is="dom-repeat" items="[[timelineArray]]" as="day">
+                                <div class="vertical layout dayContainer">
+                                    <div class$="[[day.headerClassList]]">
+                                        <div class$="[[day.yearHeaderClass]]">[[day.year]]</div>
+                                        <div class$="[[day.monthHeaderClass]]">[[day.month]]</div>
+                                        <div>[[day.day]]</div>
+                                        <div>[[day.number]]</div>
+                                    </div>
+                                    <div class$="[[day.dayClassList]]" style$="height:[[dayHeight]]"></div>
+                                </div>                        
+                            </template>                
+                        </div>
+                        <div id="jobContainer">               
+                        </div>                
+                    </div>
                 </div>
             </div>`;
     }
@@ -294,6 +294,9 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             dayHeight: {
                 type: String
             },
+            scheduleContainerHeight: {
+                type: String
+            },
             timelineContainerWidth: {
                 type: String
             },
@@ -301,7 +304,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 type: String
             },
             selectedJob: {
-                type: Object
+                type: Object,
+                observer: "_selectedJobChanged"
             },
             companies: {
                 type: Array,
@@ -917,11 +921,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     }
 
     _addJobClick(e) {
-
+        this.dispatchEvent(new CustomEvent('addjob', { bubbles: true, composed: true }));
     }
 
     _filterCrewsClick(e) {
-
+        this.dispatchEvent(new CustomEvent('filtercrews', { bubbles: true, composed: true }));
     }
 
     _jobClick(e) {
@@ -937,6 +941,12 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     }
                 }
             }
+        }
+    }
+
+    _selectedJobChanged(newValue, oldValue) {
+        if (newValue) {
+            this.dispatchEvent(new CustomEvent('editjob', { bubbles: true, composed: true, detail: { job: this.selectedJob } }));
         }
     }
 
@@ -1024,6 +1034,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         this.dayHeight = dayHeight.toString() + "px;";
         this.timelineContainerWidth = (timelineWidth + 10).toString() + "px";
         this.timelineContainerHeight = (dayHeight + 100).toString() + "px";
+        this.scheduleContainerHeight = (window.innerHeight - 158).toString() + "px";
     }    
 
     generateJobs(timelineWidth) {
