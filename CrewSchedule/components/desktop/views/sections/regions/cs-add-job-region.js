@@ -8,11 +8,12 @@ class CsAddJobRegion extends GestureEventListeners(PolymerElement) {
                 
             </style>
             <div>
-                Add Job Region Placeholder
+                Add Job Region Placeholder                
                 <div class="horizontal layout end-justified dialogButtons">
                     <cs-button id="saveButton" disabled class="saveButton" on-tap="_save">Save</cs-button>
                     <cs-button class="cancelButton" on-tap="_closeDialog">Cancel</cs-button>
                 </div>
+                <cs-color-picker></cs-color-picker>
             </div>`;
     }
 

@@ -23,6 +23,7 @@ import './external/@polymer/iron-icons/social-icons.js';
 import './external/@polymer/paper-icon-button/paper-icon-button.js';
 import './external/@polymer/paper-button/paper-button.js';
 import './external/@polymer/paper-tooltip/paper-tooltip.js';
+import './external/@polymer/paper-checkbox/paper-checkbox.js';
 import './external/@polymer/iron-pages/iron-pages.js';
 import './external/@polymer/iron-selector/iron-selector.js';
 import './external/@polymer/neon-animation/neon-animations.js';
@@ -38,12 +39,14 @@ import './controls/cs-confirm.js';
 import './controls/cs-dialog.js';
 import './controls/cs-dropdown.js';
 import './controls/cs-input.js';
+import './controls/cs-password-input.js';
 import './controls/cs-nav-bar.js';
 import './controls/cs-notification-panel.js';
 import './controls/cs-textarea.js';
 import './controls/cs-timeline.js';
 import './controls/cs-title-bar.js';
 import './controls/cs-content-switcher.js';
+import './controls/cs-color-picker.js';
 
 // Shared Styles
 const styleElement = document.createElement('dom-module');

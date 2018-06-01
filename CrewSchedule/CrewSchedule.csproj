@@ -157,6 +157,8 @@
     <Content Include="components\desktop\views\sections\regions\cs-add-job-region.js" />
     <Content Include="components\mobile\cs-mobile-shell.js" />
     <Content Include="components\shared\controls\cs-content-switcher.js" />
+    <Content Include="components\shared\controls\cs-color-picker.js" />
+    <Content Include="components\shared\controls\cs-password-input.js" />
     <Content Include="components\shared\controls\cs-title-bar.js" />
     <Content Include="components\shared\controls\cs-textarea.js" />
     <Content Include="components\shared\controls\cs-notification-panel.js" />
@@ -249,6 +251,7 @@
     <Content Include="components\shared\external\%40polymer\paper-behaviors\paper-inky-focus-behavior.js" />
     <Content Include="components\shared\external\%40polymer\paper-behaviors\paper-ripple-behavior.js" />
     <Content Include="components\shared\external\%40polymer\paper-button\paper-button.js" />
+    <Content Include="components\shared\external\%40polymer\paper-checkbox\paper-checkbox.js" />
     <Content Include="components\shared\external\%40polymer\paper-dropdown-menu\paper-dropdown-menu-icons.js" />
     <Content Include="components\shared\external\%40polymer\paper-dropdown-menu\paper-dropdown-menu-light.js" />
     <Content Include="components\shared\external\%40polymer\paper-dropdown-menu\paper-dropdown-menu-shared-styles.js" />

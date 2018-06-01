@@ -5,9 +5,7 @@ class CsDialog extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
             <style include="iron-flex iron-flex-alignment cs-shared-styles">
-                .dialogBackground {
-                    width: calc(100% - 48px);
-                    height: calc(100vh - 48px);
+                .dialogBackground {                    
                     background-color: black;
                     top: 48px;
                     left: 48px;

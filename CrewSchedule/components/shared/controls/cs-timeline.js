@@ -295,7 +295,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 type: String
             },
             scheduleContainerHeight: {
-                type: String
+                type: String,
+                notify: true
             },
             timelineContainerWidth: {
                 type: String
@@ -320,6 +321,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         }
     }
 
+    constructor() {
+        super();
+        this._boundResizeListener = this._onWindowResize.bind(this);
+    }
+
     // Lifecycle Callbacks
     connectedCallback() {
         super.connectedCallback();               
@@ -340,6 +346,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         defaultEndDate.setDate(defaultEndDate.getDate() + 31);
         this.startDate = (defaultStartDate.getFullYear() + '-' + (defaultStartDate.getMonth() + 1) + '-' + defaultStartDate.getDate()).toString();
         this.endDate = (defaultEndDate.getFullYear() + '-' + (defaultEndDate.getMonth() + 1) + '-' + defaultEndDate.getDate()).toString();
+        window.addEventListener("resize", this._boundResizeListener)
+    }
+
+    disconnectedCallback() {
+        document.removeEventListener("resize", this._boundResizeListener);
     }
 
 
@@ -904,6 +915,10 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     }
 
     // Event Handlers
+    _onWindowResize(e) {
+        this.scheduleContainerHeight = (window.innerHeight - 158).toString() + "px";
+    }
+
     _dateChanged(newValue, oldValue) {
         if (this.startDate && this.endDate && this.startDate != this.endDate) {
             if (this.endDate < this.startDate) {
@@ -941,7 +956,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     }
                 }
             }
-        }
+        }        
     }
 
     _selectedJobChanged(newValue, oldValue) {
