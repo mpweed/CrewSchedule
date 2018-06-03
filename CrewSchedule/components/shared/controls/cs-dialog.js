@@ -23,10 +23,10 @@ class CsDialog extends GestureEventListeners(PolymerElement) {
                 .dialog {
                     top: 48px;
                     left: calc(100% + 10px);
-                    width: calc(100% - 600px);
+                    width: 400px;
                     height: calc(100vh - 48px);
-                    background-color: var(--paper-grey-800);
-                    border: 2px solid var(--paper-grey-900);
+                    background-color: var(--paper-grey-900);
+                    border: 2px solid var(--paper-grey-800);
                     position: fixed;
                     -webkit-transition: left .5s ease-in-out;
                     -moz-transition: left .5s ease-in-out;
@@ -36,17 +36,17 @@ class CsDialog extends GestureEventListeners(PolymerElement) {
                 }
 
                 .dialogShown {
-                    left: 600px;                
-                }
-
-                .fadeIn80 {
-                    opacity: .8;
-                    pointer-events: auto;
+                    left: calc(100% - 400px);                
                 }
 
                 .noPointerEvents {
                     pointer-events: none;
                 }
+
+                .fadeIn80 {
+                    opacity: .8;
+                    pointer-events: auto;
+                }                
             </style>
             <div id="dialogBackground" class="dialogBackground noPointerEvents"></div>
             <div id="container" class="dialog">
@@ -55,15 +55,33 @@ class CsDialog extends GestureEventListeners(PolymerElement) {
             `;
     }
 
+    // Public Properties
+    static get properties() {
+        return {
+            isShown: {
+                type: Boolean,
+                notify: true
+            },
+            dialogWidth: {
+                type: String,
+                notify: true
+            }
+        }
+    }
+
     // Public Methods
     show() {
         this.$.dialogBackground.classList.add("fadeIn80");
         this.$.container.classList.add("dialogShown");
+        this.isShown = true;
+        this.dispatchEvent(new CustomEvent('dialogshown', { bubbles: true, composed: true }));
     }
 
     hide() {
         this.$.dialogBackground.classList.remove("fadeIn80");
         this.$.container.classList.remove("dialogShown");
+        this.isShown = false;
+        this.dispatchEvent(new CustomEvent('dialoghidden', { bubbles: true, composed: true }));
     }    
 }
 customElements.define('cs-dialog', CsDialog);

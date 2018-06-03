@@ -28,24 +28,9 @@ class CsNotificationView extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
-            isBusy: {
-                type: Boolean,
+            bootstrapData: {
+                type: Object,
                 notify: true
-            },
-            isSuccess: {
-                type: Boolean,
-                notify: true
-            },
-            isException: {
-                type: Boolean,
-                notify: true
-            },
-            errorMessage: {
-                type: String,
-                notify: true
-            },
-            applicationUser: {
-                type: Object
             }
         }
     }

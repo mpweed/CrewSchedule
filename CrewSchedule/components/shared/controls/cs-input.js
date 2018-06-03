@@ -55,6 +55,10 @@ class CsInput extends GestureEventListeners(PolymerElement) {
                 .disabled {
                     color: var(--paper-grey-500);
                 }
+
+                .centerText {
+                    text-align: center;
+                }
             </style>
             <div class="inputField">
                 <input tabindex="1" id="internalInput" type="text" placeholder="[[placeholder]]" value="{{value::input}}" class="internalInput" on-blur="_checkRequired" />
@@ -108,6 +112,10 @@ class CsInput extends GestureEventListeners(PolymerElement) {
             inputType: {
                 type: String,
                 observer: "_inputTypeChanged"
+            },
+            centerText: {
+                type: Boolean,
+                observer: "_centerTextChanged"
             }
         }
     }
@@ -117,6 +125,15 @@ class CsInput extends GestureEventListeners(PolymerElement) {
         super.connectedCallback();
         this._valueChanged(this.value);
         this.isValid = true;        
+    }
+
+    // Events
+    _centerTextChanged(newValue, oldValue) {
+        if (this.centerText) {
+            this.$.internalInput.classList.add("centerText");
+        } else {
+            this.$.internalInput.classList.remove("centerText");
+        }
     }
 
     _requiredChanged(newValue, oldValue) {
@@ -239,6 +256,10 @@ class CsInput extends GestureEventListeners(PolymerElement) {
     reset() {
         this.value = "";
         this.$.internalInput.classList.remove("requiredIndicator");
-    }    
+    }
+
+    focus() {
+        this.$.internalInput.focus();
+    }
 }
 customElements.define('cs-input', CsInput);

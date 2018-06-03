@@ -26,7 +26,7 @@ class CsConfirm extends GestureEventListeners(PolymerElement) {
                     margin: 100px auto;
                     width: 80%;
                     max-width: 800px;
-                    border: solid 1px var(--paper-blue-grey-300);
+                    border: solid 1px var(--paper-orange-300);
                     background-color: var(--paper-grey-900);
                     opacity: 0;
                     -webkit-transition: opacity .3s ease-in-out;
@@ -43,7 +43,7 @@ class CsConfirm extends GestureEventListeners(PolymerElement) {
                 }
 
                 .questionIcon {
-                    color: var(--paper-blue-grey-300);
+                    color: var(--paper-orange-300);
                     width: 48px;
                     height: 48px;
                     margin-left: 10px;
@@ -64,8 +64,8 @@ class CsConfirm extends GestureEventListeners(PolymerElement) {
                 }
 
                 .yesButton {
-                    --cs-button-color: var(--paper-pink-400);
-                    --cs-button-hover-color: var(--paper-pink-300);
+                    --cs-button-color: var(--paper-lime-400);
+                    --cs-button-hover-color: var(--paper-lime-300);
                 }
 
                 .noButton {

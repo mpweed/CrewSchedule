@@ -27,28 +27,9 @@ class CsAdminView extends GestureEventListeners(PolymerElement) {
 
     // Public Properties
     static get properties() {
-        return {
-            isBusy: {
-                type: Boolean,
-                notify: true
-            },
-            isSuccess: {
-                type: Boolean,
-                notify: true
-            },
-            isException: {
-                type: Boolean,
-                notify: true
-            },
-            errorMessage: {
-                type: String,
-                notify: true
-            },
-            applicationUser: {
-                type: Object
-            },
-            companies: {
-                type: Array,
+        return {            
+            bootstrapData: {
+                type: Object,
                 notify: true
             }
         }

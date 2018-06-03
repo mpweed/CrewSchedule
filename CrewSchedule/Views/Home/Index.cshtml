@@ -10,7 +10,7 @@
     <script type="module" src="~/components/desktop/cs-desktop-shell.js">
     </script>
 </head>
-<body unresolved>
+<body unresolved>    
     <cs-desktop-shell id="shell"></cs-desktop-shell>
     <div id="not-supported-message">
         <div class="frownFace">:-(</div>
@@ -21,10 +21,12 @@
         function hasES6Support() {
             "use strict";
             if (typeof Symbol == "undefined") return false;
+            if (!('customElements' in window)) return false;
             try {
                 eval("class Foo {}");
                 eval("var bar = (x) => x+1");
-            } catch (e) { return false; }
+                var supportsCustomElements = ('customElements' in window);
+            } catch (e) { return false; }            
             return true;
         }
         if (hasES6Support()) {

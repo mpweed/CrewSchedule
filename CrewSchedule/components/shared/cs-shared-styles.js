@@ -24,6 +24,8 @@ import './external/@polymer/paper-icon-button/paper-icon-button.js';
 import './external/@polymer/paper-button/paper-button.js';
 import './external/@polymer/paper-tooltip/paper-tooltip.js';
 import './external/@polymer/paper-checkbox/paper-checkbox.js';
+import './external/@polymer/paper-toggle-button/paper-toggle-button.js';
+import './external/@polymer/paper-spinner/paper-spinner-lite.js';
 import './external/@polymer/iron-pages/iron-pages.js';
 import './external/@polymer/iron-selector/iron-selector.js';
 import './external/@polymer/neon-animation/neon-animations.js';
@@ -47,6 +49,8 @@ import './controls/cs-timeline.js';
 import './controls/cs-title-bar.js';
 import './controls/cs-content-switcher.js';
 import './controls/cs-color-picker.js';
+import './controls/cs-login.js';
+import './controls/cs-parameter-panel.js';
 
 // Shared Styles
 const styleElement = document.createElement('dom-module');
@@ -76,10 +80,10 @@ styleElement.innerHTML =
             }
 
             cs-button {
-                --cs-button-color: var(--paper-blue-grey-300);
-                --cs-button-focus-color: var(--paper-blue-grey-100);
-                --cs-button-hover-color: var(--paper-blue-grey-100);
-                --cs-button-active-color: var(--paper-blue-grey-400);
+                --cs-button-color: var(--paper-orange-300);
+                --cs-button-focus-color: var(--paper-orange-100);
+                --cs-button-hover-color: var(--paper-orange-100);
+                --cs-button-active-color: var(--paper-orange-400);
                 --cs-button-disabled-color: var(--paper-grey-600);
             }
 
@@ -164,10 +168,10 @@ styleElement.innerHTML =
             }
 
             .saveButton {
-                --cs-button-color: var(--paper-pink-400);
-                --cs-button-focus-color: var(--paper-pink-300);
-                --cs-button-hover-color: var(--paper-pink-300);
-                --cs-button-active-color: var(--paper-pink-600);
+                --cs-button-color: var(--paper-lime-400);
+                --cs-button-focus-color: var(--paper-lime-300);
+                --cs-button-hover-color: var(--paper-lime-300);
+                --cs-button-active-color: var(--paper-lime-600);
             }
 
             .cancelButton {

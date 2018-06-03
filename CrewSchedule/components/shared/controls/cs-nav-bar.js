@@ -9,6 +9,7 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
                     width: 48px;
                     height: 100%;
                     background-color: var(--paper-grey-800);
+                    position: relative;
                 }
             
                 .appNavButton {
@@ -23,11 +24,25 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
                 .appNavSelected {
                     color: #ffffff;
                 }
+
+                .notifcationBadge {
+                    width: 40px;
+                    height: 40px;
+                    top: 113px;
+                    left: 4px;
+                    font-size: .75em;
+                    font-weight: 400;
+                    text-align: center;
+                    margin-top: -64px;                    
+                    position: absolute;     
+                    pointer-events: none;
+                }
             </style>
-            <div class="appNav">
+            <div class="appNav">                
                 <paper-icon-button id="scheduleView" icon="list" class="appNavButton" on-tap="_NavButtonClick"></paper-icon-button>
                 <paper-icon-button id="notificationView" icon="communication:chat-bubble" class="appNavButton" on-tap="_NavButtonClick"></paper-icon-button>
                 <paper-icon-button id="adminView" icon="settings" class="appNavButton" on-tap="_NavButtonClick"></paper-icon-button>
+                <div id="notifcationBadge" class="notifcationBadge" style$="color:[[badgeColor]]">[[notifcationCount]]</div>
             </div>`;
     }
 
@@ -37,6 +52,10 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
             isAdministrator: {
                 type: Boolean
             },
+            applicationUser: {
+                type: Object,
+                observer: "_applicationUserChanged"
+            },
             page: {
                 type: String,
                 value: "scheduleView",
@@ -44,6 +63,12 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
             },
             selectedNavButton: {
                 type: Object
+            },
+            notifcationCount: {
+                type: String
+            },
+            badgeColor: {
+                type: String
             }
         }
     }
@@ -54,21 +79,43 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
         this.selectedNavButton = this.$.scheduleView;
         this.$.scheduleView.classList.add("appNavSelected");
         this.page = "scheduleView";
+        this.badgeColor = "#ffb74d";
+
+        //***** TEMPORARY FOR LAYOUT PURPOSES *****
+        this.notifcationCount = "25";
     }
 
     // Event Handlers
+    _applicationUserChanged(newValue, oldValue) {
+        if (this.applicationUser && (this.applicationUser.role == "System Administrator" || this.applicationUser.role == "Company Administrator")) {
+            this.isAdministrator = true;
+        } else {
+            this.isAdministrator = false;
+        }
+    }
+
     _NavButtonClick(e) {
         var btn = e.target;
         if (!this.selectedNavButton) {
             btn.classList.add("appNavSelected");
             this.selectedNavButton = btn;
             this.page = btn.id;
+            if (btn.id == "notificationView") {
+                this.badgeColor = "#212121";
+            } else {
+                this.badgeColor = "#ffb74d";
+            }
         } else {
             if (this.selectedNavButton != btn) {
                 this.selectedNavButton.classList.remove("appNavSelected");
                 btn.classList.add("appNavSelected");
                 this.selectedNavButton = btn;
                 this.page = btn.id;
+                if (btn.id == "notificationView") {
+                    this.badgeColor = "#212121";
+                } else {
+                    this.badgeColor = "#ffb74d";
+                }
             }
         }
     }    

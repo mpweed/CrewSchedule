@@ -1,6 +1,7 @@
 ﻿import { PolymerElement, html } from '../external/@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '../external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '../cs-shared-styles.js';
+import '../../desktop/views/sections/regions/cs-edit-preferences-region.js';
 class CsTitleBar extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
@@ -13,12 +14,12 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                     margin-top: 6px;
                     margin-left: 6px;
                     margin-bottom: 6px;
-                    width: 165px;
+                    width: 156px;
                     height: 36px;
                 }
 
                 .personIcon {
-                    border: 2px solid #DCE775;
+                    border: 2px solid var(--paper-lime-300);
                     border-radius: 50%;
                     width: 32px;
                     height: 32px;
@@ -30,7 +31,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                 iron-icon {
                     width: 30px;
                     height: 30px;
-                    color: #FFB74D;
+                    color: var(--paper-orange-300);
                 }
 
                 .userName {
@@ -38,7 +39,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                     margin-left: 10px;
                     font-size: 12px;
                     font-weight: 300;
-                    color: #FFB74D;
+                    color: var(--paper-orange-300);
                 }
 
                 .userButton {
@@ -79,15 +80,27 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
 
                 .userInformationDialogJobTitle {
                     min-width: 220px;
-                    color: #DCE775;
+                    color: var(--paper-lime-300);
                 }
 
                 .primaryColor {
-                    color: #FFB74D;
+                    color: var(--paper-orange-300);
                 }
 
                 .secondaryColor {
-                    color: #DCE775;
+                    color: var(--paper-lime-300);
+                }
+
+                .actionButton {
+                    width: 36px;
+                    height: 36px;
+                    margin-top: -6px;
+                    color: var(--paper-lime-300);
+                    cursor: pointer;
+                }
+
+                .actionButton:hover {
+                    color: #ffffff;
                 }
             </style>
             <iron-ajax id="bootstrapDataXhr"
@@ -98,21 +111,20 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                    on-error="_handleXhrError">
             </iron-ajax>
             <div class="horizontal layout appTitleBar flex">
-                <img class="cslogo" src="[[logoUrl]]" />
-                
+                <img class="cslogo" src="[[logoUrl]]" />                
                 <div class="flex"></div>
-
-                
-
-
-
                 <div id="userButton" class="horizontal layout userButton" on-click="_showUserInfoPanel">
-                    <div class="userName">[[applicationUser.name]]</div>
+                    <div class="userName">[[bootstrapData.applicationUser.name]]</div>
                     <div class="personIcon">
                         <iron-icon icon="social:person"></icon>
                     </div>                    
                     <div id="userInfoPanel" class="userInfoPanel">
-                        <div class="userInformationDialogJobTitle">[[applicationUser.jobTitle]]</div>
+                        <div class="horizontal layout">
+                            <div class="userInformationDialogJobTitle">[[bootstrapData.applicationUser.jobTitle]]</div>
+                            <div class="horizontal layout flex end-justified">
+                                <paper-icon-button id="editPreferences" icon="settings" class="actionButton" on-tap="_editPreferencesClick"></paper-icon-button>
+                            </div>
+                        </div>
                         <div class="horizontal layout flex">
                             <div class="flex">
                                 <div class="dataLabelSmall primaryColor">Environment</div>
@@ -120,11 +132,14 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                             </div>
                             <div class="flex">
                                 <div class="dataLabelSmall primaryColor">Role</div>
-                                <div class="dataSmall secondaryColor">[[applicationUser.role]]</div>
+                                <div class="dataSmall secondaryColor">[[bootstrapData.applicationUser.role]]</div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <cs-dialog id="userPreferencesDialog" on-dialogshown="_dialogShown">
+                    <cs-edit-preferences-region on-close="_hideEditPreferencesDialog"></cs-edit-preferences-region>
+                </cs-dialog>
             </div>`;
     }
 
@@ -158,15 +173,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
             logoUrl: {
                 type: String
             },
-            bootstrapDataResponse: {
-                type: Object,
-                notify: true
-            },
-            isAdministrator: {
-                type: Boolean,
-                notify: true
-            },
-            applicationUser: {
+            bootstrapData: {
                 type: Object,
                 notify: true
             }
@@ -186,9 +193,6 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
             this.logoUrl = this.baseUrl + "/images/CSNameLogo.png";
             this.baseUrl = this.baseUrl + "/api/BootstrapData/";
         }
-        this.isAdministrator = false;
-        //this.dispatchEvent(new CustomEvent('busy', { detail: { status: true } }));
-        //this.getBootstrapData();
     }
 
     disconnectedCallback() {
@@ -196,7 +200,17 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
     }
 
     // Event Handlers
-    
+    _dialogShown(e) {
+        this._hideUserInfoPanel(null);
+    }
+
+    _editPreferencesClick(e) {
+        this.$.userPreferencesDialog.show();
+    }
+
+    _hideEditPreferencesDialog(e) {
+        this.$.userPreferencesDialog.hide();
+    }
 
     _handleBootstrapDataResponse(e, request) {
         this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
@@ -226,7 +240,11 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
         } else {
             event.cancelBubble = true; // IE model
         }
-        this.$.userInfoPanel.classList.add("panelShown");
+        if (!this.$.userPreferencesDialog.isShown) {
+            this.$.userInfoPanel.classList.add("panelShown");
+        } else {
+            this.$.userInfoPanel.classList.remove("panelShown");
+        }
     }
 
     _hideUserInfoPanel(e) {

@@ -9,77 +9,6 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     margin-bottom: 10px;
                     overflow: hidden;
                 }
-        
-                .companyOfficePanel {
-                    position: relative;
-                    padding-left: 100px;
-                }
-
-                .horizontalDataLabel {
-                    margin-top: 4px;
-                }
-
-                .horizontalDataField {
-                    padding-top: 10px;
-                    margin-right: 20px;
-                }
-
-                .horizontalDataFieldSmallMargin {
-                     padding-top: 10px;
-                     margin-right: 8px;
-                }
-
-                .companyField {
-                    width: 192px;
-                    min-width: 192px;
-                    margin-left: 4px;
-                }
-
-                .officeField {
-                    width: 192px;
-                    min-width: 192px;
-                    margin-left: 25px;
-                }
-
-                .datepickerPanel {
-                    position: relative;
-                    padding-left: 100px;
-                    padding-bottom: 10px;
-                }
-
-                .endDateErrorMessage {
-                    overflow: visible;
-                    text-align: center;
-                    font-size: .8em;
-                    margin-top: 10px;
-                    padding: 4px;
-                    height: 20px;
-                    width: 250px;
-                    background-color: var(--paper-red-700);
-                    border: 1px solid #FFFFFF;
-                }
-
-                .endDateErrorMessage::before {
-                    content: " ";
-                    position: absolute;
-                    top: 50%;
-                    left: 655px;
-                    margin-top: -8px;
-                    border-width: 8px;
-                    border-style: solid;
-                    border-color: transparent #FFFFFF transparent transparent;
-                }
-
-                .actionButton {
-                    width: 40px;
-                    height: 40px;
-                    color: var(--paper-lime-300);
-                    cursor: default;
-                }
-
-                .actionButton:hover {
-                    color: #ffffff;
-                }
 
                 .timelineContainer {                    
                     width: 100 %;                    
@@ -145,7 +74,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     border-left: 1px solid #ffffff;
                     border-right: 1px solid #ffffff;
                     text-align:center;
-                    cursor:default;
+                    cursor: pointer;
                     overflow: hidden;
                     position: relative; 
                 }
@@ -162,7 +91,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 .crewPanel {
                     width: 100px;
                     min-width: 100px;
-                    padding-top: 80px;
+                    border-top: 1px solid var(--paper-grey-600);
                 }
 
                 .crew {
@@ -170,7 +99,6 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     color: var(--paper-orange-300);
                     font-weight: 400;
                     text-align: center;
-                    cursor: default;
                     min-height: 34px;
                 }
                 
@@ -216,37 +144,43 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 .scheduleContainer {
                     overflow: auto;
                 }
+
+                .zoomButton {
+                    padding-left: 30px;
+                }
+
+                .zoomLabel {
+                    margin-top: 11px;
+                    text-align: center;
+                    font-size: .8em;
+                    color: var(--paper-grey-600);
+                }
+
+                .zoomValue {
+                    color: #FFFFFF;
+                    background-color: var(--paper-grey-800);
+                    text-align: center;
+                    font-size: .9em;
+                    width: 30px;
+                    padding: 4px;
+                    margin-left: 32px;
+                    margin-top: 6px;
+                    margin-bottom: 14px;
+                }
             </style>
-            <div id="companyOfficePanel" class="horizontal layout companyOfficePanel">
-                <div class="dataLabel horizontalDataLabel">Company</div>
-                <div class="horizontalDataField companyField">
-                    <cs-dropdown light items="{{companies}}" label-field="name" selected="{{selectedCompany}}"></cs-dropdown>
-                </div>
-                <div class="dataLabel horizontalDataLabel">Office</div>
-                <div class="horizontalDataField officeField">
-                    <cs-dropdown light items="{{selectedCompany.offices}}" label-field="name" selected="{{selectedOffice}}"></cs-dropdown>
-                </div>
-                <div class="horizontal layout flex end-justified">
-                    <paper-icon-button id="createJob" icon="add" class="actionButton" on-tap="_addJobClick"></paper-icon-button>
-                </div>
-            </div>
-            <div id="datepickerPanel" class="horizontal layout datepickerPanel">                
-                <div class="dataLabel horizontalDataLabel">Start Date</div>
-                <div class="horizontalDataField">
-                    <vaadin-date-picker value="{{startDate}}"></vaadin-date-picker>
-                </div>
-                <div class="dataLabel horizontalDataLabel">End Date</div>
-                <div class="horizontalDataFieldSmallMargin">
-                    <vaadin-date-picker value="{{endDate}}"></vaadin-date-picker>
-                </div>
-                <div id="endDateErrorMessage" class="endDateErrorMessage hidden">End Date must be greater than Start Date</div>
-                <div class="horizontal layout flex end-justified">
-                    <paper-icon-button id="filterCrews" icon="filter-list" class="actionButton" on-tap="_filterCrewsClick"></paper-icon-button>
-                </div>
-            </div>
+            <cs-parameter-panel bootstrap-data="{{bootstrapData}}"
+                                start-date="[[startDate]]"
+                                end-date="[[end-date]]"
+                                zoom-level="[[zoomLevel]]"
+                                day-width="[[dayWidth]]"
+                                crews="[[crews]]">
+            </cs-parameter-panel>
+
             <div id="scheduleContainer" class="scheduleContainer scroll" style$="height:[[scheduleContainerHeight]]">
                 <div class="horizontal layout">
-                    <div class="crewPanel">                    
+                    <div class="crewPanel">
+                        <div class="zoomLabel">Zoom Level</div>
+                        <div class="zoomValue">[[zoomLevel]]</div>
                         <template is="dom-repeat" items="[[crews]]" as="crew">
                             <div class="crew" style$="height:[[crew.height]]">
                                 <div class="crewName">[[crew.name]]</div>
@@ -277,6 +211,10 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
+            bootstrapData: {
+                type: Object,
+                notify: true
+            },
             crews: {
                 type: Array
             },            
@@ -317,7 +255,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             },
             selectedOffice: {
                 type: Object
-            }            
+            },
+            zoomValue: {
+                type: String,
+                value: "1"
+            }
         }
     }
 
@@ -353,570 +295,17 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         document.removeEventListener("resize", this._boundResizeListener);
     }
 
-
-    // **TEMPORARY** - Static data used for layout design and development
-    generateCrews() {
-        this.crews = null;
-        let crews = [
-            {
-                "id": "1",
-                "name": "Crew 1",                
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-16",
-                        "endDate": "2018-06-17",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-17",
-                        "endDate": "2018-06-13",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-22",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-18",
-                        "endDate": "2018-07-12",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "2",
-                "name": "Crew 2",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-25",
-                        "endDate": "2018-06-04",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-20",
-                        "endDate": "2018-5-24",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-06",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-01",
-                        "endDate": "2018-06-07",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "3",
-                "name": "Crew 3",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-16",
-                        "endDate": "2018-06-17",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-17",
-                        "endDate": "2018-06-13",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-22",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-18",
-                        "endDate": "2018-07-12",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "4",
-                "name": "Crew 4",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-25",
-                        "endDate": "2018-06-04",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-20",
-                        "endDate": "2018-5-24",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-06",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-01",
-                        "endDate": "2018-06-07",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "5",
-                "name": "Crew 5",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-16",
-                        "endDate": "2018-06-17",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-17",
-                        "endDate": "2018-06-13",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-22",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-18",
-                        "endDate": "2018-07-12",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "6",
-                "name": "Crew 6",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-25",
-                        "endDate": "2018-06-04",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-20",
-                        "endDate": "2018-5-24",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-06",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-01",
-                        "endDate": "2018-06-07",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "7",
-                "name": "Crew 7",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-16",
-                        "endDate": "2018-06-17",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-17",
-                        "endDate": "2018-06-13",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-22",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-18",
-                        "endDate": "2018-07-12",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "8",
-                "name": "Crew 8",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-25",
-                        "endDate": "2018-06-04",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-20",
-                        "endDate": "2018-5-24",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-06",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-01",
-                        "endDate": "2018-06-07",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "9",
-                "name": "Crew 9",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-16",
-                        "endDate": "2018-06-17",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-17",
-                        "endDate": "2018-06-13",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-22",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-18",
-                        "endDate": "2018-07-12",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "10",
-                "name": "Crew 10",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-25",
-                        "endDate": "2018-06-04",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-20",
-                        "endDate": "2018-5-24",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-06",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-01",
-                        "endDate": "2018-06-07",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "11",
-                "name": "Crew 11",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-16",
-                        "endDate": "2018-06-17",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-17",
-                        "endDate": "2018-06-13",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-22",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-18",
-                        "endDate": "2018-07-12",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "12",
-                "name": "Crew 12",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-25",
-                        "endDate": "2018-06-04",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-20",
-                        "endDate": "2018-5-24",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-06",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-01",
-                        "endDate": "2018-06-07",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    }
-                ]
-            }
-        ];
-        this.crews = crews;
-    }
-
     // Event Handlers
     _onWindowResize(e) {
         this.scheduleContainerHeight = (window.innerHeight - 158).toString() + "px";
+    }
+
+    _zoomInClick(e) {
+
+    }
+
+    _zoomOutClick(e) {
+
     }
 
     _dateChanged(newValue, oldValue) {
@@ -924,12 +313,9 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             if (this.endDate < this.startDate) {
                 this.crews = null;
                 this.clearTimeline();
-                this.$.endDateErrorMessage.classList.remove("hidden");
+                //this.$.endDateErrorMessage.classList.remove("hidden");
             } else {
-                // **TEMPORARY** - Static data used for layout design and development
-                this.generateCrews()
-
-                this.$.endDateErrorMessage.classList.add("hidden");
+                //this.$.endDateErrorMessage.classList.add("hidden");
                 this.generateTimeSpan();
             }
         }
@@ -943,8 +329,9 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         this.dispatchEvent(new CustomEvent('filtercrews', { bubbles: true, composed: true }));
     }
 
-    _jobClick(e) {
+    _jobClick(e) {        
         let context = e.path[0].context;
+        context.selectedJob = null;
         let crewId = e.path[0].attributes.crew.nodeValue;
         let jobId = e.path[0].attributes.job.nodeValue;
         for (var crew of context.crews) {

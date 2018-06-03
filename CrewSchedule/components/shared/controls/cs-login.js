@@ -1,90 +1,107 @@
-﻿import { PolymerElement, html } from '../shared/external/@polymer/polymer/polymer-element.js';
-import { GestureEventListeners } from '../shared/external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
-import '../shared/cs-shared-styles.js';
-class CsDesktopShell extends GestureEventListeners(PolymerElement) {    
+﻿import { PolymerElement, html } from '../external/@polymer/polymer/polymer-element.js';
+import { GestureEventListeners } from '../external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
+import '../cs-shared-styles.js';
+class CsLogin extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
             <style include="iron-flex iron-flex-alignment cs-shared-styles">
-                .content {                
-                    height: calc(100vh - 48px);
-                }                
-
-                .appPanel {
-                    opacity: 0;
-                    -webkit-transition: opacity 1s ease-in-out;
-                    -moz-transition: opacity 1s ease-in-out;
-                    -o-transition: opacity 1s ease-in-out;
-                    transition: opacity 1s ease-in-out;
+                .loginPanel {
+                    width: 433px;
+                    height: 300px;
+                    margin: 60px auto;
                 }
 
-                .appPanelShown {
-                    opacity: 1;
+                .loginLogo {
+                    width: 433px;
+                    height: 100px;
                 }
+
+                .loginField {
+                    margin-top: 20px;
+                    margin-left: 75px;
+                    margin-right: 75px;
+                }
+
+                .passwordField {
+                    margin-top: 20px;
+                    margin-left: 75px;
+                    margin-right: 75px;
+                    margin-bottom: 20px;
+                }
+
+                .loginButton {
+                    --cs-button-color: var(--paper-lime-300);
+                    --cs-button-focus-color: var(--paper-orange-300);
+                    --cs-button-hover-color: var(--paper-orange-300);
+                    --cs-button-active-color: var(--paper-lime-600);
+                }              
             </style>
-            <div id="loginPanel" class="removed"> <!-- Remove class list for production -->
-                <cs-login on-busy="_handleBusy"
-                          on-loginsuccess="_hideLoginPanel">
-                </cs-login>
-            </div>
-            <div id="appPanel" class="appPanel appPanelShown"> <!-- Replace "appPanelShown" class with "hidden" class for production -->
-                <cs-title-bar on-busy="_handleBusy"
-                              on-exception="_handleException"
-                              bootstrap-data="{{bootstrapData}}">
-                </cs-title-bar>
-                <div class="horizontal layout content flex">
-                    <cs-nav-bar page="{{page}}"
-                                bootstrap-data="{{bootstrapData}}">
-                    </cs-nav-bar>
-                    <cs-content-switcher on-busy="_handleBusy"
-                                         on-success="_handleSuccess"
-                                         on-exception="_handleException"
-                                         bootstrap-data="{{bootstrapData}}"
-                                         page="{{page}}">
-                    </cs-content-switcher>
+            <div id="loginPanel" class="loginPanel">
+                <img class="loginLogo" src="../images/CSNameLogo.png" />
+                <div class="loginField">
+                    <cs-input light center-text required placeholder="User" id="loginId" value="{{login}}"></cs-input>
                 </div>
-            </div>
-            <cs-notification-panel is-busy="[[isBusy]]" 
-                                   is-success="{{isSuccess}}" 
-                                   is-exception="{{isException}}" 
-                                   error-message="[[errorMessage]]">
-            </cs-notification-panel>`;
+                <div class="passwordField">
+                    <cs-password-input light center-text required placeholder="Password" id="password" value="{{password}}" on-enterkeypressed="_login"></cs-input>
+                </div>
+                <div class="horizontal layout center-justified dialogButtons">
+                    <cs-button id="loginButton" disabled class="loginButton" on-tap="_login">Login</cs-button>
+                </div>
+            </div>`;
     }
 
     // Public Properties
     static get properties() {
         return {
-            isBusy: {
-                type: Boolean,
-                notify: true
-            },
-            isSuccess: {
-                type: Boolean,
-                notify: true
-            },
-            isException: {
-                type: Boolean,
-                notify: true
-            },
-            errorMessage: {
+            login: {
                 type: String,
-                notify: true
+                observer: "_validateInput"
             },
-            bootstrapData: {
-                type: Object,
-                notify: true
+            password: {
+                type: String,
+                observer: "_validateInput"
             }
         }
     }
-    
+
     // Lifecycle Callbacks
     connectedCallback() {
         super.connectedCallback();
-
-        //***** TEMPORARY FOR LAYOUT PURPOSES WHEN LOGIN IS NOT USED *****
-        this.bootstrapData = this.generateLayoutBootData();
+        this.timer = null;
     }
 
-    // TEMPORARY METHODS
+    ready() {
+        super.ready();
+        this.$.loginId.reset();
+        this.$.password.reset();
+        this.$.loginId.focus();
+    }
+
+    // Events
+    _validateInput() {
+        if (this.$.loginId.isValid && this.$.password.isValid) {
+            this.$.loginButton.disabled = false;
+        } else {
+            this.$.loginButton.disabled = true;
+        }
+    } 
+
+    _login(e) {        
+        this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: true } }));
+
+        // Simulate login until real logic is coded
+        this.timer = setTimeout(() => {
+            clearTimeout(this.timer);
+            this.timer = null;
+
+            // ***TEMPORARY*** FOR LAYOUT DEVELOPMENT ONLY            
+            let bootData = this.generateLayoutBootData();
+
+            this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
+            this.dispatchEvent(new CustomEvent('loginsuccess', { bubbles: true, composed: true, detail: { bootstrapData: bootData } }));
+        }, 2000);
+    }
+
     generateLayoutBootData() {
         let retval = new Object();
         retval.applicationUser = {
@@ -661,25 +678,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
         ];
     }
 
-    // Event Handlers
-    _handleBusy(e) {
-        this.isBusy = e.detail.status;
-    }
-
-    _handleSuccess(e) {
-        this.isSuccess = true;
-    }
-
-    _handleException(e) {
-        this.isException = true;
-        this.errorMessage = e.detail;
-    }
-
-    _hideLoginPanel(e) {
-        this.bootstrapData = e.detail.bootstrapData;
-        this.$.loginPanel.classList.add("removed");
-        this.$.appPanel.classList.remove("hidden");
-        this.$.appPanel.classList.add("appPanelShown");
-    }
+    // Public Methods
+      
 }
-customElements.define('cs-desktop-shell', CsDesktopShell);
+customElements.define('cs-login', CsLogin);

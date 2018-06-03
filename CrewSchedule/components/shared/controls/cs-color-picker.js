@@ -41,7 +41,7 @@ class CsColorPicker extends GestureEventListeners(PolymerElement) {
 
                 .dropdownBody .dropdown {
                     position: absolute;
-                    max-height: 100px;
+                    max-height: 200px;
                     top: 100%;
                     left: 0px;
                     right: 0px;
@@ -124,6 +124,10 @@ class CsColorPicker extends GestureEventListeners(PolymerElement) {
             },
             selectedItem: {
                 type: Object,
+                notify: true
+            },
+            selectedColor: {
+                type: String,
                 notify: true
             },
             disabled: {
@@ -1039,9 +1043,126 @@ class CsColorPicker extends GestureEventListeners(PolymerElement) {
                 "name": "#dd2c00",
                 "color": "#dd2c00"
             },
-
-            /* paper-brown */
-
+            {
+                "name": "#efebe9",
+                "color": "#efebe9"
+            },
+            {
+                "name": "#d7ccc8",
+                "color": "#d7ccc8"
+            },
+            {
+                "name": "#bcaaa4",
+                "color": "#bcaaa4"
+            },
+            {
+                "name": "#a1887f",
+                "color": "#a1887f"
+            },
+            {
+                "name": "#8d6e63",
+                "color": "#8d6e63"
+            },
+            {
+                "name": "#795548",
+                "color": "#795548"
+            },
+            {
+                "name": "#6d4c41",
+                "color": "#6d4c41"
+            },
+            {
+                "name": "#5d4037",
+                "color": "#5d4037"
+            },
+            {
+                "name": "#4e342e",
+                "color": "#4e342e"
+            },
+            {
+                "name": "#3e2723",
+                "color": "#3e2723"
+            },
+            {
+                "name": "#fafafa",
+                "color": "#fafafa"
+            },
+            {
+                "name": "#f5f5f5",
+                "color": "#f5f5f5"
+            },
+            {
+                "name": "#eeeeee",
+                "color": "#eeeeee"
+            },
+            {
+                "name": "#e0e0e0",
+                "color": "#e0e0e0"
+            },
+            {
+                "name": "#bdbdbd",
+                "color": "#bdbdbd"
+            },
+            {
+                "name": "#9e9e9e",
+                "color": "#9e9e9e"
+            },
+            {
+                "name": "#757575",
+                "color": "#757575"
+            },
+            {
+                "name": "#616161",
+                "color": "#616161"
+            },
+            {
+                "name": "#424242",
+                "color": "#424242"
+            },
+            {
+                "name": "#212121",
+                "color": "#212121"
+            },
+            {
+                "name": "#eceff1",
+                "color": "#eceff1"
+            },
+            {
+                "name": "#cfd8dc",
+                "color": "#cfd8dc"
+            },
+            {
+                "name": "#b0bec5",
+                "color": "#b0bec5"
+            },
+            {
+                "name": "#90a4ae",
+                "color": "#90a4ae"
+            },
+            {
+                "name": "#78909c",
+                "color": "#78909c"
+            },
+            {
+                "name": "#607d8b",
+                "color": "#607d8b"
+            },
+            {
+                "name": "#546e7a",
+                "color": "#546e7a"
+            },
+            {
+                "name": "#455a64",
+                "color": "#455a64"
+            },
+            {
+                "name": "#37474f",
+                "color": "#37474f"
+            },
+            {
+                "name": "#263238",
+                "color": "#263238"
+            }
         ];
     }
 
@@ -1074,6 +1195,7 @@ class CsColorPicker extends GestureEventListeners(PolymerElement) {
 
     _updateSelection(e) {
         this.selectedItem = e.model.item;
+        this.selectedColor = this.selectedItem.color;
         this.$.dropdownBody.classList.remove("active");
         // Don't propogate the event to the document
         if (e.stopPropagation) {

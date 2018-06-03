@@ -55,9 +55,13 @@ class CsPasswordInput extends GestureEventListeners(PolymerElement) {
                 .disabled {
                     color: var(--paper-grey-500);
                 }
+
+                .centerText {
+                    text-align: center;
+                }
             </style>
             <div class="inputField">
-                <input tabindex="1" id="internalInput" type="text" placeholder="[[placeholder]]" value="{{value::input}}" class="internalInput" on-blur="_checkRequired" />
+                <input tabindex="1" id="internalInput" type="password" placeholder="[[placeholder]]" value="{{value::input}}" class="internalInput" on-blur="_checkRequired" on-keydown="_checkForEnter" />
                 <template is="dom-if" if="[[characterCounter]]">
                     <div class="horizontal end-justified layout counterField">
                         <div class="counter">[[counter]]</div>
@@ -108,6 +112,10 @@ class CsPasswordInput extends GestureEventListeners(PolymerElement) {
             inputType: {
                 type: String,
                 observer: "_inputTypeChanged"
+            },
+            centerText: {
+                type: Boolean,
+                observer: "_centerTextChanged"
             }
         }
     }
@@ -117,6 +125,21 @@ class CsPasswordInput extends GestureEventListeners(PolymerElement) {
         super.connectedCallback();
         this._valueChanged(this.value);
         this.isValid = true;        
+    }
+
+    // Events
+    _checkForEnter(e) {
+        if (e.keyCode === 13) {
+            this.dispatchEvent(new CustomEvent('enterkeypressed', { bubbles: true, composed: true }));
+        }
+    }
+
+    _centerTextChanged(newValue, oldValue) {
+        if (this.centerText) {
+            this.$.internalInput.classList.add("centerText");
+        } else {
+            this.$.internalInput.classList.remove("centerText");
+        }
     }
 
     _requiredChanged(newValue, oldValue) {

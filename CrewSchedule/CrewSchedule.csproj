@@ -152,12 +152,15 @@
     <Content Include="components\desktop\views\cs-admin-view.js" />
     <Content Include="components\desktop\views\cs-notification-view.js" />
     <Content Include="components\desktop\views\cs-schedule-view.js" />
+    <Content Include="components\desktop\views\sections\regions\cs-edit-preferences-region.js" />
     <Content Include="components\desktop\views\sections\regions\cs-filter-crews-region.js" />
     <Content Include="components\desktop\views\sections\regions\cs-edit-job-region.js" />
     <Content Include="components\desktop\views\sections\regions\cs-add-job-region.js" />
     <Content Include="components\mobile\cs-mobile-shell.js" />
     <Content Include="components\shared\controls\cs-content-switcher.js" />
     <Content Include="components\shared\controls\cs-color-picker.js" />
+    <Content Include="components\shared\controls\cs-parameter-panel.js" />
+    <Content Include="components\shared\controls\cs-login.js" />
     <Content Include="components\shared\controls\cs-password-input.js" />
     <Content Include="components\shared\controls\cs-title-bar.js" />
     <Content Include="components\shared\controls\cs-textarea.js" />
@@ -285,6 +288,7 @@
     <Content Include="components\shared\external\%40polymer\paper-styles\shadow.js" />
     <Content Include="components\shared\external\%40polymer\paper-styles\typography.js" />
     <Content Include="components\shared\external\%40polymer\paper-toast\paper-toast.js" />
+    <Content Include="components\shared\external\%40polymer\paper-toggle-button\paper-toggle-button.js" />
     <Content Include="components\shared\external\%40polymer\paper-tooltip\paper-tooltip.js" />
     <Content Include="components\shared\external\%40polymer\polymer\externs\closure-types.js" />
     <Content Include="components\shared\external\%40polymer\polymer\externs\polymer-externs.js" />

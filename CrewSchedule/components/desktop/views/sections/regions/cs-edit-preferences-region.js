@@ -1,20 +1,18 @@
 ﻿import { PolymerElement, html } from '../../../../shared/external/@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '../../../../shared/external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '../../../../shared/cs-shared-styles.js';
-class CsAddJobRegion extends GestureEventListeners(PolymerElement) {    
+class CsEditPreferencesRegion extends GestureEventListeners(PolymerElement) {    
     static get template() {
         return html`
             <style include="iron-flex iron-flex-alignment cs-shared-styles">
                 
             </style>
             <div>
-                Add Job Region Placeholder                
+                Edit User Preferences Region Placeholder
                 <div class="horizontal layout end-justified dialogButtons">
                     <cs-button id="saveButton" disabled class="saveButton" on-tap="_save">Save</cs-button>
                     <cs-button class="cancelButton" on-tap="_closeDialog">Cancel</cs-button>
                 </div>
-                <cs-color-picker></cs-color-picker>
-                <cs-password-input></cs-password-input>
             </div>`;
     }
 
@@ -57,4 +55,4 @@ class CsAddJobRegion extends GestureEventListeners(PolymerElement) {
         this.dispatchEvent(new CustomEvent("close"));
     }
 }
-customElements.define('cs-add-job-region', CsAddJobRegion);
+customElements.define('cs-edit-preferences-region', CsEditPreferencesRegion);

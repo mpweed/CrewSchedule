@@ -25,10 +25,10 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
                 }
             </style>
             <div class="viewPanel">
-                <cs-timeline companies="[[companies]]" 
-                             on-addjob="_showAddJobDialog" 
-                             on-filtercrews="_showFilterCrewsDialog" 
-                             on-editjob="_showEditJobDialog"></cs-timeline>
+                <cs-timeline bootstrap-data="{{bootstrapData}}" 
+                             on-addclick="_showAddJobDialog" 
+                             on-filterclick="_showFilterCrewsDialog" 
+                             on-editclick="_showEditJobDialog"></cs-timeline>
                 <cs-dialog id="addJobDialog">
                     <cs-add-job-region on-close="_hideAddJobDialog">
                     </cs-add-job-region>
@@ -46,28 +46,9 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
 
     // Public Properties
     static get properties() {
-        return {
-            isBusy: {
-                type: Boolean,
-                notify: true
-            },
-            isSuccess: {
-                type: Boolean,
-                notify: true
-            },
-            isException: {
-                type: Boolean,
-                notify: true
-            },
-            errorMessage: {
-                type: String,
-                notify: true
-            },
-            applicationUser: {
-                type: Object
-            },
-            companies: {
-                type: Array,
+        return {            
+            bootstrapData: {
+                type: Object,
                 notify: true
             }
         }

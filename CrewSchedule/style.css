@@ -60,18 +60,18 @@
 }
 
 cs-button {
-    --cs-button-color: var(--paper-blue-grey-300);
-    --cs-button-focus-color: var(--paper-blue-grey-100);
-    --cs-button-hover-color: var(--paper-blue-grey-100);
-    --cs-button-active-color: var(--paper-blue-grey-400);
+    --cs-button-color: var(--paper-orange-300);
+    --cs-button-focus-color: var(--paper-orange-100);
+    --cs-button-hover-color: var(--paper-orange-100);
+    --cs-button-active-color: var(--paper-orange-400);
     --cs-button-disabled-color: var(--paper-grey-600);
 }
 
 .saveButton {
-    --cs-button-color: var(--paper-pink-400);
-    --cs-button-focus-color: var(--paper-pink-300);
-    --cs-button-hover-color: var(--paper-pink-300);
-    --cs-button-active-color: var(--paper-pink-600);
+    --cs-button-color: var(--paper-lime-400);
+    --cs-button-focus-color: var(--paper-lime-300);
+    --cs-button-hover-color: var(--paper-lime-300);
+    --cs-button-active-color: var(--paper-lime-600);
 }
 
 .cancelButton {
