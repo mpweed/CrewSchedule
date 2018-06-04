@@ -88,6 +88,13 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 paper-icon-button[disabled] {
                     color: var(--paper-grey-800);
                 }
+
+                .filterStatus {
+                    color: var(--paper-orange-300);
+                    font-size: .9em;
+                    font-weight: 200;
+                    margin-top: 10px;
+                }
             </style>
             <div id="companyOfficePanel" class="horizontal layout companyOfficePanel">
                 <paper-icon-button id="zoomIn" icon="zoom-in" class="actionButton" on-tap="_zoomInClick"></paper-icon-button>
@@ -112,9 +119,10 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 <div class="dataLabel horizontalDataLabel">End Date</div>
                 <div class="horizontalDataFieldSmallMargin">
                     <vaadin-date-picker value="{{endDate}}"></vaadin-date-picker>
-                </div>
-                <!--<div id="endDateErrorMessage" class="endDateErrorMessage hidden">End Date must be greater than Start Date</div>-->
+                    <!--<div id="endDateErrorMessage" class="endDateErrorMessage hidden">End Date must be greater than Start Date</div>-->
+                </div>                
                 <div class="horizontal layout flex end-justified">
+                    <div class="filterStatus">[[filterStatus]]</div>
                     <paper-icon-button id="filterCrews" icon="filter-list" class="actionButton" on-tap="_filterCrewsClick"></paper-icon-button>
                 </div>
             </div>
@@ -175,6 +183,9 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 type: Array,
                 notify: true,
                 observer: "_crewFilterChanged"
+            },
+            filterStatus: {
+                type: String
             }
         }
     }
@@ -202,6 +213,7 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 this.crews = JSON.parse(JSON.stringify(this.bootstrapData.crews));
                 let filter = new Array();
                 for (var crew of this.crews) {
+                    crew.checked = true;
                     filter.push(crew);
                 }
                 this.crewFilter = filter;                
@@ -231,12 +243,14 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
     _zoomInClick(e) {
         if (this.zoomLevel < 4) {
             this.zoomLevel = this.zoomLevel + 1;
+            this.$.zoomIn.focused = false;
         }
     }
 
     _zoomOutClick(e) {
         if (this.zoomLevel > 1) {
             this.zoomLevel = this.zoomLevel - 1;
+            this.$.zoomOut.focused = false;
         }
     }
 
@@ -254,10 +268,19 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
 
     _crewFilterChanged(newValue, oldValue) {
         let filteredCrews = new Array();
-        for (var crew of this.crewFilter) {
-            filteredCrews.push(crew);
+        if (this.crewFilter) {
+            for (var crew of this.crewFilter) {
+                if (crew.checked) {
+                    filteredCrews.push(crew);
+                }
+            }
         }
         this.filteredCrews = filteredCrews;
+        if (this.crewFilter.length == filteredCrews.length) {
+            this.filterStatus = "Off";
+        } else {
+            this.filterStatus = "On";
+        }
     }
 
     // Private Methods

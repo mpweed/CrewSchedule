@@ -152,9 +152,9 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     background-color: var(--paper-grey-800);
                     text-align: center;
                     font-size: .9em;
-                    width: 30px;
+                    width: 20px;
                     padding: 4px;
-                    margin-left: 32px;
+                    margin-left: 37px;
                     margin-top: 6px;
                     margin-bottom: 14px;
                 }
@@ -166,7 +166,6 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                                 day-width="{{dayWidth}}"
                                 filtered-crews="{{crews}}">
             </cs-parameter-panel>
-
             <div id="scheduleContainer" class="scheduleContainer scroll" style$="height:[[scheduleContainerHeight]]">
                 <div class="horizontal layout">
                     <div class="crewPanel">

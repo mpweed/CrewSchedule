@@ -8,9 +8,16 @@ class CsFilterCrewsRegion extends GestureEventListeners(PolymerElement) {
                 
             </style>
             <div>
-                Filter Crews Region Placeholder
+                <div>
+                    <template is="dom-repeat" items="[[crewFilter]]" as="crew">
+                        <div class="horizontal layout">
+                            <paper-checkbox checked="{{crew.checked}}"></paper-checkbox>
+                            <div>[[crew.name]]</div>
+                        </div>
+                    </template>
+                </div>
                 <div class="horizontal layout end-justified dialogButtons">
-                    <cs-button id="saveButton" disabled class="saveButton" on-tap="_save">Save</cs-button>
+                    <cs-button id="saveButton" class="saveButton" on-tap="_save">Save</cs-button>
                     <cs-button class="cancelButton" on-tap="_closeDialog">Cancel</cs-button>
                 </div>
             </div>`;
@@ -19,24 +26,10 @@ class CsFilterCrewsRegion extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
-            isBusy: {
-                type: Boolean,
+            /** Public **/
+            crewFilter: {
+                type: Array,
                 notify: true
-            },
-            isSuccess: {
-                type: Boolean,
-                notify: true
-            },
-            isException: {
-                type: Boolean,
-                notify: true
-            },
-            errorMessage: {
-                type: String,
-                notify: true
-            },
-            applicationUser: {
-                type: Object
             }
         }
     }
@@ -48,7 +41,9 @@ class CsFilterCrewsRegion extends GestureEventListeners(PolymerElement) {
 
     // Event Handlers
     _save(e) {
-
+        let newCrewFilter = JSON.parse(JSON.stringify(this.crewFilter));
+        this.crewFilter = newCrewFilter;
+        this._closeDialog(null);
     }
 
     _closeDialog(e) {
