@@ -79,7 +79,6 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
     // Lifecycle Callbacks
     connectedCallback() {
         super.connectedCallback();
-
         //***** TEMPORARY FOR LAYOUT PURPOSES WHEN LOGIN IS NOT USED *****
         this.bootstrapData = this.generateLayoutBootData();
     }
@@ -91,6 +90,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
             "name": "Michael Weed",
             "jobTitle": "System Administrator",
             "role": "System Administrator",
+            "zoomLevel": "1",
             "companies": [
                 {
                     "id": "1",
@@ -659,6 +659,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
                 ]
             }
         ];
+        return retval;
     }
 
     // Event Handlers

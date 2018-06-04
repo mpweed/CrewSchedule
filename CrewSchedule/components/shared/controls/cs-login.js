@@ -108,6 +108,7 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
             "name": "Michael Weed",
             "jobTitle": "System Administrator",
             "role": "System Administrator",
+            "zoomLevel": "1",
             "companies": [
                 {
                     "id": "1",
@@ -676,6 +677,7 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
                 ]
             }
         ];
+        return retval;
     }
 
     // Public Methods

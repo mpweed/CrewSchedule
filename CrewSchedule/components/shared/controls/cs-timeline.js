@@ -16,12 +16,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     overflow: auto;
                 }
 
-                .dayContainer {
-                    width: 34px;
-                }
-
                 .dayHeader {
-                    width: 34px;
                     border-right: 1px solid var(--paper-grey-800);
                     border-bottom: 1px solid var(--paper-grey-600);
                     text-align: center;
@@ -56,7 +51,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 }
 
                 .day {
-                    width: 34px;                    
+                    /* width: 34px; */                    
                     border-right: 1px solid var(--paper-grey-800);
                 }
         
@@ -145,10 +140,6 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     overflow: auto;
                 }
 
-                .zoomButton {
-                    padding-left: 30px;
-                }
-
                 .zoomLabel {
                     margin-top: 11px;
                     text-align: center;
@@ -169,11 +160,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 }
             </style>
             <cs-parameter-panel bootstrap-data="{{bootstrapData}}"
-                                start-date="[[startDate]]"
-                                end-date="[[end-date]]"
-                                zoom-level="[[zoomLevel]]"
-                                day-width="[[dayWidth]]"
-                                crews="[[crews]]">
+                                start-date="{{startDate}}"
+                                end-date="{{endDate}}"
+                                zoom-level="{{zoomLevel}}"
+                                day-width="{{dayWidth}}"
+                                filtered-crews="{{crews}}">
             </cs-parameter-panel>
 
             <div id="scheduleContainer" class="scheduleContainer scroll" style$="height:[[scheduleContainerHeight]]">
@@ -190,14 +181,14 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     <div id="timelineContainer" class="timelineContainer scroll" style$="height:[[timelineContainerHeight]]; width:[[timelineContainerWidth]]">
                         <div id="timelineHeader" class="horizontal layout">
                             <template is="dom-repeat" items="[[timelineArray]]" as="day">
-                                <div class="vertical layout dayContainer">
-                                    <div class$="[[day.headerClassList]]">
+                                <div class="vertical layout" style$="width:[[dayWidthFormatted]]">
+                                    <div class$="[[day.headerClassList]]" style$="width:[[dayWidthFormatted]]">
                                         <div class$="[[day.yearHeaderClass]]">[[day.year]]</div>
                                         <div class$="[[day.monthHeaderClass]]">[[day.month]]</div>
                                         <div>[[day.day]]</div>
                                         <div>[[day.number]]</div>
                                     </div>
-                                    <div class$="[[day.dayClassList]]" style$="height:[[dayHeight]]"></div>
+                                    <div class$="[[day.dayClassList]]" style$="height:[[dayHeight]] width:[[dayWidthFormatted]]"></div>
                                 </div>                        
                             </template>                
                         </div>
@@ -211,21 +202,35 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
+            /** Public **/
             bootstrapData: {
                 type: Object,
                 notify: true
             },
-            crews: {
-                type: Array
-            },            
+            /** Private **/
             startDate: {
-                type: String,
+                type: Date,
                 observer: "_dateChanged"
             },
             endDate: {
-                type: String,
+                type: Date,
                 observer: "_dateChanged"
             },
+            zoomLevel: {
+                type: Number
+            },
+            dayWidth: {
+                type: Number,
+                observer: "_dayWidthChanged"
+            },
+            dayWidthFormatted: {
+                type: String
+            },
+            crews: {
+                type: Array,
+                observer: "_crewsChanged"
+            },
+
             timelineArray: {
                 type: Array
             },
@@ -245,20 +250,6 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             selectedJob: {
                 type: Object,
                 observer: "_selectedJobChanged"
-            },
-            companies: {
-                type: Array,
-                notify: true
-            },
-            selectedCompany: {
-                type: Object
-            },
-            selectedOffice: {
-                type: Object
-            },
-            zoomValue: {
-                type: String,
-                value: "1"
             }
         }
     }
@@ -270,24 +261,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
 
     // Lifecycle Callbacks
     connectedCallback() {
-        super.connectedCallback();               
+        super.connectedCallback();        
     }
 
     ready() {
-        super.ready();
-        Date.prototype.getMonthName = function () {
-            let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-            return months[this.getMonth()];
-        };
-        Date.prototype.getDayName = function () {
-            let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            return days[this.getDay()];
-        };
-        let defaultStartDate = new Date(Date.now());
-        let defaultEndDate = new Date(Date.now());
-        defaultEndDate.setDate(defaultEndDate.getDate() + 31);
-        this.startDate = (defaultStartDate.getFullYear() + '-' + (defaultStartDate.getMonth() + 1) + '-' + defaultStartDate.getDate()).toString();
-        this.endDate = (defaultEndDate.getFullYear() + '-' + (defaultEndDate.getMonth() + 1) + '-' + defaultEndDate.getDate()).toString();
+        super.ready();       
         window.addEventListener("resize", this._boundResizeListener)
     }
 
@@ -300,33 +278,24 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         this.scheduleContainerHeight = (window.innerHeight - 158).toString() + "px";
     }
 
-    _zoomInClick(e) {
-
-    }
-
-    _zoomOutClick(e) {
-
-    }
-
     _dateChanged(newValue, oldValue) {
-        if (this.startDate && this.endDate && this.startDate != this.endDate) {
-            if (this.endDate < this.startDate) {
-                this.crews = null;
-                this.clearTimeline();
-                //this.$.endDateErrorMessage.classList.remove("hidden");
-            } else {
-                //this.$.endDateErrorMessage.classList.add("hidden");
-                this.generateTimeSpan();
-            }
+        this.regenerateTimeSpan();
+    }
+
+    _dayWidthChanged(newValue, oldValue) {
+        this.dayWidthFormatted = this.dayWidth.toString() + "px;";
+        this.regenerateTimeSpan();
+    }
+
+    _crewsChanged(newValue, oldValue) {
+        this.regenerateTimeSpan();    
+    }
+
+    regenerateTimeSpan() {
+        this.clearTimeline();
+        if (this.crews) {
+            this.generateTimeSpan();
         }
-    }
-
-    _addJobClick(e) {
-        this.dispatchEvent(new CustomEvent('addjob', { bubbles: true, composed: true }));
-    }
-
-    _filterCrewsClick(e) {
-        this.dispatchEvent(new CustomEvent('filtercrews', { bubbles: true, composed: true }));
     }
 
     _jobClick(e) {        
@@ -348,7 +317,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
 
     _selectedJobChanged(newValue, oldValue) {
         if (newValue) {
-            this.dispatchEvent(new CustomEvent('editjob', { bubbles: true, composed: true, detail: { job: this.selectedJob } }));
+            this.dispatchEvent(new CustomEvent('editclick', { bubbles: true, composed: true, detail: { job: this.selectedJob } }));
         }
     }
 
@@ -374,7 +343,14 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     }
 
     generateTimeSpan() {
-        const DAY_WIDTH = 34;
+        Date.prototype.getMonthName = function () {
+            let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            return months[this.getMonth()];
+        };
+        Date.prototype.getDayName = function () {
+            let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            return days[this.getDay()];
+        };
         let dayCounter = 0;
         let timelineWidth = 0;
         this.clearJobs();
@@ -431,7 +407,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             currentDate.setDate(currentDate.getDate() + 1);
             dayCounter++;
         }
-        timelineWidth = DAY_WIDTH * dayCounter;
+        timelineWidth = this.dayWidth * dayCounter;
         let dayHeight = this.generateJobs(timelineWidth);
         this.dayHeight = dayHeight.toString() + "px;";
         this.timelineContainerWidth = (timelineWidth + 10).toString() + "px";
@@ -518,7 +494,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         crew.jobs.sort(
             (a, b) => {
                 return (new Date(a.startDate)) - (new Date(b.startDate));
-            });
+            });              
     }
 
     generateSwimlanes(crew) {        
@@ -600,7 +576,6 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
 
     calculateLeftOffset(job) {
         const MILLISECONDS_IN_DAY = 86400000;
-        const DAY_WIDTH = 34;
         let timeSpanStart = new Date(this.startDate);
         if (timeSpanStart.getHours() != 0) {
             this.setUtcAdjustedDate(timeSpanStart);
@@ -610,12 +585,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             this.setUtcAdjustedDate(jobStartDate)
         }        
         let leftOffsetDays = Math.round((jobStartDate - timeSpanStart) / MILLISECONDS_IN_DAY);
-        return (leftOffsetDays * DAY_WIDTH);
+        return (leftOffsetDays * this.dayWidth);
     }
 
     calculateWidth(job) {
         const MILLISECONDS_IN_DAY = 86400000;
-        const DAY_WIDTH = 34;
         let jobStartDate = new Date(job.startDate);
         if (jobStartDate.getHours() != 0) {
             this.setUtcAdjustedDate(jobStartDate);
@@ -627,7 +601,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         // Adjust end date so that the full day is included in the width calculation
         jobEndDate.setDate(jobEndDate.getDate() + 1);
         let lengthInDays = Math.round((jobEndDate - jobStartDate) / MILLISECONDS_IN_DAY);
-        return (lengthInDays * DAY_WIDTH);
+        return (lengthInDays * this.dayWidth);
     }
 
     generateHtml(job) {

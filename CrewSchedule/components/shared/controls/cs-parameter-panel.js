@@ -1,6 +1,7 @@
 ﻿import { PolymerElement, html } from '../external/@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '../external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '../cs-shared-styles.js';
+import '../../desktop/views/sections/regions/cs-filter-crews-region.js'
 class CsParameterPanel extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
@@ -92,7 +93,7 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 <paper-icon-button id="zoomIn" icon="zoom-in" class="actionButton" on-tap="_zoomInClick"></paper-icon-button>
                 <div class="dataLabel horizontalDataLabel companyLabel">Company</div>
                 <div class="horizontalDataField companyField">
-                    <cs-dropdown light items="{{companies}}" label-field="name" selected="{{selectedCompany}}"></cs-dropdown>
+                    <cs-dropdown light items="{{bootstrapData.applicationUser.companies}}" label-field="name" selected="{{selectedCompany}}"></cs-dropdown>
                 </div>
                 <div class="dataLabel horizontalDataLabel">Office</div>
                 <div class="horizontalDataField officeField">
@@ -103,7 +104,7 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 </div>
             </div>
             <div id="datepickerPanel" class="horizontal layout datepickerPanel">
-                <paper-icon-button id="zoomOut" icon="zoom-out" class="actionButton" disabled on-tap="_zoomOutClick"></paper-icon-button>
+                <paper-icon-button id="zoomOut" icon="zoom-out" class="actionButton" on-tap="_zoomOutClick"></paper-icon-button>
                 <div class="dataLabel horizontalDataLabel startDateLabel">Start Date</div>
                 <div class="horizontalDataField">
                     <vaadin-date-picker value="{{startDate}}"></vaadin-date-picker>
@@ -116,20 +117,64 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 <div class="horizontal layout flex end-justified">
                     <paper-icon-button id="filterCrews" icon="filter-list" class="actionButton" on-tap="_filterCrewsClick"></paper-icon-button>
                 </div>
-            </div>`;
+            </div>
+            <cs-dialog id="filterCrewsDialog">
+                <cs-filter-crews-region crew-filter="{{crewFilter}}"
+                                        on-close="_hideFilterCrewsDialog">
+                </cs-filter-crews-region>
+            </cs-dialog>`;
     }
 
     // Public Properties
     static get properties() {
         return {
+            /** Public **/
             bootstrapData: {
                 type: Object,
                 notify: true,
-                observer: "bootstrapDataChanged"
+                observer: "_bootstrapDataChanged"
+            },
+            startDate: {
+                type: Date,
+                notify: true
+            },
+            endDate: {
+                type: Date,
+                notify: true,
+                observer: "_endDateChanged"
+            },
+            zoomLevel: {
+                type: Number,
+                value: 1,
+                notify: true,
+                observer: "_zoomLevelChanged"
+            },
+            dayWidth: {
+                type: Number,
+                value: 34,
+                notify: true
+            },
+            filteredCrews: {
+                type: Array,
+                notify: true
+            },
+            /** Private **/
+            selectedCompany: {
+                type: Object,
+                notify: true
+            },
+            selectedOffice: {
+                type: Object,
+                notify: true
             },
             crews: {
                 type: Array,
                 notify: true
+            },
+            crewFilter: {
+                type: Array,
+                notify: true,
+                observer: "_crewFilterChanged"
             }
         }
     }
@@ -139,16 +184,109 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
         super.connectedCallback();
     }
 
+    ready() {
+        super.ready();        
+        let defaultStartDate = new Date(Date.now());
+        let defaultEndDate = new Date(Date.now());
+        defaultEndDate.setDate(defaultEndDate.getDate() + 31);
+        this.startDate = (defaultStartDate.getFullYear() + '-' + (defaultStartDate.getMonth() + 1) + '-' + defaultStartDate.getDate()).toString();
+        this.endDate = (defaultEndDate.getFullYear() + '-' + (defaultEndDate.getMonth() + 1) + '-' + defaultEndDate.getDate()).toString();
+    }
+
     // Event Handlers
     _bootstrapDataChanged(newValue, oldValue) {
+        this.filteredCrews = null;
+        if (this.bootstrapData) {
+            this.zoomLevel = Number(this.bootstrapData.applicationUser.zoomLevel);                                   
+            if (this.bootstrapData.crews) {
+                this.crews = JSON.parse(JSON.stringify(this.bootstrapData.crews));
+                let filter = new Array();
+                for (var crew of this.crews) {
+                    filter.push(crew);
+                }
+                this.crewFilter = filter;                
+            }
+        }        
+    }
+
+    _endDateChanged(newValue, oldValue) {
         this.crews = null;
-        if (this.bootstrapData && this.bootstrapData.crews) {
-            this.crews = this.bootstrapData.crews;
+        if (this.startDate && this.endDate && this.startDate != this.endDate) {
+            if (this.endDate < this.startDate) {
+                //this.$.endDateErrorMessage.classList.remove("hidden");
+            } else {
+                //this.$.endDateErrorMessage.classList.add("hidden");
+                this.getCrews();
+            }
+        }
+    }    
+
+    _zoomLevelChanged(newValue, oldValue) {
+        if (this.zoomLevel) {
+            this.setZoomButtonState();
+            this.setDayWidth();
         }
     }
 
+    _zoomInClick(e) {
+        if (this.zoomLevel < 4) {
+            this.zoomLevel = this.zoomLevel + 1;
+        }
+    }
 
-    // Public Methods
+    _zoomOutClick(e) {
+        if (this.zoomLevel > 1) {
+            this.zoomLevel = this.zoomLevel - 1;
+        }
+    }
+
+    _addJobClick(e) {
+        this.dispatchEvent(new CustomEvent('addclick', { bubbles: true, composed: true }));
+    }
+
+    _filterCrewsClick(e) {
+        this.$.filterCrewsDialog.show();    
+    }
+
+    _hideFilterCrewsDialog(e) {
+        this.$.filterCrewsDialog.hide();
+    }
+
+    _crewFilterChanged(newValue, oldValue) {
+        let filteredCrews = new Array();
+        for (var crew of this.crewFilter) {
+            filteredCrews.push(crew);
+        }
+        this.filteredCrews = filteredCrews;
+    }
+
+    // Private Methods
+    setDayWidth() {
+        this.dayWidth = this.zoomLevel * 34;
+    }
+
+    setZoomButtonState() {
+        if (this.zoomLevel) {
+            if (this.zoomLevel < 2) {
+                this.$.zoomOut.disabled = true;
+            } else {
+                this.$.zoomOut.disabled = false;
+            }
+            if (this.zoomLevel > 3) {
+                this.$.zoomIn.disabled = true;
+            } else {
+                this.$.zoomIn.disabled = false;
+            }
+        }
+    }
+
+    getCrews() {
+        /*** TEMPORARY ***/
+        this.crews = null;
+        if (this.bootstrapData && this.bootstrapData.crews) {
+            this.crews = this.bootstrapData.crews;
+        }        
+    }
       
 }
 customElements.define('cs-parameter-panel', CsParameterPanel);
