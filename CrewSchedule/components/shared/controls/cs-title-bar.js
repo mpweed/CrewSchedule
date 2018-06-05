@@ -151,6 +151,15 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
+            /** Public **/
+            isDialogShown: {
+                type: Boolean,
+                notify: true
+            },
+            bootstrapData: {
+                type: Object,
+                notify: true
+            },
             environment: {
                 type: String,
                 value: function () {
@@ -172,11 +181,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
             },
             logoUrl: {
                 type: String
-            },
-            bootstrapData: {
-                type: Object,
-                notify: true
-            }
+            }           
         }
     }
 
@@ -205,7 +210,9 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
     }
 
     _editPreferencesClick(e) {
-        this.$.userPreferencesDialog.show();
+        if (!this.isDialogShown) {
+            this.$.userPreferencesDialog.show();
+        }        
     }
 
     _hideEditPreferencesDialog(e) {

@@ -113,6 +113,21 @@ styleElement.innerHTML =
                 color: var(--paper-grey-600);
             }
 
+            .dialogCaption {
+                font-size: 1.5em;
+                font-weight: 100;
+                color: var(--paper-lime-300);
+            }
+
+            .dialogHeader {
+                padding-left: 20px;
+                border-bottom: 1px solid var(--paper-grey-800);
+            }
+
+            .dialogBody {
+                padding: 20px;
+            }
+
             .dataField {
                 margin-right: 20px;
             }
@@ -163,8 +178,10 @@ styleElement.innerHTML =
                 visibility: hidden;
             }
 
-            .dialogButtons {
-                margin-top: 20px;
+            .dialogButtons {                
+                padding-top: 20px;
+                padding-right: 20px;
+                border-top: 1px solid var(--paper-grey-800);
             }
 
             .saveButton {

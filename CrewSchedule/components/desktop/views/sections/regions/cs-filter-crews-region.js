@@ -5,14 +5,21 @@ class CsFilterCrewsRegion extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
             <style include="iron-flex iron-flex-alignment cs-shared-styles">
-                
+                paper-checkbox.styled {
+                    --paper-checkbox-checked-color: var(--paper-orange-300);
+                    --paper-checkbox-label-color: var(--paper-grey-500);
+                    --paper-checkbox-unchecked-color: var(--paper-grey-800);
+                    margin-bottom: 20px;
+                }
             </style>
             <div>
-                <div>
+                <div class="dialogHeader">
+                    <span class="dialogCaption">Filter Crews</span>
+                </div>                
+                <div class="dialogBody">
                     <template is="dom-repeat" items="[[crewFilter]]" as="crew">
                         <div class="horizontal layout">
-                            <paper-checkbox checked="{{crew.checked}}"></paper-checkbox>
-                            <div>[[crew.name]]</div>
+                            <paper-checkbox checked="{{crew.checked}}" class="styled">[[crew.name]]</paper-checkbox>
                         </div>
                     </template>
                 </div>

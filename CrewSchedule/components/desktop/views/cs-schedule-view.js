@@ -24,7 +24,8 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
                 }
             </style>
             <div class="viewPanel">
-                <cs-timeline bootstrap-data="{{bootstrapData}}" 
+                <cs-timeline is-dialog-shown="{{isDialogShown}}"
+                             bootstrap-data="{{bootstrapData}}" 
                              on-addclick="_showAddJobDialog" 
                              on-editclick="_showEditJobDialog"></cs-timeline>
                 <cs-dialog id="addJobDialog">
@@ -40,7 +41,12 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
 
     // Public Properties
     static get properties() {
-        return {            
+        return {
+            /** Public **/
+            isDialogShown: {
+                type: Boolean,
+                notify: true
+            },
             bootstrapData: {
                 type: Object,
                 notify: true
@@ -55,11 +61,15 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
 
     // Event Handlers
     _showAddJobDialog(e) {
-        this.$.addJobDialog.show();
+        if (!this.isDialogShown) {
+            this.$.addJobDialog.show();
+        }        
     }    
 
     _showEditJobDialog(e) {
-        this.$.editJobDialog.show();
+        if (!this.isDialogShown) {
+            this.$.editJobDialog.show();
+        }
     }
 
     _hideAddJobDialog(e) {
@@ -68,6 +78,6 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
 
     _hideEditJobDialog(e) {
         this.$.editJobDialog.hide();
-    }
+    }    
 }
 customElements.define('cs-schedule-view', CsScheduleView);

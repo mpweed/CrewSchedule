@@ -28,7 +28,11 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
             </div>
             <div id="appPanel" class="appPanel appPanelShown"> <!-- Replace "appPanelShown" class with "hidden" class for production -->
                 <cs-title-bar on-busy="_handleBusy"
+                              on-success="_handleSuccess"
                               on-exception="_handleException"
+                              on-dialogshown="_handleDialogShown"
+                              on-dialoghidden="_handleDialogHidden"
+                              is-dialog-shown="{{isDialogShown}}"
                               bootstrap-data="{{bootstrapData}}">
                 </cs-title-bar>
                 <div class="horizontal layout content flex">
@@ -38,6 +42,9 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
                     <cs-content-switcher on-busy="_handleBusy"
                                          on-success="_handleSuccess"
                                          on-exception="_handleException"
+                                         on-dialogshown="_handleDialogShown"
+                                         on-dialoghidden="_handleDialogHidden"
+                                         is-dialog-shown="{{isDialogShown}}"
                                          bootstrap-data="{{bootstrapData}}"
                                          page="{{page}}">
                     </cs-content-switcher>
@@ -62,6 +69,10 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
                 notify: true
             },
             isException: {
+                type: Boolean,
+                notify: true
+            },
+            isDialogShown: {
                 type: Boolean,
                 notify: true
             },
@@ -674,6 +685,14 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
     _handleException(e) {
         this.isException = true;
         this.errorMessage = e.detail;
+    }
+
+    _handleDialogShown(e) {
+        this.isDialogShown = true;
+    }
+
+    _handleDialogHidden(e) {
+        this.isDialogShown = false;
     }
 
     _hideLoginPanel(e) {

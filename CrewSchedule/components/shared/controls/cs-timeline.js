@@ -11,7 +11,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 }
 
                 .timelineContainer {                    
-                    width: 100 %;                    
+                    width: 100%;                    
                     position: relative;
                     overflow: auto;
                 }
@@ -159,7 +159,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     margin-bottom: 14px;
                 }
             </style>
-            <cs-parameter-panel bootstrap-data="{{bootstrapData}}"
+            <cs-parameter-panel is-dialog-shown="{{isDialogShown}}"
+                                bootstrap-data="{{bootstrapData}}"
                                 start-date="{{startDate}}"
                                 end-date="{{endDate}}"
                                 zoom-level="{{zoomLevel}}"
@@ -202,18 +203,20 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     static get properties() {
         return {
             /** Public **/
+            isDialogShown: {
+                type: Boolean,
+                notify: true
+            },
             bootstrapData: {
                 type: Object,
                 notify: true
             },
             /** Private **/
             startDate: {
-                type: Date,
-                observer: "_dateChanged"
+                type: Date
             },
             endDate: {
-                type: Date,
-                observer: "_dateChanged"
+                type: Date
             },
             zoomLevel: {
                 type: Number
@@ -229,7 +232,6 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 type: Array,
                 observer: "_crewsChanged"
             },
-
             timelineArray: {
                 type: Array
             },
@@ -275,10 +277,6 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     // Event Handlers
     _onWindowResize(e) {
         this.scheduleContainerHeight = (window.innerHeight - 158).toString() + "px";
-    }
-
-    _dateChanged(newValue, oldValue) {
-        this.regenerateTimeSpan();
     }
 
     _dayWidthChanged(newValue, oldValue) {

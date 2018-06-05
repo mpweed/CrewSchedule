@@ -51,8 +51,11 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                     margin-bottom: 10px;
                 }
 
-                .endDateErrorMessage {
+                .endDateContainer {
                     overflow: visible;
+                }
+
+                .endDateContainer .endDateErrorMessage {
                     text-align: center;
                     font-size: .8em;
                     margin-top: 10px;
@@ -61,17 +64,19 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                     width: 250px;
                     background-color: var(--paper-red-700);
                     border: 1px solid #FFFFFF;
+                    position: absolute
+                    top: 120%;
                 }
 
-                .endDateErrorMessage::before {
+                .endDateContainer .endDateErrorMessage::before {
                     content: " ";
                     position: absolute;
-                    top: 50%;
-                    left: 655px;
+                    top: 52%;
+                    left: 592px;
                     margin-top: -8px;
                     border-width: 8px;
                     border-style: solid;
-                    border-color: transparent #FFFFFF transparent transparent;
+                    border-color: transparent transparent #FFFFFF transparent;
                 }
 
                 .actionButton {
@@ -117,9 +122,9 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                     <vaadin-date-picker value="{{startDate}}"></vaadin-date-picker>
                 </div>
                 <div class="dataLabel horizontalDataLabel">End Date</div>
-                <div class="horizontalDataFieldSmallMargin">
+                <div class="horizontalDataFieldSmallMargin endDateContainer">
                     <vaadin-date-picker value="{{endDate}}"></vaadin-date-picker>
-                    <!--<div id="endDateErrorMessage" class="endDateErrorMessage hidden">End Date must be greater than Start Date</div>-->
+                    <div id="endDateErrorMessage" class="endDateErrorMessage removed">End Date must be greater than Start Date</div>
                 </div>                
                 <div class="horizontal layout flex end-justified">
                     <div class="filterStatus">[[filterStatus]]</div>
@@ -137,6 +142,10 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
     static get properties() {
         return {
             /** Public **/
+            isDialogShown: {
+                type: Boolean,
+                notify: true
+            },
             bootstrapData: {
                 type: Object,
                 notify: true,
@@ -144,12 +153,13 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
             },
             startDate: {
                 type: Date,
-                notify: true
+                notify: true,
+                observer: "_dateChanged"
             },
             endDate: {
                 type: Date,
                 notify: true,
-                observer: "_endDateChanged"
+                observer: "_dateChanged"
             },
             zoomLevel: {
                 type: Number,
@@ -221,13 +231,14 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
         }        
     }
 
-    _endDateChanged(newValue, oldValue) {
+    _dateChanged(newValue, oldValue) {
         this.crews = null;
         if (this.startDate && this.endDate && this.startDate != this.endDate) {
             if (this.endDate < this.startDate) {
-                //this.$.endDateErrorMessage.classList.remove("hidden");
+                //this.filteredCrews = null;
+                this.$.endDateErrorMessage.classList.remove("removed");
             } else {
-                //this.$.endDateErrorMessage.classList.add("hidden");
+                this.$.endDateErrorMessage.classList.add("removed");
                 this.getCrews();
             }
         }
@@ -259,7 +270,9 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
     }
 
     _filterCrewsClick(e) {
-        this.$.filterCrewsDialog.show();    
+        if (!this.isDialogShown) {
+            this.$.filterCrewsDialog.show();
+        }            
     }
 
     _hideFilterCrewsDialog(e) {
@@ -307,7 +320,18 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
         /*** TEMPORARY ***/
         this.crews = null;
         if (this.bootstrapData && this.bootstrapData.crews) {
-            this.crews = this.bootstrapData.crews;
+            this.crews = JSON.parse(JSON.stringify(this.bootstrapData.crews));
+            let filteredCrews = new Array();
+            if (this.crewFilter && this.crews) {
+                let counter = 0;
+                for (var crew of this.crewFilter) {
+                    if (crew.checked) {
+                        filteredCrews.push(this.crews[counter]);
+                    }
+                    counter++;
+                }
+            }
+            this.filteredCrews = filteredCrews;
         }        
     }
       

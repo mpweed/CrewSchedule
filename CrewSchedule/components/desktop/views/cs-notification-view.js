@@ -28,6 +28,11 @@ class CsNotificationView extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
+            /** Public **/
+            isDialogShown: {
+                type: Boolean,
+                notify: true
+            },
             bootstrapData: {
                 type: Object,
                 notify: true

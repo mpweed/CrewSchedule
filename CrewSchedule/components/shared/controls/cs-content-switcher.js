@@ -19,11 +19,14 @@ class CsContentSwitcher extends GestureEventListeners(PolymerElement) {
                 }
             </style>
             <iron-pages id="ironPages" selected="[[page]]" attr-for-selected="name" fallback-selection="view404" class="scroll">            
-                <cs-schedule-view id="scheduleView" name="scheduleView" bootstrap-data="{{bootstrapData}}">
+                <cs-schedule-view id="scheduleView" name="scheduleView" is-dialog-shown="{{isDialogShown}}"
+                                                                        bootstrap-data="{{bootstrapData}}">
                 </cs-schedule-view>
-                <cs-notification-view id="notificationView" name="notificationView" bootstrap-data="{{bootstrapData}}">
+                <cs-notification-view id="notificationView" name="notificationView" is-dialog-shown="{{isDialogShown}}"
+                                                                                    bootstrap-data="{{bootstrapData}}">
                 </cs-notification-view>
-                <cs-admin-view id="adminView" name="adminView" bootstrap-data="{{bootstrapData}}">
+                <cs-admin-view id="adminView" name="adminView" is-dialog-shown="{{isDialogShown}}"
+                                                               bootstrap-data="{{bootstrapData}}">
                 </cs-admin-view>
             </iron-pages>`;
     }
@@ -31,6 +34,11 @@ class CsContentSwitcher extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
+            /** Public **/
+            isDialogShown: {
+                type: Boolean,
+                notify: true
+            },
             bootstrapData: {
                 type: Object,
                 notify: true

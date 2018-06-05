@@ -26,13 +26,14 @@ class CsDialog extends GestureEventListeners(PolymerElement) {
                     width: 400px;
                     height: calc(100vh - 48px);
                     background-color: var(--paper-grey-900);
-                    border: 2px solid var(--paper-grey-800);
+                    border: 1px solid var(--paper-grey-800);
                     position: fixed;
                     -webkit-transition: left .5s ease-in-out;
                     -moz-transition: left .5s ease-in-out;
                     -o-transition: left .5s ease-in-out;
                     transition: left .5s ease-in-out;
                     z-index: 100;
+                    overflow: auto;
                 }
 
                 .dialogShown {
@@ -41,23 +42,18 @@ class CsDialog extends GestureEventListeners(PolymerElement) {
 
                 .noPointerEvents {
                     pointer-events: none;
-                }
-
-                .fadeIn80 {
-                    opacity: .8;
-                    pointer-events: auto;
-                }                
+                }               
             </style>
             <div id="dialogBackground" class="dialogBackground noPointerEvents"></div>
-            <div id="container" class="dialog">
+            <div id="container" class="dialog scroll">
                 <slot></slot>
-            </div>
-            `;
+            </div>`;
     }
 
     // Public Properties
     static get properties() {
         return {
+            /** Public **/
             isShown: {
                 type: Boolean,
                 notify: true
