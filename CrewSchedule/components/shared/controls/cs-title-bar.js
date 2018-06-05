@@ -160,6 +160,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                 type: Object,
                 notify: true
             },
+            /** Private **/
             environment: {
                 type: String,
                 value: function () {

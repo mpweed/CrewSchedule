@@ -48,6 +48,7 @@ class CsButton extends GestureEventListeners(PolymerElement) {
 
     static get properties() {
         return {
+            /** Public **/
             disabled: {
                 type: Boolean,
                 observer: "_disabledChanged"

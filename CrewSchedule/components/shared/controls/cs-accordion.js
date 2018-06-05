@@ -49,9 +49,11 @@ class CsAccordion extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
+            /** Public **/
             caption: {
                 type: String
             },
+            /** Private **/
             isAccordionVisible: {
                 type: Boolean,
                 value: false,

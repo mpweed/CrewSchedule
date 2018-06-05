@@ -42,7 +42,12 @@ class CsDialog extends GestureEventListeners(PolymerElement) {
 
                 .noPointerEvents {
                     pointer-events: none;
-                }               
+                }
+
+                .fadeIn80 {
+                    opacity: .8;
+                    pointer-events: auto;
+                }
             </style>
             <div id="dialogBackground" class="dialogBackground noPointerEvents"></div>
             <div id="container" class="dialog scroll">

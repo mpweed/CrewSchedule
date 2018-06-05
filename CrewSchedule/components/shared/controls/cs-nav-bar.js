@@ -49,9 +49,7 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
-            isAdministrator: {
-                type: Boolean
-            },
+            /** Public **/
             applicationUser: {
                 type: Object,
                 observer: "_applicationUserChanged"
@@ -60,12 +58,13 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
                 type: String,
                 value: "scheduleView",
                 notify: true
-            },
-            selectedNavButton: {
-                type: Object
-            },
+            },            
             notifcationCount: {
                 type: String
+            },
+            /** Private **/
+            selectedNavButton: {
+                type: Object
             },
             badgeColor: {
                 type: String

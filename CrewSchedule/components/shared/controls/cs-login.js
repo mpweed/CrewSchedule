@@ -53,6 +53,7 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
+            /** Private **/
             login: {
                 type: String,
                 observer: "_validateInput"

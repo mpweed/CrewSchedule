@@ -74,6 +74,7 @@ class CsPasswordInput extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
+            /** Public **/
             placeholder: {
                 type: String
             },

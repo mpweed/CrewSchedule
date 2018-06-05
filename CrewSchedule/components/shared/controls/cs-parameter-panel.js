@@ -55,10 +55,11 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                     overflow: visible;
                 }
 
-                .endDateContainer .endDateErrorMessage {
+                .endDateErrorMessage {
                     text-align: center;
                     font-size: .8em;
                     margin-top: 10px;
+                    margin-left: 464px;
                     padding: 4px;
                     height: 20px;
                     width: 250px;
@@ -68,11 +69,11 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                     top: 120%;
                 }
 
-                .endDateContainer .endDateErrorMessage::before {
+                .endDateErrorMessage::before {
                     content: " ";
                     position: absolute;
-                    top: 52%;
-                    left: 592px;
+                    top: 82px;
+                    left: 588px;
                     margin-top: -8px;
                     border-width: 8px;
                     border-style: solid;
@@ -82,6 +83,8 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 .actionButton {
                     width: 40px;
                     height: 40px;
+                    min-width: 40px;
+                    min-height: 40px;
                     color: var(--paper-lime-300);                    
                     cursor: pointer;
                 }
@@ -123,13 +126,15 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 </div>
                 <div class="dataLabel horizontalDataLabel">End Date</div>
                 <div class="horizontalDataFieldSmallMargin endDateContainer">
-                    <vaadin-date-picker value="{{endDate}}"></vaadin-date-picker>
-                    <div id="endDateErrorMessage" class="endDateErrorMessage removed">End Date must be greater than Start Date</div>
+                    <vaadin-date-picker value="{{endDate}}"></vaadin-date-picker>                    
                 </div>                
                 <div class="horizontal layout flex end-justified">
                     <div class="filterStatus">[[filterStatus]]</div>
                     <paper-icon-button id="filterCrews" icon="filter-list" class="actionButton" on-tap="_filterCrewsClick"></paper-icon-button>
                 </div>
+            </div>
+            <div>
+                <div id="endDateErrorMessage" class="endDateErrorMessage removed">End Date must be greater than Start Date</div>
             </div>
             <cs-dialog id="filterCrewsDialog">
                 <cs-filter-crews-region crew-filter="{{crewFilter}}"
@@ -231,18 +236,51 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
         }        
     }
 
+    _crewFilterChanged(newValue, oldValue) {
+        this.updateFilteredCrews();
+        this.dispatchEvent(new CustomEvent('filterupdated', { bubbles: true, composed: true }));
+    }
+
     _dateChanged(newValue, oldValue) {
         this.crews = null;
         if (this.startDate && this.endDate && this.startDate != this.endDate) {
             if (this.endDate < this.startDate) {
-                //this.filteredCrews = null;
+                this.filteredCrews = null;
                 this.$.endDateErrorMessage.classList.remove("removed");
             } else {
                 this.$.endDateErrorMessage.classList.add("removed");
                 this.getCrews();
             }
         }
-    }    
+    }
+
+    getCrews() {
+        /*** TEMPORARY ***/
+        this.crews = null;
+        if (this.bootstrapData && this.bootstrapData.crews) {
+            this.crews = JSON.parse(JSON.stringify(this.bootstrapData.crews));
+            this.updateFilteredCrews();
+        }
+    }
+
+    updateFilteredCrews() {
+        let filteredCrews = new Array();
+        if (this.crewFilter) {
+            let counter = 0;
+            for (var crew of this.crewFilter) {
+                if (crew.checked) {
+                    filteredCrews.push(this.crews[counter]);
+                }
+                counter++;
+            }
+        }
+        this.filteredCrews = filteredCrews;
+        if (this.crewFilter.length == filteredCrews.length) {
+            this.filterStatus = "Off";
+        } else {
+            this.filterStatus = "On";
+        }
+    }
 
     _zoomLevelChanged(newValue, oldValue) {
         if (this.zoomLevel) {
@@ -279,23 +317,6 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
         this.$.filterCrewsDialog.hide();
     }
 
-    _crewFilterChanged(newValue, oldValue) {
-        let filteredCrews = new Array();
-        if (this.crewFilter) {
-            for (var crew of this.crewFilter) {
-                if (crew.checked) {
-                    filteredCrews.push(crew);
-                }
-            }
-        }
-        this.filteredCrews = filteredCrews;
-        if (this.crewFilter.length == filteredCrews.length) {
-            this.filterStatus = "Off";
-        } else {
-            this.filterStatus = "On";
-        }
-    }
-
     // Private Methods
     setDayWidth() {
         this.dayWidth = this.zoomLevel * 34;
@@ -314,26 +335,6 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 this.$.zoomIn.disabled = false;
             }
         }
-    }
-
-    getCrews() {
-        /*** TEMPORARY ***/
-        this.crews = null;
-        if (this.bootstrapData && this.bootstrapData.crews) {
-            this.crews = JSON.parse(JSON.stringify(this.bootstrapData.crews));
-            let filteredCrews = new Array();
-            if (this.crewFilter && this.crews) {
-                let counter = 0;
-                for (var crew of this.crewFilter) {
-                    if (crew.checked) {
-                        filteredCrews.push(this.crews[counter]);
-                    }
-                    counter++;
-                }
-            }
-            this.filteredCrews = filteredCrews;
-        }        
-    }
-      
+    } 
 }
 customElements.define('cs-parameter-panel', CsParameterPanel);

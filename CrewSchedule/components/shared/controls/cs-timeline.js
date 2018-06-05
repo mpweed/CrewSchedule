@@ -159,7 +159,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     margin-bottom: 14px;
                 }
             </style>
-            <cs-parameter-panel is-dialog-shown="{{isDialogShown}}"
+            <cs-parameter-panel on-filterupdated="_handleFilterUpdated"
+                                is-dialog-shown="{{isDialogShown}}"
                                 bootstrap-data="{{bootstrapData}}"
                                 start-date="{{startDate}}"
                                 end-date="{{endDate}}"
@@ -169,7 +170,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             </cs-parameter-panel>
             <div id="scheduleContainer" class="scheduleContainer scroll" style$="height:[[scheduleContainerHeight]]">
                 <div class="horizontal layout">
-                    <div class="crewPanel">
+                    <div id="crewPanel" class="crewPanel">
                         <div class="zoomLabel">Zoom Level</div>
                         <div class="zoomValue">[[zoomLevel]]</div>
                         <template is="dom-repeat" items="[[crews]]" as="crew">
@@ -213,10 +214,12 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             },
             /** Private **/
             startDate: {
-                type: Date
+                type: Date,
+                observer: "_dateChanged"
             },
             endDate: {
-                type: Date
+                type: Date,
+                observer: "_dateChanged"
             },
             zoomLevel: {
                 type: Number
@@ -229,8 +232,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 type: String
             },
             crews: {
-                type: Array,
-                observer: "_crewsChanged"
+                type: Array
             },
             timelineArray: {
                 type: Array
@@ -284,7 +286,19 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         this.regenerateTimeSpan();
     }
 
-    _crewsChanged(newValue, oldValue) {
+    _dateChanged(newValue, oldValue) {
+        if (this.startDate && this.endDate && this.startDate != this.endDate) {
+            if (this.endDate < this.startDate) {
+                this.clearTimeline();
+                this.$.crewPanel.classList.add("hidden");
+            } else {
+                this.$.crewPanel.classList.remove("hidden");
+                this.regenerateTimeSpan();
+            }
+        }        
+    }
+
+    _handleFilterUpdated(e) {
         this.regenerateTimeSpan();    
     }
 
@@ -626,24 +640,22 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     }
 
     generateJobTooltip(job, newJobContainer) {
-        if (job.startDate === this.startDate || job.endDate === this.endDate || job.width < 350) {            
-            if (job.startDate === this.startDate && job.width < 350) {               
-                let newTooltip = document.createElement('span');
-                newTooltip.classList = "tooltiptext tooltiptext-left-align";
-                newTooltip.innerHTML = job.name;
-                newJobContainer.appendChild(newTooltip);
-            } else if (job.endDate === this.endDate && job.width < 350) {
-                let newTooltip = document.createElement('span');
-                newTooltip.classList = "tooltiptext tooltiptext-right-align";
-                newTooltip.innerHTML = job.name;
-                newJobContainer.appendChild(newTooltip);
-            } else if (job.width < 350) {
-                let newTooltip = document.createElement('span');
-                newTooltip.classList = "tooltiptext tooltiptext-center-align";
-                newTooltip.innerHTML = job.name;
-                newJobContainer.appendChild(newTooltip);
-            }            
-        }        
+        if (job.startDate === this.startDate) {
+            let newTooltip = document.createElement('span');
+            newTooltip.classList = "tooltiptext tooltiptext-left-align";
+            newTooltip.innerHTML = job.name;
+            newJobContainer.appendChild(newTooltip);
+        } else if (job.endDate === this.endDate) {
+            let newTooltip = document.createElement('span');
+            newTooltip.classList = "tooltiptext tooltiptext-right-align";
+            newTooltip.innerHTML = job.name;
+            newJobContainer.appendChild(newTooltip);
+        } else {
+            let newTooltip = document.createElement('span');
+            newTooltip.classList = "tooltiptext tooltiptext-center-align";
+            newTooltip.innerHTML = job.name;
+            newJobContainer.appendChild(newTooltip);
+        }         
     }
 
     generateCrewDivider(additionalTopOffset, timelineWidth) {

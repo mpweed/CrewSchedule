@@ -120,12 +120,10 @@ class CsDropdown extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
+            /** Public **/
             items: {
                 type: Array,
                 observer: "_updateInternalItems"
-            },
-            internalItems: {
-                type: Array
             },
             labelField: {
                 type: String,
@@ -147,7 +145,11 @@ class CsDropdown extends GestureEventListeners(PolymerElement) {
                 type: Boolean,
                 value: false,
                 observer: "_lightChanged"
-            }
+            },
+            /** Private **/
+            internalItems: {
+                type: Array
+            }            
         }
     }
 

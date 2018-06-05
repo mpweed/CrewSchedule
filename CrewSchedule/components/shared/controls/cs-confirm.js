@@ -106,6 +106,7 @@ class CsConfirm extends GestureEventListeners(PolymerElement) {
 
     static get properties() {
         return {
+            /** Public **/
             message: {
                 type: String
             }

@@ -119,9 +119,7 @@ class CsColorPicker extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
-            internalItems: {
-                type: Array
-            },
+            /** Public **/
             selectedItem: {
                 type: Object,
                 notify: true
@@ -138,7 +136,11 @@ class CsColorPicker extends GestureEventListeners(PolymerElement) {
                 type: Boolean,
                 value: false,
                 observer: "_lightChanged"
-            }
+            },
+            /** Private **/
+            internalItems: {
+                type: Array
+            }            
         }
     }
 

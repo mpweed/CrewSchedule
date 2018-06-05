@@ -196,6 +196,7 @@ class CsNotificationPanel extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
+            /** Public **/
             isBusy: {
                 type: Boolean,
                 value: false,

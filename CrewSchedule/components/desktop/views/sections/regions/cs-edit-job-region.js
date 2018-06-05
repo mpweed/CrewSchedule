@@ -8,9 +8,14 @@ class CsEditJobRegion extends GestureEventListeners(PolymerElement) {
                 
             </style>
             <div>
-                Edit Job Region Placeholder
+                <div class="dialogHeader">
+                    <span class="dialogCaption">Edit Job</span>
+                </div>                
+                <div class="dialogBody">
+                    <!-- PLACE MAIN CONTENT HERE -->
+                </div>
                 <div class="horizontal layout end-justified dialogButtons">
-                    <cs-button id="saveButton" disabled class="saveButton" on-tap="_save">Save</cs-button>
+                    <cs-button id="saveButton" class="saveButton" on-tap="_save">Save</cs-button>
                     <cs-button class="cancelButton" on-tap="_closeDialog">Cancel</cs-button>
                 </div>
             </div>`;
@@ -19,22 +24,7 @@ class CsEditJobRegion extends GestureEventListeners(PolymerElement) {
     // Public Properties
     static get properties() {
         return {
-            isBusy: {
-                type: Boolean,
-                notify: true
-            },
-            isSuccess: {
-                type: Boolean,
-                notify: true
-            },
-            isException: {
-                type: Boolean,
-                notify: true
-            },
-            errorMessage: {
-                type: String,
-                notify: true
-            },
+            /** Public **/
             applicationUser: {
                 type: Object
             }
