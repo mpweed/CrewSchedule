@@ -91,7 +91,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
 
                 .crew {
                     border-top: 1px solid var(--paper-grey-600);
-                    color: var(--paper-orange-300);
+                    color: #FFFFFF;
+                    font-size: .8em;
                     font-weight: 400;
                     text-align: center;
                     min-height: 34px;
