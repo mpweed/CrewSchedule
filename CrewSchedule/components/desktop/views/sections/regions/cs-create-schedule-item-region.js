@@ -1,7 +1,7 @@
 ﻿import { PolymerElement, html } from '../../../../shared/external/@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '../../../../shared/external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '../../../../shared/cs-shared-styles.js';
-class CsAddJobRegion extends GestureEventListeners(PolymerElement) {    
+class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {    
     static get template() {
         return html`
             <style include="iron-flex iron-flex-alignment cs-shared-styles">
@@ -9,7 +9,7 @@ class CsAddJobRegion extends GestureEventListeners(PolymerElement) {
             </style>
             <div>
                 <div class="dialogHeader">
-                    <span class="dialogCaption">Create Job</span>
+                    <span class="dialogCaption">Create Schedule Item</span>
                 </div>                
                 <div class="dialogBody">
                     <!-- PLACE MAIN CONTENT HERE -->
@@ -45,4 +45,4 @@ class CsAddJobRegion extends GestureEventListeners(PolymerElement) {
         this.dispatchEvent(new CustomEvent("close"));
     }
 }
-customElements.define('cs-add-job-region', CsAddJobRegion);
+customElements.define('cs-create-schedule-item-region', CsCreateScheduleItemRegion);

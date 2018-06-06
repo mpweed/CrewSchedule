@@ -2,7 +2,7 @@
 import { GestureEventListeners } from '../../shared/external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '../../shared/cs-shared-styles.js';
 import '../../shared/controls/cs-dialog.js'
-import '../../desktop/views/sections/regions/cs-add-job-region.js'
+import '../../desktop/views/sections/regions/cs-create-schedule-item-region.js'
 import '../../desktop/views/sections/regions/cs-edit-job-region.js'
 class CsScheduleView extends GestureEventListeners(PolymerElement) {    
     static get template() {
@@ -29,8 +29,8 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
                              on-addclick="_showAddJobDialog" 
                              on-editclick="_showEditJobDialog"></cs-timeline>
                 <cs-dialog id="addJobDialog">
-                    <cs-add-job-region on-close="_hideAddJobDialog">
-                    </cs-add-job-region>
+                    <cs-create-schedule-item-region on-close="_hideAddJobDialog">
+                    </cs-create-schedule-item-region>
                 </cs-dialog>                
                 <cs-dialog id="editJobDialog">
                     <cs-edit-job-region on-close="_hideEditJobDialog">

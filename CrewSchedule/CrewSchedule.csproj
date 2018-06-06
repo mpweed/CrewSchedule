@@ -155,7 +155,7 @@
     <Content Include="components\desktop\views\sections\regions\cs-edit-preferences-region.js" />
     <Content Include="components\desktop\views\sections\regions\cs-filter-crews-region.js" />
     <Content Include="components\desktop\views\sections\regions\cs-edit-job-region.js" />
-    <Content Include="components\desktop\views\sections\regions\cs-add-job-region.js" />
+    <Content Include="components\desktop\views\sections\regions\cs-create-schedule-item-region.js" />
     <Content Include="components\mobile\cs-mobile-shell.js" />
     <Content Include="components\shared\controls\cs-content-switcher.js" />
     <Content Include="components\shared\controls\cs-color-picker.js" />

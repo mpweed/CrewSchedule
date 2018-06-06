@@ -115,7 +115,7 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                     <cs-dropdown light items="{{selectedCompany.offices}}" label-field="name" selected="{{selectedOffice}}"></cs-dropdown>
                 </div>
                 <div class="horizontal layout flex end-justified">
-                    <paper-icon-button id="createJob" icon="add" class="actionButton" on-tap="_addJobClick"></paper-icon-button>
+                    <paper-icon-button id="createScheduleItem" icon="add" class="actionButton" on-tap="_createScheduleItemClick"></paper-icon-button>
                 </div>
             </div>
             <div id="datepickerPanel" class="horizontal layout datepickerPanel">
@@ -303,7 +303,7 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
         }
     }
 
-    _addJobClick(e) {
+    _createScheduleItemClick(e) {
         this.dispatchEvent(new CustomEvent('addclick', { bubbles: true, composed: true }));
     }
 

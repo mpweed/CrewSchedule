@@ -120,7 +120,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
         retval.crews = [
             {
                 "id": "1",
-                "name": "Crew 1",
+                "name": "Boyer, Bill",
                 "jobs": [
                     {
                         "id": "1",
@@ -166,7 +166,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
             },
             {
                 "id": "2",
-                "name": "Crew 2",
+                "name": "Adutwum, George",
                 "jobs": [
                     {
                         "id": "1",
@@ -212,7 +212,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
             },
             {
                 "id": "3",
-                "name": "Crew 3",
+                "name": "Melhado, Ed",
                 "jobs": [
                     {
                         "id": "1",
@@ -258,7 +258,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
             },
             {
                 "id": "4",
-                "name": "Crew 4",
+                "name": "O'Connor, Kyle",
                 "jobs": [
                     {
                         "id": "1",
@@ -304,7 +304,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
             },
             {
                 "id": "5",
-                "name": "Crew 5",
+                "name": "Regal, Kevin",
                 "jobs": [
                     {
                         "id": "1",
@@ -350,7 +350,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
             },
             {
                 "id": "6",
-                "name": "Crew 6",
+                "name": "Acerbi, Brian",
                 "jobs": [
                     {
                         "id": "1",
@@ -396,7 +396,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
             },
             {
                 "id": "7",
-                "name": "Crew 7",
+                "name": "Connor, Doug",
                 "jobs": [
                     {
                         "id": "1",
@@ -442,7 +442,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
             },
             {
                 "id": "8",
-                "name": "Crew 8",
+                "name": "Gebreyesus, Dawit",
                 "jobs": [
                     {
                         "id": "1",
@@ -488,7 +488,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
             },
             {
                 "id": "9",
-                "name": "Crew 9",
+                "name": "Aguilar, Carlos",
                 "jobs": [
                     {
                         "id": "1",
@@ -534,7 +534,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
             },
             {
                 "id": "10",
-                "name": "Crew 10",
+                "name": "Cote, Dennis",
                 "jobs": [
                     {
                         "id": "1",
@@ -580,7 +580,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
             },
             {
                 "id": "11",
-                "name": "Crew 11",
+                "name": "McQuillen, Kyle",
                 "jobs": [
                     {
                         "id": "1",
@@ -626,7 +626,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
             },
             {
                 "id": "12",
-                "name": "Crew 12",
+                "name": "Tappen, Edward",
                 "jobs": [
                     {
                         "id": "1",
