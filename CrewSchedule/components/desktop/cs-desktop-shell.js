@@ -92,7 +92,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
     connectedCallback() {
         super.connectedCallback();
         //***** TEMPORARY FOR LAYOUT PURPOSES WHEN LOGIN IS NOT USED *****
-        this.bootstrapData = this.generateLayoutBootData();
+        this.bootstrapData = StaticData.bootstrapData();
     }
 
     // TEMPORARY METHODS

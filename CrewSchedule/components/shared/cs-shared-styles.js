@@ -52,6 +52,9 @@ import './controls/cs-color-picker.js';
 import './controls/cs-login.js';
 import './controls/cs-parameter-panel.js';
 
+// Static Data for Development
+import './../shared/cs-static-data.js';
+
 // Shared Styles
 const styleElement = document.createElement('dom-module');
 styleElement.innerHTML =

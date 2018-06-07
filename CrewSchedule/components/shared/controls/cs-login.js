@@ -96,7 +96,7 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
             this.timer = null;
 
             // ***TEMPORARY*** FOR LAYOUT DEVELOPMENT ONLY            
-            let bootData = this.generateLayoutBootData();
+            let bootData = StaticData.bootstrapData();
 
             this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
             this.dispatchEvent(new CustomEvent('loginsuccess', { bubbles: true, composed: true, detail: { bootstrapData: bootData } }));
@@ -105,7 +105,14 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
 
     generateLayoutBootData() {
         let retval = new Object();
+        
+
+
+
+
+
         retval.applicationUser = {
+            "id": "1",
             "name": "Michael Weed",
             "jobTitle": "System Administrator",
             "role": "System Administrator",
@@ -114,7 +121,7 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
                 {
                     "id": "1",
                     "name": "Control Point",
-                    "offices": [
+                    "branches": [
                         {
                             "id": "1",
                             "name": "Warren, NJ"
@@ -123,6 +130,30 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
                 }
             ]
         };
+
+        
+
+        retval.projectManagers = [
+            {
+                "id": "2",
+                "name": "James Sens",
+                "jobTitle": "Branch Manager",
+                "role": "Project Manager",
+                "zoomLevel": "1",
+                "companies": [
+                    {
+                        "id": "1",
+                        "name": "Control Point",
+                        "offices": [
+                            {
+                                "id": "1",
+                                "name": "Warren, NJ"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
 
         retval.crews = [
             {

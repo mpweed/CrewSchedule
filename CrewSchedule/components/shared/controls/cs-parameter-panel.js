@@ -110,9 +110,9 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 <div class="horizontalDataField companyField">
                     <cs-dropdown light items="{{bootstrapData.applicationUser.companies}}" label-field="name" selected="{{selectedCompany}}"></cs-dropdown>
                 </div>
-                <div class="dataLabel horizontalDataLabel">Office</div>
+                <div class="dataLabel horizontalDataLabel">Branch</div>
                 <div class="horizontalDataField officeField">
-                    <cs-dropdown light items="{{selectedCompany.offices}}" label-field="name" selected="{{selectedOffice}}"></cs-dropdown>
+                    <cs-dropdown light items="{{selectedCompany.branches}}" label-field="name" selected="{{selectedBranch}}"></cs-dropdown>
                 </div>
                 <div class="horizontal layout flex end-justified">
                     <paper-icon-button id="createScheduleItem" icon="add" class="actionButton" on-tap="_createScheduleItemClick"></paper-icon-button>
@@ -186,7 +186,7 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 type: Object,
                 notify: true
             },
-            selectedOffice: {
+            selectedBranch: {
                 type: Object,
                 notify: true
             },
