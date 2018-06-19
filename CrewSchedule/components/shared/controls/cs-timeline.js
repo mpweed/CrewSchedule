@@ -162,21 +162,21 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             </style>
             <cs-parameter-panel on-filterupdated="_handleFilterUpdated"
                                 is-dialog-shown="{{isDialogShown}}"
-                                bootstrap-data="{{bootstrapData}}"
+                                reference-data="{{referenceData}}"
                                 start-date="{{startDate}}"
                                 end-date="{{endDate}}"
                                 zoom-level="{{zoomLevel}}"
                                 day-width="{{dayWidth}}"
-                                filtered-crews="{{crews}}">
+                                filtered-crew-chiefs="{{crewChiefs}}">
             </cs-parameter-panel>
             <div id="scheduleContainer" class="scheduleContainer scroll" style$="height:[[scheduleContainerHeight]]">
                 <div class="horizontal layout">
                     <div id="crewPanel" class="crewPanel">
                         <div class="zoomLabel">Zoom Level</div>
                         <div class="zoomValue">[[zoomLevel]]</div>
-                        <template is="dom-repeat" items="[[crews]]" as="crew">
-                            <div class="crew" style$="height:[[crew.height]]">
-                                <div class="crewName">[[crew.name]]</div>
+                        <template is="dom-repeat" items="[[crewChiefs]]" as="crewChief">
+                            <div class="crew" style$="height:[[crewChief.height]]">
+                                <div class="crewName">[[crewChief.name]]</div>
                             </div>
                         </template>
                     </div>
@@ -209,7 +209,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 type: Boolean,
                 notify: true
             },
-            bootstrapData: {
+            referenceData: {
                 type: Object,
                 notify: true
             },
@@ -232,7 +232,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             dayWidthFormatted: {
                 type: String
             },
-            crews: {
+            crewChiefs: {
                 type: Array
             },
             timelineArray: {
@@ -251,9 +251,9 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             timelineContainerHeight: {
                 type: String
             },
-            selectedJob: {
+            selectedScheduleItem: {
                 type: Object,
-                observer: "_selectedJobChanged"
+                observer: "_selectedScheduleItemChanged"
             }
         }
     }
@@ -305,21 +305,21 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
 
     regenerateTimeSpan() {
         this.clearTimeline();
-        if (this.crews) {
+        if (this.crewChiefs) {
             this.generateTimeSpan();
         }
     }
 
     _jobClick(e) {        
         let context = e.path[0].context;
-        context.selectedJob = null;
-        let crewId = e.path[0].attributes.crew.nodeValue;
-        let jobId = e.path[0].attributes.job.nodeValue;
-        for (var crew of context.crews) {
-            if (crew.id === crewId) {
-                for (var job of crew.jobs) {
-                    if (job.id === jobId) {
-                        context.selectedJob = job;
+        context.selectedScheduleItem = null;
+        let crewChiefId = e.path[0].attributes.crewChief.nodeValue;
+        let scheduleItemId = e.path[0].attributes.scheduleItem.nodeValue;
+        for (var crewChief of context.crewChiefs) {
+            if (crewChief.id === Number(crewChiefId)) {
+                for (var scheduleItem of crewChief.scheduleItems) {
+                    if (scheduleItem.id === Number(scheduleItemId)) {
+                        context.selectedScheduleItem = scheduleItem;
                         break;
                     }
                 }
@@ -327,9 +327,9 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         }        
     }
 
-    _selectedJobChanged(newValue, oldValue) {
+    _selectedScheduleItemChanged(newValue, oldValue) {
         if (newValue) {
-            this.dispatchEvent(new CustomEvent('editclick', { bubbles: true, composed: true, detail: { job: this.selectedJob } }));
+            this.dispatchEvent(new CustomEvent('editclick', { bubbles: true, composed: true, detail: { scheduleItem: this.selectedScheduleItem } }));
         }
     }
 
@@ -420,30 +420,30 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             dayCounter++;
         }
         timelineWidth = this.dayWidth * dayCounter;
-        let dayHeight = this.generateJobs(timelineWidth);
+        let dayHeight = this.generateScheduleItems(timelineWidth);
         this.dayHeight = dayHeight.toString() + "px;";
         this.timelineContainerWidth = (timelineWidth + 10).toString() + "px";
         this.timelineContainerHeight = (dayHeight + 100).toString() + "px";
         this.scheduleContainerHeight = (window.innerHeight - 158).toString() + "px";
     }    
 
-    generateJobs(timelineWidth) {
+    generateScheduleItems(timelineWidth) {
         let additionalTopOffset = 0;
-        if (this.crews && this.crews.length > 0 && this.startDate && this.endDate) {            
-            for (var crew of this.crews) {
-                this.removeOutOfRangeJobs(crew);
-                this.adjustJobDates(crew);
-                this.sortJobs(crew);
-                this.generateSwimlanes(crew);
-                additionalTopOffset = this.generateJobHtml(crew, additionalTopOffset);
-                additionalTopOffset = this.generateCrewDivider(additionalTopOffset, timelineWidth);
-                crew.height = (crew.height + 9) + "px;";
+        if (this.crewChiefs && this.crewChiefs.length > 0 && this.startDate && this.endDate) {            
+            for (var crewChief of this.crewChiefs) {
+                this.removeOutOfRangeScheduleItems(crewChief);
+                this.adjustScheduleItemDates(crewChief);
+                this.sortScheduleItems(crewChief);
+                this.generateSwimlanes(crewChief);
+                additionalTopOffset = this.generateScheduleItemHtml(crewChief, additionalTopOffset);
+                additionalTopOffset = this.generateCrewChiefDivider(additionalTopOffset, timelineWidth);
+                crewChief.height = (crewChief.height + 9) + "px;";
             }
         }
         return additionalTopOffset;
     }
 
-    removeOutOfRangeJobs(crew) {
+    removeOutOfRangeScheduleItems(crewChief) {
         let startDate = new Date(this.startDate);
         if (startDate.getHours() != 0) {
             this.setUtcAdjustedDate(startDate);
@@ -452,134 +452,134 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         if (endDate.getHours() != 0) {
             this.setUtcAdjustedDate(endDate);
         }        
-        if (crew.jobs && crew.jobs.length > 0) {
+        if (crewChief.scheduleItems && crewChief.scheduleItems.length > 0) {
             let deletionList = new Array();
-            for (var i = 0; i < crew.jobs.length; i++) {
-                let currentStartDate = new Date(crew.jobs[i].startDate);
+            for (var i = 0; i < crewChief.scheduleItems.length; i++) {
+                let currentStartDate = new Date(crewChief.scheduleItems[i].startDate);
                 if (currentStartDate.getHours() != 0) {
                     this.setUtcAdjustedDate(currentStartDate);
                 }
-                let currentEndDate = new Date(crew.jobs[i].endDate);
+                let currentEndDate = new Date(crewChief.scheduleItems[i].endDate);
                 if (currentEndDate.getHours() != 0) {
                     this.setUtcAdjustedDate(currentEndDate);
                 }
                 if (currentEndDate < startDate) { // Job ends before start of timeline range
-                    deletionList.push(crew.jobs[i]);
+                    deletionList.push(crewChief.scheduleItems[i]);
                 }
                 if (currentStartDate > endDate) { // Job starts after end of timeline range
-                    deletionList.push(crew.jobs[i]);
+                    deletionList.push(crewChief.scheduleItems[i]);
                 }
             }
             for (var i = 0; i < deletionList.length; i++) {
-                var indexToDelete = crew.jobs.indexOf(deletionList[i]);
-                crew.jobs.splice(indexToDelete, 1);
+                var indexToDelete = crewChief.scheduleItems.indexOf(deletionList[i]);
+                crewChief.scheduleItems.splice(indexToDelete, 1);
             }
         }
     }
 
-    adjustJobDates(crew) {
+    adjustScheduleItemDates(crewChief) {
         let startDate = new Date(this.startDate);
         let endDate = new Date(this.endDate);
-        if (crew.jobs && crew.jobs.length > 0) {
-            for (var job of crew.jobs) {
-                let currentStartDate = new Date(job.startDate);
+        if (crewChief.scheduleItems && crewChief.scheduleItems.length > 0) {
+            for (var scheduleItem of crewChief.scheduleItems) {
+                let currentStartDate = new Date(scheduleItem.startDate);
                 if (currentStartDate.getHours() != 0) {
                     this.setUtcAdjustedDate(currentStartDate);
                 }
-                let currentEndDate = new Date(job.endDate);
+                let currentEndDate = new Date(scheduleItem.endDate);
                 if (currentEndDate.getHours() != 0) {
                     this.setUtcAdjustedDate(currentEndDate);
                 }
-                job.originalStartDate = job.startDate;
-                job.originalEndDate = job.endDate;
+                scheduleItem.originalStartDate = scheduleItem.startDate;
+                scheduleItem.originalEndDate = scheduleItem.endDate;
                 if (currentStartDate < startDate) {
-                    job.startDate = this.startDate;
+                    scheduleItem.startDate = this.startDate;
                 }
                 if (currentEndDate > endDate) {
-                    job.endDate = this.endDate;
+                    scheduleItem.endDate = this.endDate;
                 }
             }
         }
     }
 
-    sortJobs(crew) {
-        crew.jobs.sort(
+    sortScheduleItems(crewChief) {
+        crewChief.scheduleItems.sort(
             (a, b) => {
                 return (new Date(a.startDate)) - (new Date(b.startDate));
             });              
     }
 
-    generateSwimlanes(crew) {        
-        if (crew.jobs && crew.jobs.length > 0) {
-            let clonedJobsArray = JSON.parse(JSON.stringify(crew.jobs));
-            crew.swimlanes = new Array();
-            while (clonedJobsArray.length > 0) {
-                let previousJob = null;
-                let currentJob = null;
-                let previousJobEndDate = null;
-                let currentJobStartDate = null;
+    generateSwimlanes(crewChief) {        
+        if (crewChief.scheduleItems && crewChief.scheduleItems.length > 0) {
+            let clonedScheduleItemsArray = JSON.parse(JSON.stringify(crewChief.scheduleItems));
+            crewChief.swimlanes = new Array();
+            while (clonedScheduleItemsArray.length > 0) {
+                let previousScheduleItem = null;
+                let currentScheduleItem = null;
+                let previousScheduleEndDate = null;
+                let currentScheduleItemStartDate = null;
                 let currentSwimlane = new Array();
                 let deletionList = new Array();
-                for (var i = 0; i < clonedJobsArray.length; i++) {
-                    currentJob = clonedJobsArray[i];
-                    if (!previousJob) {
-                        previousJob = currentJob;
+                for (var i = 0; i < clonedScheduleItemsArray.length; i++) {
+                    currentScheduleItem = clonedScheduleItemsArray[i];
+                    if (!previousScheduleItem) {
+                        previousScheduleItem = currentScheduleItem;
                     }
-                    if (previousJob.id === currentJob.id) {
-                        currentSwimlane.push(currentJob);
-                        deletionList.push(currentJob);
+                    if (previousScheduleItem.id === currentScheduleItem.id) {
+                        currentSwimlane.push(currentScheduleItem);
+                        deletionList.push(currentScheduleItem);
                     } else {
-                        previousJobEndDate = new Date(previousJob.endDate);
+                        previousJobEndDate = new Date(previousScheduleItem.endDate);
                         if (previousJobEndDate.getHours() != 0) {
                             this.setUtcAdjustedDate(previousJobEndDate);
                         }
-                        currentJobStartDate = new Date(currentJob.startDate);
+                        currentJobStartDate = new Date(currentScheduleItem.startDate);
                         if (currentJobStartDate.getHours() != 0) {
                             this.setUtcAdjustedDate(currentJobStartDate);
                         }
                         if (currentJobStartDate > previousJobEndDate) {
-                            currentSwimlane.push(currentJob);
-                            deletionList.push(currentJob);
-                            previousJob = currentJob;
+                            currentSwimlane.push(currentScheduleItem);
+                            deletionList.push(currentScheduleItem);
+                            previousScheduleItem = currentScheduleItem;
                         }                        
                     }
                 }
                 for (var i = 0; i < deletionList.length; i++) {
-                    var indexToDelete = clonedJobsArray.indexOf(deletionList[i]);
-                    clonedJobsArray.splice(indexToDelete, 1);
+                    var indexToDelete = clonedScheduleItemsArray.indexOf(deletionList[i]);
+                    clonedScheduleItemsArray.splice(indexToDelete, 1);
                 }                
-                crew.swimlanes.push(currentSwimlane);
+                crewChief.swimlanes.push(currentSwimlane);
             }
         }
     }
 
-    generateJobHtml(crew, additionalTopOffset) {        
+    generateScheduleItemHtml(crewChief, additionalTopOffset) {        
         const STARTING_TOP_OFFSET = 90;        
-        const JOB_HEIGHT = 24;
-        const JOB_TOP_MARGIN = 10;
-        let currentJob = null;
-        let crewHeight = 0;
+        const SCHEDULE_ITEM_HEIGHT = 24;
+        const SCHEDULE_ITEM_TOP_MARGIN = 10;
+        let currentScheduleItem = null;
+        let crewChiefHeight = 0;
         let topOffset = STARTING_TOP_OFFSET + additionalTopOffset;
-        if (crew.swimlanes && crew.swimlanes.length > 0) {
-            for (var swimlane of crew.swimlanes) {
+        if (crewChief.swimlanes && crewChief.swimlanes.length > 0) {
+            for (var swimlane of crewChief.swimlanes) {
                 for (var i = 0; i < swimlane.length; i++) {
-                    currentJob = swimlane[i];
-                    currentJob.crew = crew.id;
-                    currentJob.color = currentJob.projectManager.color;
-                    currentJob.job = currentJob.id;
-                    currentJob.top = topOffset;
-                    currentJob.left = this.calculateLeftOffset(currentJob);
-                    currentJob.width = this.calculateWidth(currentJob);
-                    this.generateHtml(currentJob);
+                    currentScheduleItem = swimlane[i];
+                    currentScheduleItem.crewChief = crewChief.id;
+                    currentScheduleItem.color = currentScheduleItem.projectManagerColor;
+                    currentScheduleItem.scheduleItem = currentScheduleItem.id;
+                    currentScheduleItem.top = topOffset;
+                    currentScheduleItem.left = this.calculateLeftOffset(currentScheduleItem);
+                    currentScheduleItem.width = this.calculateWidth(currentScheduleItem);
+                    this.generateHtml(currentScheduleItem);
                 }
-                topOffset = topOffset + JOB_TOP_MARGIN + JOB_HEIGHT;
-                crewHeight = crewHeight + JOB_TOP_MARGIN + JOB_HEIGHT;
+                topOffset = topOffset + SCHEDULE_ITEM_TOP_MARGIN + SCHEDULE_ITEM_HEIGHT;
+                crewChiefHeight = crewChiefHeight + SCHEDULE_ITEM_TOP_MARGIN + SCHEDULE_ITEM_HEIGHT;
             }            
         }
-        if (crewHeight == 0) {
-            crewHeight = 34;
+        if (crewChiefHeight == 0) {
+            crewChiefHeight = 34;
         }
-        crew.height = crewHeight;
+        crewChief.height = crewChiefHeight;
         if (topOffset == (STARTING_TOP_OFFSET + additionalTopOffset)) {
             topOffset = topOffset + 34;
         }
@@ -600,13 +600,13 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         return (leftOffsetDays * this.dayWidth);
     }
 
-    calculateWidth(job) {
+    calculateWidth(scheduleItem) {
         const MILLISECONDS_IN_DAY = 86400000;
-        let jobStartDate = new Date(job.startDate);
+        let jobStartDate = new Date(scheduleItem.startDate);
         if (jobStartDate.getHours() != 0) {
             this.setUtcAdjustedDate(jobStartDate);
         }
-        let jobEndDate = new Date(job.endDate);
+        let jobEndDate = new Date(scheduleItem.endDate);
         if (jobEndDate.getHours() != 0) {
             this.setUtcAdjustedDate(jobEndDate);
         }        
@@ -616,50 +616,51 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         return (lengthInDays * this.dayWidth);
     }
 
-    generateHtml(job) {
+    generateHtml(scheduleItem) {
         let newJobContainer = document.createElement('div');
         newJobContainer.classList = "jobContainer";
-        newJobContainer.style.top = job.top.toString() + "px";
-        newJobContainer.style.left = job.left.toString() + "px";
-        newJobContainer.style.width = job.width.toString() + "px";
+        newJobContainer.style.top = scheduleItem.top.toString() + "px";
+        newJobContainer.style.left = scheduleItem.left.toString() + "px";
+        newJobContainer.style.width = scheduleItem.width.toString() + "px";
         let newJob = document.createElement('div');
-        let crewAttr = document.createAttribute('crew');
-        crewAttr.value = job.crew;
+        let crewAttr = document.createAttribute('crewChief');
+        crewAttr.value = scheduleItem.employeeId;
         newJob.setAttributeNode(crewAttr);
-        let jobAttr = document.createAttribute('job');
-        jobAttr.value = job.job;
-        newJob.setAttributeNode(jobAttr);
-        newJob.style.backgroundColor = job.color;
-        newJob.style.width = job.width.toString() + "px";        
+        let scheduleItemAttr = document.createAttribute('scheduleItem');
+        scheduleItemAttr.value = scheduleItem.id;
+        newJob.setAttributeNode(scheduleItemAttr);
+        newJob.style.backgroundColor = scheduleItem.color;
+        newJob.style.width = scheduleItem.width.toString() + "px";        
         newJob.classList = "job";
         newJob.addEventListener("click", this._jobClick);
-        newJob.innerHTML = job.name;
+        newJob.innerHTML = scheduleItem.projectNumber;
         newJob.context = this;
         newJobContainer.appendChild(newJob);
-        this.generateJobTooltip(job, newJobContainer);
+        this.generateScheduleItemTooltip(scheduleItem, newJobContainer);
         this.$.jobContainer.appendChild(newJobContainer);
     }
 
-    generateJobTooltip(job, newJobContainer) {
-        if (job.startDate === this.startDate) {
+    generateScheduleItemTooltip(scheduleItem, newJobContainer) {
+        scheduleItem.startDate = scheduleItem.startDate.split('T')[0];
+        if (scheduleItem.startDate === this.startDate) {
             let newTooltip = document.createElement('span');
             newTooltip.classList = "tooltiptext tooltiptext-left-align";
-            newTooltip.innerHTML = job.name;
+            newTooltip.innerHTML = scheduleItem.projectNumber;
             newJobContainer.appendChild(newTooltip);
-        } else if (job.endDate === this.endDate) {
+        } else if (scheduleItem.endDate === this.endDate) {
             let newTooltip = document.createElement('span');
             newTooltip.classList = "tooltiptext tooltiptext-right-align";
-            newTooltip.innerHTML = job.name;
+            newTooltip.innerHTML = scheduleItem.projectNumber;
             newJobContainer.appendChild(newTooltip);
         } else {
             let newTooltip = document.createElement('span');
             newTooltip.classList = "tooltiptext tooltiptext-center-align";
-            newTooltip.innerHTML = job.name;
+            newTooltip.innerHTML = scheduleItem.projectNumber;
             newJobContainer.appendChild(newTooltip);
         }         
     }
 
-    generateCrewDivider(additionalTopOffset, timelineWidth) {
+    generateCrewChiefDivider(additionalTopOffset, timelineWidth) {
         const STARTING_TOP_OFFSET = 90;
         let topOffset = STARTING_TOP_OFFSET + additionalTopOffset;
         let divider = document.createElement('div');       

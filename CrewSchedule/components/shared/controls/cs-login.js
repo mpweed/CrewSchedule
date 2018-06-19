@@ -1,6 +1,7 @@
 ﻿import { PolymerElement, html } from '../external/@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '../external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '../cs-shared-styles.js';
+import { StaticData } from '../cs-static-data.js';
 class CsLogin extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
@@ -36,6 +37,14 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
                     --cs-button-active-color: var(--paper-lime-600);
                 }              
             </style>
+            <iron-ajax id="referenceDataXhr"
+                   url="[[baseUrl]]"
+                   method="POST"
+                   content-type="application/json"
+                   handle-as="json"
+                   on-response="_handleReferenceDataResponse"
+                   on-error="_handleXhrError">
+            </iron-ajax>
             <div id="loginPanel" class="loginPanel">
                 <img class="loginLogo" src="../images/CSNameLogo.png" />
                 <div class="loginField">
@@ -44,7 +53,7 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
                 <div class="passwordField">
                     <cs-password-input light center-text required placeholder="Password" id="password" value="{{password}}" on-enterkeypressed="_login"></cs-input>
                 </div>
-                <div class="horizontal layout center-justified dialogButtons">
+                <div class="horizontal layout center-justified">
                     <cs-button id="loginButton" disabled class="loginButton" on-tap="_login">Login</cs-button>
                 </div>
             </div>`;
@@ -61,6 +70,16 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
             password: {
                 type: String,
                 observer: "_validateInput"
+            },
+            baseUrl: {
+                type: String,
+                notify: true
+            },
+            startDate: {
+                type: String
+            },
+            endDate: {
+                type: String
             }
         }
     }
@@ -68,7 +87,13 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
     // Lifecycle Callbacks
     connectedCallback() {
         super.connectedCallback();
-        this.timer = null;
+        this.baseUrl = window.location.href;
+        var trailingCharacter = this.baseUrl.slice(-1);
+        if (trailingCharacter === "/") {
+            this.baseUrl = this.baseUrl + "api/ReferenceData/";
+        } else {
+            this.baseUrl = this.baseUrl + "/api/ReferenceData/";
+        }
     }
 
     ready() {
@@ -76,6 +101,11 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
         this.$.loginId.reset();
         this.$.password.reset();
         this.$.loginId.focus();
+        let defaultStartDate = new Date(Date.now());
+        let defaultEndDate = new Date(Date.now());
+        defaultEndDate.setDate(defaultEndDate.getDate() + 31);
+        this.startDate = (defaultStartDate.getFullYear() + '-' + (defaultStartDate.getMonth() + 1) + '-' + defaultStartDate.getDate()).toString();
+        this.endDate = (defaultEndDate.getFullYear() + '-' + (defaultEndDate.getMonth() + 1) + '-' + defaultEndDate.getDate()).toString();
     }
 
     // Events
@@ -89,630 +119,32 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
 
     _login(e) {        
         this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: true } }));
-
-        // Simulate login until real logic is coded
-        this.timer = setTimeout(() => {
-            clearTimeout(this.timer);
-            this.timer = null;
-
-            // ***TEMPORARY*** FOR LAYOUT DEVELOPMENT ONLY            
-            let bootData = StaticData.bootstrapData();
-
-            this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
-            this.dispatchEvent(new CustomEvent('loginsuccess', { bubbles: true, composed: true, detail: { bootstrapData: bootData } }));
-        }, 2000);
-    }
-
-    generateLayoutBootData() {
-        let retval = new Object();
-        
-
-
-
-
-
-        retval.applicationUser = {
-            "id": "1",
-            "name": "Michael Weed",
-            "jobTitle": "System Administrator",
-            "role": "System Administrator",
-            "zoomLevel": "1",
-            "companies": [
-                {
-                    "id": "1",
-                    "name": "Control Point",
-                    "branches": [
-                        {
-                            "id": "1",
-                            "name": "Warren, NJ"
-                        }
-                    ]
-                }
-            ]
+        this.$.referenceDataXhr.body = {
+            "loginId": this.login,
+            "password": this.password,
+            "startDate": this.startDate,
+            "endDate": this.endDate
         };
-
-        
-
-        retval.projectManagers = [
-            {
-                "id": "2",
-                "name": "James Sens",
-                "jobTitle": "Branch Manager",
-                "role": "Project Manager",
-                "zoomLevel": "1",
-                "companies": [
-                    {
-                        "id": "1",
-                        "name": "Control Point",
-                        "offices": [
-                            {
-                                "id": "1",
-                                "name": "Warren, NJ"
-                            }
-                        ]
-                    }
-                ]
-            }
-        ];
-
-        retval.crews = [
-            {
-                "id": "1",
-                "name": "Boyer, Bill",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-16",
-                        "endDate": "2018-06-17",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-17",
-                        "endDate": "2018-06-13",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-22",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-18",
-                        "endDate": "2018-07-12",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "2",
-                "name": "Adutwum, George",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-25",
-                        "endDate": "2018-06-04",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-20",
-                        "endDate": "2018-5-24",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-06",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-01",
-                        "endDate": "2018-06-07",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "3",
-                "name": "Melhado, Ed",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-16",
-                        "endDate": "2018-06-17",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-17",
-                        "endDate": "2018-06-13",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-22",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-18",
-                        "endDate": "2018-07-12",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "4",
-                "name": "O'Connor, Kyle",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-25",
-                        "endDate": "2018-06-04",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-20",
-                        "endDate": "2018-5-24",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-06",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-01",
-                        "endDate": "2018-06-07",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "5",
-                "name": "Regal, Kevin",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-16",
-                        "endDate": "2018-06-17",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-17",
-                        "endDate": "2018-06-13",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-22",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-18",
-                        "endDate": "2018-07-12",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "6",
-                "name": "Acerbi, Brian",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-25",
-                        "endDate": "2018-06-04",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-20",
-                        "endDate": "2018-5-24",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-06",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-01",
-                        "endDate": "2018-06-07",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "7",
-                "name": "Connor, Doug",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-16",
-                        "endDate": "2018-06-17",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-17",
-                        "endDate": "2018-06-13",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-22",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-18",
-                        "endDate": "2018-07-12",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "8",
-                "name": "Gebreyesus, Dawit",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-25",
-                        "endDate": "2018-06-04",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-20",
-                        "endDate": "2018-5-24",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-06",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-01",
-                        "endDate": "2018-06-07",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "9",
-                "name": "Aguilar, Carlos",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-16",
-                        "endDate": "2018-06-17",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-17",
-                        "endDate": "2018-06-13",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-22",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-18",
-                        "endDate": "2018-07-12",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "10",
-                "name": "Cote, Dennis",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-25",
-                        "endDate": "2018-06-04",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-20",
-                        "endDate": "2018-5-24",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-06",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-01",
-                        "endDate": "2018-06-07",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "11",
-                "name": "McQuillen, Kyle",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-16",
-                        "endDate": "2018-06-17",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-17",
-                        "endDate": "2018-06-13",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#e53935"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-22",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-18",
-                        "endDate": "2018-07-12",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "12",
-                "name": "Tappen, Edward",
-                "jobs": [
-                    {
-                        "id": "1",
-                        "name": "Job 1",
-                        "startDate": "2018-05-25",
-                        "endDate": "2018-06-04",
-                        "projectManager": {
-                            "id": "2",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "2",
-                        "name": "Job 2",
-                        "startDate": "2018-05-20",
-                        "endDate": "2018-5-24",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    },
-                    {
-                        "id": "3",
-                        "name": "Job 3",
-                        "startDate": "2018-06-06",
-                        "endDate": "2018-06-28",
-                        "projectManager": {
-                            "id": "3",
-                            "color": "#fb8c00"
-                        }
-                    },
-                    {
-                        "id": "4",
-                        "name": "Job 4",
-                        "startDate": "2018-06-01",
-                        "endDate": "2018-06-07",
-                        "projectManager": {
-                            "id": "1",
-                            "color": "#795548"
-                        }
-                    }
-                ]
-            }
-        ];
-        return retval;
+        this.$.referenceDataXhr.generateRequest();
     }
 
-    // Public Methods
-      
+    _handleReferenceDataResponse(e, request) {
+        this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
+        if (e.detail.response.exception) {
+            this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
+            // TODO: SHOW FAILURE MESSAGE HERE
+
+        } else {
+            e.detail.response.startDate = this.startDate;
+            e.detail.response.endDate = this.endDate;
+            this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
+            this.dispatchEvent(new CustomEvent('loginsuccess', { bubbles: true, composed: true, detail: { referenceData: e.detail.response } }));
+        }
+    }
+
+    _handleXhrError(e, request) {
+        this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
+        this.dispatchEvent(new CustomEvent('exception', { detail: e.detail.error.message }));
+    }
 }
 customElements.define('cs-login', CsLogin);

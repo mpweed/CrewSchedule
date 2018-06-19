@@ -25,7 +25,6 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                     height: 32px;
                     margin-top: 6px;
                     margin-left: 6px;
-                    margin-right: 10px;
                 }
 
                 iron-icon {
@@ -45,6 +44,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                 .userButton {
                     position: relative;
                     min-width: 140px;
+                    padding-right: 8px;
                 }
 
                 .userButton:hover {
@@ -102,25 +102,18 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                 .actionButton:hover {
                     color: #ffffff;
                 }
-            </style>
-            <iron-ajax id="bootstrapDataXhr"
-                   url="[[baseUrl]]"
-                   method="GET"
-                   handle-as="json"
-                   on-response="_handleBootstrapDataResponse"
-                   on-error="_handleXhrError">
-            </iron-ajax>
+            </style>            
             <div class="horizontal layout appTitleBar flex">
                 <img class="cslogo" src="[[logoUrl]]" />                
                 <div class="flex"></div>
-                <div id="userButton" class="horizontal layout userButton" on-click="_showUserInfoPanel">
-                    <div class="userName">[[bootstrapData.applicationUser.name]]</div>
+                <div id="userButton" class="horizontal layout end-justified userButton" on-click="_showUserInfoPanel">
+                    <div class="userName">[[referenceData.applicationUser.name]]</div>
                     <div class="personIcon">
                         <iron-icon icon="social:person"></icon>
                     </div>                    
                     <div id="userInfoPanel" class="userInfoPanel">
                         <div class="horizontal layout">
-                            <div class="userInformationDialogJobTitle">[[bootstrapData.applicationUser.jobTitle]]</div>
+                            <div class="userInformationDialogJobTitle">[[referenceData.applicationUser.title]]</div>
                             <div class="horizontal layout flex end-justified">
                                 <paper-icon-button id="editPreferences" icon="settings" class="actionButton" on-tap="_editPreferencesClick"></paper-icon-button>
                             </div>
@@ -132,7 +125,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                             </div>
                             <div class="flex">
                                 <div class="dataLabelSmall primaryColor">Role</div>
-                                <div class="dataSmall secondaryColor">[[bootstrapData.applicationUser.role]]</div>
+                                <div class="dataSmall secondaryColor">[[referenceData.applicationUser.roleName]]</div>
                             </div>
                         </div>
                     </div>
@@ -156,7 +149,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                 type: Boolean,
                 notify: true
             },
-            bootstrapData: {
+            referenceData: {
                 type: Object,
                 notify: true
             },
@@ -175,11 +168,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                         return "Construction"
                     }
                 }
-            },
-            baseUrl: {
-                type: String,
-                notify: true
-            },
+            },            
             logoUrl: {
                 type: String
             }           
@@ -194,10 +183,8 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
         var trailingCharacter = this.baseUrl.slice(-1);
         if (trailingCharacter === "/") {            
             this.logoUrl = this.baseUrl + "images/CSNameLogo.png";
-            this.baseUrl = this.baseUrl + "api/BootstrapData/";
         } else {            
             this.logoUrl = this.baseUrl + "/images/CSNameLogo.png";
-            this.baseUrl = this.baseUrl + "/api/BootstrapData/";
         }
     }
 
@@ -218,28 +205,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
 
     _hideEditPreferencesDialog(e) {
         this.$.userPreferencesDialog.hide();
-    }
-
-    _handleBootstrapDataResponse(e, request) {
-        this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
-        this.bootstrapDataResponse = e.detail.response;
-        if (this.bootstrapDataResponse.exception) {
-            this.dispatchEvent(new CustomEvent('exception', { detail: this.bootstrapDataResponse.exception.Message }));
-        } else {
-            this.applicationUser = this.bootstrapDataResponse.applicationUser;
-            if (this.applicationUser) {
-                if (this.applicationUser.appInfo.role === 'ADMINISTRATOR') {
-                    this.isAdministrator = true;
-                }
-            }
-            this.jobs = this.bootstrapDataResponse.jobs;
-        }
-    }
-
-    _handleXhrError(e, request) {
-        this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
-        this.dispatchEvent(new CustomEvent('exception', { detail: e.detail.error.message }));
-    }
+    }    
 
     _showUserInfoPanel(event) {
         // Don't propogate the event to the document
@@ -257,11 +223,6 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
 
     _hideUserInfoPanel(e) {
         this.$.userInfoPanel.classList.remove("panelShown");
-    }
-
-    // Private Methods
-    getBootstrapData() {
-        this.$.bootstrapDataXhr.generateRequest();
-    }    
+    }   
 }
 customElements.define('cs-title-bar', CsTitleBar);

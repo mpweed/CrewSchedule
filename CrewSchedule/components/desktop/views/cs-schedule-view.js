@@ -3,7 +3,7 @@ import { GestureEventListeners } from '../../shared/external/@polymer/polymer/li
 import '../../shared/cs-shared-styles.js';
 import '../../shared/controls/cs-dialog.js'
 import '../../desktop/views/sections/regions/cs-create-schedule-item-region.js'
-import '../../desktop/views/sections/regions/cs-edit-job-region.js'
+import '../../desktop/views/sections/regions/cs-edit-schedule-item-region.js'
 class CsScheduleView extends GestureEventListeners(PolymerElement) {    
     static get template() {
         return html`
@@ -25,16 +25,16 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
             </style>
             <div class="viewPanel">
                 <cs-timeline is-dialog-shown="{{isDialogShown}}"
-                             bootstrap-data="{{bootstrapData}}" 
-                             on-addclick="_showAddJobDialog" 
-                             on-editclick="_showEditJobDialog"></cs-timeline>
-                <cs-dialog id="addJobDialog">
-                    <cs-create-schedule-item-region on-close="_hideAddJobDialog">
+                             reference-data="{{referenceData}}" 
+                             on-addclick="_showAddDialog" 
+                             on-editclick="_showEditDialog"></cs-timeline>
+                <cs-dialog id="addDialog">
+                    <cs-create-schedule-item-region on-close="_hideAddDialog">
                     </cs-create-schedule-item-region>
                 </cs-dialog>                
-                <cs-dialog id="editJobDialog">
-                    <cs-edit-job-region on-close="_hideEditJobDialog">
-                    </cs-edit-job-region>
+                <cs-dialog id="editDialog">
+                    <cs-edit-schedule-item-region on-close="_hideEditDialog">
+                    </cs-edit-schedule-item-region>
                 </cs-dialog>
             </div>`;
     }
@@ -47,7 +47,7 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
                 type: Boolean,
                 notify: true
             },
-            bootstrapData: {
+            referenceData: {
                 type: Object,
                 notify: true
             }
@@ -60,24 +60,24 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
     }
 
     // Event Handlers
-    _showAddJobDialog(e) {
+    _showAddDialog(e) {
         if (!this.isDialogShown) {
-            this.$.addJobDialog.show();
+            this.$.addDialog.show();
         }        
     }    
 
-    _showEditJobDialog(e) {
+    _showEditDialog(e) {
         if (!this.isDialogShown) {
-            this.$.editJobDialog.show();
+            this.$.editDialog.show();
         }
     }
 
-    _hideAddJobDialog(e) {
-        this.$.addJobDialog.hide();
+    _hideAddDialog(e) {
+        this.$.addDialog.hide();
     }   
 
-    _hideEditJobDialog(e) {
-        this.$.editJobDialog.hide();
+    _hideEditDialog(e) {
+        this.$.editDialog.hide();
     }    
 }
 customElements.define('cs-schedule-view', CsScheduleView);

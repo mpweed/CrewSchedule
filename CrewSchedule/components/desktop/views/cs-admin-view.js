@@ -33,7 +33,7 @@ class CsAdminView extends GestureEventListeners(PolymerElement) {
                 type: Boolean,
                 notify: true
             },
-            bootstrapData: {
+            referenceData: {
                 type: Object,
                 notify: true
             }

@@ -50,9 +50,9 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
     static get properties() {
         return {
             /** Public **/
-            applicationUser: {
+            referenceData: {
                 type: Object,
-                observer: "_applicationUserChanged"
+                observer: "_referenceDataChanged"
             },
             page: {
                 type: String,
@@ -68,6 +68,10 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
             },
             badgeColor: {
                 type: String
+            },
+            isAdministrator: {
+                type: Boolean,
+                notify: true
             }
         }
     }
@@ -85,8 +89,8 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
     }
 
     // Event Handlers
-    _applicationUserChanged(newValue, oldValue) {
-        if (this.applicationUser && (this.applicationUser.role == "System Administrator" || this.applicationUser.role == "Company Administrator")) {
+    _referenceDataChanged(newValue, oldValue) {
+        if (this.referenceData.applicationUser && (this.referenceData.applicationUser.role == "System Administrator" || this.referenceData.applicationUser.role == "Company Administrator")) {
             this.isAdministrator = true;
         } else {
             this.isAdministrator = false;

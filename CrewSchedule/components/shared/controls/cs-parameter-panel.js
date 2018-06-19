@@ -1,7 +1,7 @@
 ﻿import { PolymerElement, html } from '../external/@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '../external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '../cs-shared-styles.js';
-import '../../desktop/views/sections/regions/cs-filter-crews-region.js'
+import '../../desktop/views/sections/regions/cs-filter-crew-chiefs-region.js'
 class CsParameterPanel extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
@@ -108,7 +108,7 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 <paper-icon-button id="zoomIn" icon="zoom-in" class="actionButton" on-tap="_zoomInClick"></paper-icon-button>
                 <div class="dataLabel horizontalDataLabel companyLabel">Company</div>
                 <div class="horizontalDataField companyField">
-                    <cs-dropdown light items="{{bootstrapData.applicationUser.companies}}" label-field="name" selected="{{selectedCompany}}"></cs-dropdown>
+                    <cs-dropdown light items="{{referenceData.applicationUser.companies}}" label-field="name" selected="{{selectedCompany}}"></cs-dropdown>
                 </div>
                 <div class="dataLabel horizontalDataLabel">Branch</div>
                 <div class="horizontalDataField officeField">
@@ -137,9 +137,9 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 <div id="endDateErrorMessage" class="endDateErrorMessage removed">End Date must be greater than Start Date</div>
             </div>
             <cs-dialog id="filterCrewsDialog">
-                <cs-filter-crews-region crew-filter="{{crewFilter}}"
+                <cs-filter-crew-chiefs-region crew-chief-filter="{{crewChiefFilter}}"
                                         on-close="_hideFilterCrewsDialog">
-                </cs-filter-crews-region>
+                </cs-filter-crew-chiefs-region>
             </cs-dialog>`;
     }
 
@@ -151,18 +151,18 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 type: Boolean,
                 notify: true
             },
-            bootstrapData: {
+            referenceData: {
                 type: Object,
                 notify: true,
-                observer: "_bootstrapDataChanged"
+                observer: "_referenceDataChanged"
             },
             startDate: {
-                type: Date,
+                type: String,
                 notify: true,
                 observer: "_dateChanged"
             },
             endDate: {
-                type: Date,
+                type: String,
                 notify: true,
                 observer: "_dateChanged"
             },
@@ -177,7 +177,7 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 value: 34,
                 notify: true
             },
-            filteredCrews: {
+            filteredCrewChiefs: {
                 type: Array,
                 notify: true
             },
@@ -190,14 +190,14 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 type: Object,
                 notify: true
             },
-            crews: {
+            crewChiefs: {
                 type: Array,
                 notify: true
             },
-            crewFilter: {
+            crewChiefFilter: {
                 type: Array,
                 notify: true,
-                observer: "_crewFilterChanged"
+                observer: "_crewChiefFilterChanged"
             },
             filterStatus: {
                 type: String
@@ -210,72 +210,55 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
         super.connectedCallback();
     }
 
-    ready() {
-        super.ready();        
-        let defaultStartDate = new Date(Date.now());
-        let defaultEndDate = new Date(Date.now());
-        defaultEndDate.setDate(defaultEndDate.getDate() + 31);
-        this.startDate = (defaultStartDate.getFullYear() + '-' + (defaultStartDate.getMonth() + 1) + '-' + defaultStartDate.getDate()).toString();
-        this.endDate = (defaultEndDate.getFullYear() + '-' + (defaultEndDate.getMonth() + 1) + '-' + defaultEndDate.getDate()).toString();
-    }
-
     // Event Handlers
-    _bootstrapDataChanged(newValue, oldValue) {
-        this.filteredCrews = null;
-        if (this.bootstrapData) {
-            this.zoomLevel = Number(this.bootstrapData.applicationUser.zoomLevel);                                   
-            if (this.bootstrapData.crews) {
-                this.crews = JSON.parse(JSON.stringify(this.bootstrapData.crews));
+    _referenceDataChanged(newValue, oldValue) {
+        this.filteredCrewChiefs = null;
+        if (this.referenceData) {
+            this.zoomLevel = Number(this.referenceData.applicationUser.zoomLevel);                                   
+            if (this.referenceData.crewChiefs) {
+                this.crewChiefs = JSON.parse(JSON.stringify(this.referenceData.crewChiefs));
                 let filter = new Array();
-                for (var crew of this.crews) {
-                    crew.checked = true;
-                    filter.push(crew);
+                for (var crewChief of this.crewChiefs) {
+                    crewChief.checked = true;
+                    filter.push(crewChief);
                 }
-                this.crewFilter = filter;                
+                this.crewChiefFilter = filter;
+                this.startDate = this.referenceData.startDate;
+                this.endDate = this.referenceData.endDate;
             }
         }        
     }
 
-    _crewFilterChanged(newValue, oldValue) {
-        this.updateFilteredCrews();
+    _crewChiefFilterChanged(newValue, oldValue) {
+        this.updateFilteredCrewChiefs();
         this.dispatchEvent(new CustomEvent('filterupdated', { bubbles: true, composed: true }));
     }
 
     _dateChanged(newValue, oldValue) {
-        this.crews = null;
+        //this.crewChiefs = null;
         if (this.startDate && this.endDate && this.startDate != this.endDate) {
             if (this.endDate < this.startDate) {
-                this.filteredCrews = null;
+                this.filteredCrewChiefs = null;
                 this.$.endDateErrorMessage.classList.remove("removed");
             } else {
                 this.$.endDateErrorMessage.classList.add("removed");
-                this.getCrews();
             }
         }
     }
 
-    getCrews() {
-        /*** TEMPORARY ***/
-        this.crews = null;
-        if (this.bootstrapData && this.bootstrapData.crews) {
-            this.crews = JSON.parse(JSON.stringify(this.bootstrapData.crews));
-            this.updateFilteredCrews();
-        }
-    }
-
-    updateFilteredCrews() {
-        let filteredCrews = new Array();
-        if (this.crewFilter) {
+    updateFilteredCrewChiefs() {
+        let filteredCrewChiefs = new Array();
+        if (this.crewChiefFilter) {
             let counter = 0;
-            for (var crew of this.crewFilter) {
-                if (crew.checked) {
-                    filteredCrews.push(this.crews[counter]);
+            for (var crewChief of this.crewChiefFilter) {
+                if (crewChief.checked) {
+                    filteredCrewChiefs.push(this.crewChiefs[counter]);
                 }
                 counter++;
             }
         }
-        this.filteredCrews = filteredCrews;
-        if (this.crewFilter.length == filteredCrews.length) {
+        this.filteredCrewChiefs = filteredCrewChiefs;
+        if (this.crewChiefFilter.length == filteredCrewChiefs.length) {
             this.filterStatus = "Off";
         } else {
             this.filterStatus = "On";

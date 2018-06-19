@@ -142,9 +142,20 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MobileController.cs" />
+    <Compile Include="Controllers\ReferenceDataController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BootstrapParameters.cs" />
+    <Compile Include="Models\Branch.cs" />
+    <Compile Include="Models\Company.cs" />
+    <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\Equipment.cs" />
+    <Compile Include="Models\ReferenceData.cs" />
+    <Compile Include="Models\ReferenceDataRepository.cs" />
+    <Compile Include="Models\Repository.cs" />
+    <Compile Include="Models\ScheduleItem.cs" />
+    <Compile Include="Models\Task.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -153,8 +164,8 @@
     <Content Include="components\desktop\views\cs-notification-view.js" />
     <Content Include="components\desktop\views\cs-schedule-view.js" />
     <Content Include="components\desktop\views\sections\regions\cs-edit-preferences-region.js" />
-    <Content Include="components\desktop\views\sections\regions\cs-filter-crews-region.js" />
-    <Content Include="components\desktop\views\sections\regions\cs-edit-job-region.js" />
+    <Content Include="components\desktop\views\sections\regions\cs-filter-crew-chiefs-region.js" />
+    <Content Include="components\desktop\views\sections\regions\cs-edit-schedule-item-region.js" />
     <Content Include="components\desktop\views\sections\regions\cs-create-schedule-item-region.js" />
     <Content Include="components\mobile\cs-mobile-shell.js" />
     <Content Include="components\shared\controls\cs-content-switcher.js" />
@@ -437,7 +448,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="components\mobile\views\sections\regions\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

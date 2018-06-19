@@ -12,6 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Design Assets", "Design Ass
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database Backup", "Database Backup", "{719D5A96-899A-4787-A02F-413E861A4ACF}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\..\Program Files\Microsoft SQL Server\MSSQL13.SQLEXPRESS\MSSQL\Backup\crewschedule.bak = ..\..\..\..\..\Program Files\Microsoft SQL Server\MSSQL13.SQLEXPRESS\MSSQL\Backup\crewschedule.bak
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

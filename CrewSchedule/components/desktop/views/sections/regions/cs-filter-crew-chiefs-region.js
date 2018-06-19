@@ -1,7 +1,7 @@
 ﻿import { PolymerElement, html } from '../../../../shared/external/@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '../../../../shared/external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '../../../../shared/cs-shared-styles.js';
-class CsFilterCrewsRegion extends GestureEventListeners(PolymerElement) {    
+class CsFilterCrewChiefsRegion extends GestureEventListeners(PolymerElement) {    
     static get template() {
         return html`
             <style include="iron-flex iron-flex-alignment cs-shared-styles">
@@ -14,12 +14,12 @@ class CsFilterCrewsRegion extends GestureEventListeners(PolymerElement) {
             </style>
             <div>
                 <div class="dialogHeader">
-                    <span class="dialogCaption">Filter Crews</span>
+                    <span class="dialogCaption">Filter Crew Chiefs</span>
                 </div>                
                 <div class="dialogBody">
-                    <template is="dom-repeat" items="[[crewFilter]]" as="crew">
+                    <template is="dom-repeat" items="[[crewChiefFilter]]" as="crewChief">
                         <div class="horizontal layout">
-                            <paper-checkbox checked="{{crew.checked}}" class="styled">[[crew.name]]</paper-checkbox>
+                            <paper-checkbox checked="{{crewChief.checked}}" class="styled">[[crewChief.name]]</paper-checkbox>
                         </div>
                     </template>
                 </div>
@@ -34,7 +34,7 @@ class CsFilterCrewsRegion extends GestureEventListeners(PolymerElement) {
     static get properties() {
         return {
             /** Public **/
-            crewFilter: {
+            crewChiefFilter: {
                 type: Array,
                 notify: true
             }
@@ -48,8 +48,8 @@ class CsFilterCrewsRegion extends GestureEventListeners(PolymerElement) {
 
     // Event Handlers
     _save(e) {
-        let newCrewFilter = JSON.parse(JSON.stringify(this.crewFilter));
-        this.crewFilter = newCrewFilter;
+        let newCrewChiefFilter = JSON.parse(JSON.stringify(this.crewChiefFilter));
+        this.crewChiefFilter = newCrewChiefFilter;
         this._closeDialog(null);
     }
 
@@ -57,4 +57,4 @@ class CsFilterCrewsRegion extends GestureEventListeners(PolymerElement) {
         this.dispatchEvent(new CustomEvent("close"));
     }
 }
-customElements.define('cs-filter-crews-region', CsFilterCrewsRegion);
+customElements.define('cs-filter-crew-chiefs-region', CsFilterCrewChiefsRegion);
