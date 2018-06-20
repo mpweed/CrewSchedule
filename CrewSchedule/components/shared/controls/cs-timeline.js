@@ -10,6 +10,10 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     overflow: hidden;
                 }
 
+                .scheduleContainer {
+                    overflow: auto;
+                }
+
                 .timelineContainer {                    
                     width: 100%;                    
                     position: relative;
@@ -57,31 +61,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         
                 .weekend {
                     background-color: var(--paper-grey-800);
-                }
-
-                .jobContainer {
-                    position: absolute;
-                    overflow: visible;
-                }
-
-                .job {
-                    height:24px;
-                    border-left: 1px solid #ffffff;
-                    border-right: 1px solid #ffffff;
-                    text-align:center;
-                    cursor: pointer;
-                    overflow: hidden;
-                    position: relative; 
-                }
-
-                .job:hover {
-                    opacity: .8
                 }                
-
-                .hline {
-                    height:1px;
-                    position: absolute;
-                }
 
                 .crewPanel {
                     width: 100px;
@@ -104,42 +84,62 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     transform: translateY(-50%);
                 }
 
-                .jobContainer .tooltiptext {
+                .scheduleItemContainer {
+                    position: absolute;
+                    overflow: visible;
+                }
+
+                .scheduleItemContainer .tooltiptext {
                     visibility: hidden;
                     font-size: .9em;
-                    height:24px;
-                    width: 350px;
+                    padding: 8px;                    
+                    height: 160px;
+                    width: 250px;
                     background-color: var(--paper-grey-900);
-                    color: #FFFFFF;
-                    text-align: center;
+                    color: #FFFFFF;                    
                     border: 1px solid var(--paper-grey-600);
-                    top: -120%;
+                    top: -760%;
                     position: absolute;
                     z-index: 1;
                 }
 
-                .jobContainer .tooltiptext-left-align {
+                .scheduleItemContainer .tooltiptext-left-align {
                     left: 0;
                     margin-left: 10px;
                 }
 
-                .jobContainer .tooltiptext-right-align {
+                .scheduleItemContainer .tooltiptext-right-align {
                     right: 0;
                     margin-right: 10px;
                 }
 
-                .jobContainer .tooltiptext-center-align {
+                .scheduleItemContainer .tooltiptext-center-align {
                     left: 50%;
-                    margin-left: -175px;
+                    margin-left: -125px; /* -175px */
                 }
                 
-                .jobContainer:hover .tooltiptext {
+                .scheduleItemContainer:hover .tooltiptext {
                     visibility: visible;
                 }
 
-                .scheduleContainer {
-                    overflow: auto;
+                .scheduleItem {
+                    height:24px;
+                    border-left: 1px solid #ffffff;
+                    border-right: 1px solid #ffffff;
+                    text-align:center;
+                    cursor: pointer;
+                    overflow: hidden;
+                    position: relative; 
                 }
+
+                .scheduleItem:hover {
+                    opacity: .8
+                }                
+
+                .hline {
+                    height:1px;
+                    position: absolute;
+                }                              
 
                 .zoomLabel {
                     margin-top: 11px;
@@ -158,6 +158,24 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     margin-left: 37px;
                     margin-top: 6px;
                     margin-bottom: 14px;
+                }
+
+                .projectNumber {
+                    font-weight: 800;
+                }
+
+                .projectTimeframe {
+                    color: var(--paper-orange-300);
+                }
+
+                .projectName {
+                    color: var(--paper-lime-300);
+                    font-weight: 600;
+                    margin-top: 6px;
+                }
+
+                .projectAddress {
+                    color: var(--paper-grey-400);
                 }
             </style>
             <cs-parameter-panel on-filterupdated="_handleFilterUpdated"
@@ -194,7 +212,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                                 </div>                        
                             </template>                
                         </div>
-                        <div id="jobContainer">               
+                        <div id="scheduleItemContainer">               
                         </div>                
                     </div>
                 </div>
@@ -310,7 +328,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         }
     }
 
-    _jobClick(e) {        
+    _scheduleItemClick(e) {        
         let context = e.path[0].context;
         context.selectedScheduleItem = null;
         let crewChiefId = e.path[0].attributes.crewChief.nodeValue;
@@ -344,13 +362,13 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     }
 
     clearTimeline() {
-        this.clearJobs();
+        this.clearScheduleItems();
         this.timelineArray = null;
     }
 
-    clearJobs() {
-        while (this.$.jobContainer.lastChild) {
-            this.$.jobContainer.removeChild(this.$.jobContainer.lastChild);
+    clearScheduleItems() {
+        while (this.$.scheduleItemContainer.lastChild) {
+            this.$.scheduleItemContainer.removeChild(this.$.scheduleItemContainer.lastChild);
         }
     }
 
@@ -365,7 +383,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         };
         let dayCounter = 0;
         let timelineWidth = 0;
-        this.clearJobs();
+        this.clearScheduleItems();
         this.timelineArray = new Array();
         let timeSpanStart = new Date(this.startDate);
         if (timeSpanStart.getHours() != 0) {
@@ -463,10 +481,10 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 if (currentEndDate.getHours() != 0) {
                     this.setUtcAdjustedDate(currentEndDate);
                 }
-                if (currentEndDate < startDate) { // Job ends before start of timeline range
+                if (currentEndDate < startDate) { // ScheduleItem ends before start of timeline range
                     deletionList.push(crewChief.scheduleItems[i]);
                 }
-                if (currentStartDate > endDate) { // Job starts after end of timeline range
+                if (currentStartDate > endDate) { // ScheduleItem starts after end of timeline range
                     deletionList.push(crewChief.scheduleItems[i]);
                 }
             }
@@ -516,7 +534,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             while (clonedScheduleItemsArray.length > 0) {
                 let previousScheduleItem = null;
                 let currentScheduleItem = null;
-                let previousScheduleEndDate = null;
+                let previousScheduleItemEndDate = null;
                 let currentScheduleItemStartDate = null;
                 let currentSwimlane = new Array();
                 let deletionList = new Array();
@@ -529,15 +547,15 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                         currentSwimlane.push(currentScheduleItem);
                         deletionList.push(currentScheduleItem);
                     } else {
-                        previousJobEndDate = new Date(previousScheduleItem.endDate);
-                        if (previousJobEndDate.getHours() != 0) {
-                            this.setUtcAdjustedDate(previousJobEndDate);
+                        previousScheduleItemEndDate = new Date(previousScheduleItem.endDate);
+                        if (previousScheduleItemEndDate.getHours() != 0) {
+                            this.setUtcAdjustedDate(previousScheduleItemEndDate);
                         }
-                        currentJobStartDate = new Date(currentScheduleItem.startDate);
-                        if (currentJobStartDate.getHours() != 0) {
-                            this.setUtcAdjustedDate(currentJobStartDate);
+                        currentScheduleItemStartDate = new Date(currentScheduleItem.startDate);
+                        if (currentScheduleItemStartDate.getHours() != 0) {
+                            this.setUtcAdjustedDate(currentScheduleItemStartDate);
                         }
-                        if (currentJobStartDate > previousJobEndDate) {
+                        if (currentScheduleItemStartDate > previousScheduleItemEndDate) {
                             currentSwimlane.push(currentScheduleItem);
                             deletionList.push(currentScheduleItem);
                             previousScheduleItem = currentScheduleItem;
@@ -565,7 +583,17 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 for (var i = 0; i < swimlane.length; i++) {
                     currentScheduleItem = swimlane[i];
                     currentScheduleItem.crewChief = crewChief.id;
-                    currentScheduleItem.color = currentScheduleItem.projectManagerColor;
+                    switch (currentScheduleItem.type) {
+                        case "Job":
+                            currentScheduleItem.color = currentScheduleItem.projectManagerColor;
+                            break;
+                        case "PTO":
+                            currentScheduleItem.color = "#e65100"; // --paper-orange-900
+                            break;
+                        case "Leave":
+                            currentScheduleItem.color = "#b71c1c"; // --paper-red-900
+                            break;
+                    }                    
                     currentScheduleItem.scheduleItem = currentScheduleItem.id;
                     currentScheduleItem.top = topOffset;
                     currentScheduleItem.left = this.calculateLeftOffset(currentScheduleItem);
@@ -586,25 +614,25 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         return (topOffset - STARTING_TOP_OFFSET);
     }
 
-    calculateLeftOffset(job) {
+    calculateLeftOffset(scheduleItem) {
         const MILLISECONDS_IN_DAY = 86400000;
         let timeSpanStart = new Date(this.startDate);
         if (timeSpanStart.getHours() != 0) {
             this.setUtcAdjustedDate(timeSpanStart);
         }
-        let jobStartDate = new Date(job.startDate);
-        if (jobStartDate.getHours() != 0) {
-            this.setUtcAdjustedDate(jobStartDate)
+        let scheduleItemStartDate = new Date(scheduleItem.startDate);
+        if (scheduleItemStartDate.getHours() != 0) {
+            this.setUtcAdjustedDate(scheduleItemStartDate)
         }        
-        let leftOffsetDays = Math.round((jobStartDate - timeSpanStart) / MILLISECONDS_IN_DAY);
+        let leftOffsetDays = Math.round((scheduleItemStartDate - timeSpanStart) / MILLISECONDS_IN_DAY);
         return (leftOffsetDays * this.dayWidth);
     }
 
     calculateWidth(scheduleItem) {
         const MILLISECONDS_IN_DAY = 86400000;
-        let jobStartDate = new Date(scheduleItem.startDate);
-        if (jobStartDate.getHours() != 0) {
-            this.setUtcAdjustedDate(jobStartDate);
+        let scheduleItemStartDate = new Date(scheduleItem.startDate);
+        if (scheduleItemStartDate.getHours() != 0) {
+            this.setUtcAdjustedDate(scheduleItemStartDate);
         }
         let jobEndDate = new Date(scheduleItem.endDate);
         if (jobEndDate.getHours() != 0) {
@@ -612,52 +640,80 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         }        
         // Adjust end date so that the full day is included in the width calculation
         jobEndDate.setDate(jobEndDate.getDate() + 1);
-        let lengthInDays = Math.round((jobEndDate - jobStartDate) / MILLISECONDS_IN_DAY);
+        let lengthInDays = Math.round((jobEndDate - scheduleItemStartDate) / MILLISECONDS_IN_DAY);
         return (lengthInDays * this.dayWidth);
     }
 
     generateHtml(scheduleItem) {
-        let newJobContainer = document.createElement('div');
-        newJobContainer.classList = "jobContainer";
-        newJobContainer.style.top = scheduleItem.top.toString() + "px";
-        newJobContainer.style.left = scheduleItem.left.toString() + "px";
-        newJobContainer.style.width = scheduleItem.width.toString() + "px";
-        let newJob = document.createElement('div');
+        let newScheduleItemContainer = document.createElement('div');
+        newScheduleItemContainer.classList = "scheduleItemContainer";
+        newScheduleItemContainer.style.top = scheduleItem.top.toString() + "px";
+        newScheduleItemContainer.style.left = scheduleItem.left.toString() + "px";
+        newScheduleItemContainer.style.width = scheduleItem.width.toString() + "px";
+        let newScheduleItem = document.createElement('div');
         let crewAttr = document.createAttribute('crewChief');
         crewAttr.value = scheduleItem.employeeId;
-        newJob.setAttributeNode(crewAttr);
+        newScheduleItem.setAttributeNode(crewAttr);
         let scheduleItemAttr = document.createAttribute('scheduleItem');
         scheduleItemAttr.value = scheduleItem.id;
-        newJob.setAttributeNode(scheduleItemAttr);
-        newJob.style.backgroundColor = scheduleItem.color;
-        newJob.style.width = scheduleItem.width.toString() + "px";        
-        newJob.classList = "job";
-        newJob.addEventListener("click", this._jobClick);
-        newJob.innerHTML = scheduleItem.projectNumber;
-        newJob.context = this;
-        newJobContainer.appendChild(newJob);
-        this.generateScheduleItemTooltip(scheduleItem, newJobContainer);
-        this.$.jobContainer.appendChild(newJobContainer);
+        newScheduleItem.setAttributeNode(scheduleItemAttr);
+        newScheduleItem.style.backgroundColor = scheduleItem.color;
+        newScheduleItem.style.width = scheduleItem.width.toString() + "px";        
+        newScheduleItem.classList = "scheduleItem";
+        newScheduleItem.addEventListener("click", this._scheduleItemClick);
+        newScheduleItem.innerHTML = scheduleItem.projectNumber;
+        newScheduleItem.context = this;
+        newScheduleItemContainer.appendChild(newScheduleItem);
+        this.generateScheduleItemTooltip(scheduleItem, newScheduleItemContainer);
+        this.$.scheduleItemContainer.appendChild(newScheduleItemContainer);
     }
 
-    generateScheduleItemTooltip(scheduleItem, newJobContainer) {
-        scheduleItem.startDate = scheduleItem.startDate.split('T')[0];
-        if (scheduleItem.startDate === this.startDate) {
-            let newTooltip = document.createElement('span');
-            newTooltip.classList = "tooltiptext tooltiptext-left-align";
-            newTooltip.innerHTML = scheduleItem.projectNumber;
-            newJobContainer.appendChild(newTooltip);
-        } else if (scheduleItem.endDate === this.endDate) {
-            let newTooltip = document.createElement('span');
-            newTooltip.classList = "tooltiptext tooltiptext-right-align";
-            newTooltip.innerHTML = scheduleItem.projectNumber;
-            newJobContainer.appendChild(newTooltip);
-        } else {
-            let newTooltip = document.createElement('span');
-            newTooltip.classList = "tooltiptext tooltiptext-center-align";
-            newTooltip.innerHTML = scheduleItem.projectNumber;
-            newJobContainer.appendChild(newTooltip);
-        }         
+    generateScheduleItemTooltip(scheduleItem, newScheduleItemContainer) {
+        if (scheduleItem.type === "Job") {
+            scheduleItem.startDate = scheduleItem.startDate.split('T')[0];
+            scheduleItem.endDate = scheduleItem.endDate.split('T')[0];
+            let projectInfo = null;
+            if (scheduleItem.addressLine2) {
+                projectInfo =
+                    '<div class="projectNumber">' + scheduleItem.projectNumber + '</div>' +
+                    '<div class="projectTimeframe">' + scheduleItem.startDate + ' to ' + scheduleItem.endDate + '</div>' +
+                    '<div>' + scheduleItem.tasks[0].name + '</div>' +
+                    '<div class="projectName">' + scheduleItem.projectName + '</div>' +
+                    '<div class="projectAddress">' + scheduleItem.addressLine1 + '</div>' +
+                    '<div class="projectAddress">' + scheduleItem.addressLine2 + '</div>' +
+                    '<div class="projectAddress">' + scheduleItem.city + ', ' + scheduleItem.state + ', ' + scheduleItem.zip + '</div>';
+            } else {
+                projectInfo =
+                    '<div class="projectNumber">' + scheduleItem.projectNumber + '</div>' +
+                    '<div class="projectTimeframe">' + scheduleItem.startDate + ' to ' + scheduleItem.endDate + '</div>' +
+                    '<div>' + scheduleItem.tasks[0].name + '</div>' +
+                    '<div class="projectName">' + scheduleItem.projectName + '</div>' +
+                    '<div class="projectAddress">' + scheduleItem.addressLine1 + '</div>' +
+                    '<div class="projectAddress">' + scheduleItem.city + ', ' + scheduleItem.state + ', ' + scheduleItem.zip + '</div>';
+            }
+            let newTooltip = document.createElement('div');
+            newTooltip.innerHTML = projectInfo;
+            if (scheduleItem.startDate === this.startDate) {
+                newTooltip.classList = "tooltiptext tooltiptext-left-align";
+            } else if (scheduleItem.endDate === this.endDate) {
+                newTooltip.classList = "tooltiptext tooltiptext-right-align";
+            } else {
+                let scheduleItemStartDate = new Date(scheduleItem.startDate);
+                let scheduleItemEndDate = new Date(scheduleItem.endDate);
+                let startDate = new Date(this.startDate);
+                let endDate = new Date(this.endDate);
+                startDate.setDate(startDate.getDate() + 3);
+                endDate.setDate(endDate.getDate() - 3);
+                if (scheduleItemStartDate <= startDate) {
+                    newTooltip.classList = "tooltiptext tooltiptext-left-align";
+                } else if (scheduleItemEndDate >= endDate) {
+                    newTooltip.classList = "tooltiptext tooltiptext-right-align";
+                } else {
+                    newTooltip.classList = "tooltiptext tooltiptext-center-align";
+                }
+            }
+            newScheduleItemContainer.appendChild(newTooltip);
+        }
     }
 
     generateCrewChiefDivider(additionalTopOffset, timelineWidth) {
@@ -668,7 +724,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         divider.style.width = timelineWidth.toString() + "px";
         divider.style.backgroundColor = "#616161";
         divider.classList = "hline";
-        this.$.jobContainer.appendChild(divider);
+        this.$.scheduleItemContainer.appendChild(divider);
         return (additionalTopOffset + 10);
     }
 

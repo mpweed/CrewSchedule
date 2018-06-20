@@ -131,7 +131,9 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                     </div>
                 </div>
                 <cs-dialog id="userPreferencesDialog" on-dialogshown="_dialogShown">
-                    <cs-edit-preferences-region on-close="_hideEditPreferencesDialog"></cs-edit-preferences-region>
+                    <cs-edit-preferences-region on-close="_hideEditPreferencesDialog"
+                                                reference-data="{{referenceData}}">
+                    </cs-edit-preferences-region>
                 </cs-dialog>
             </div>`;
     }

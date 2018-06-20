@@ -1,7 +1,6 @@
 ﻿import { PolymerElement, html } from '../shared/external/@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '../shared/external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '../shared/cs-shared-styles.js';
-import { StaticData } from '../shared/cs-static-data.js';
 class CsDesktopShell extends GestureEventListeners(PolymerElement) {    
     static get template() {
         return html`
@@ -92,8 +91,6 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
     // Lifecycle Callbacks
     connectedCallback() {
         super.connectedCallback();
-        //***** TEMPORARY FOR LAYOUT PURPOSES WHEN LOGIN IS NOT USED *****
-        //this.referenceData = StaticData.bootstrapData;
     }
    
     // Event Handlers

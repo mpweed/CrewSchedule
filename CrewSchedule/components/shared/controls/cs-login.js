@@ -1,7 +1,6 @@
 ﻿import { PolymerElement, html } from '../external/@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '../external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '../cs-shared-styles.js';
-import { StaticData } from '../cs-static-data.js';
 class CsLogin extends GestureEventListeners(PolymerElement) {
     static get template() {
         return html`
@@ -35,7 +34,36 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
                     --cs-button-focus-color: var(--paper-orange-300);
                     --cs-button-hover-color: var(--paper-orange-300);
                     --cs-button-active-color: var(--paper-lime-600);
-                }              
+                }
+
+                iron-icon {                
+                    width: 48px;
+                    height: 48px;                
+                }
+
+                #errorIcon {
+                    color: red;
+                    width: 48px;
+                    height: 48px;
+                    margin-left: 6px;
+                    margin-top: 6px;
+                    margin-bottom: 6px;
+                }
+
+                #errorCaption {
+                    margin-left: 6px;
+                    margin-top: 12px;
+                    color: #ffffff;
+                    font-size: 1.5em;
+                }
+
+                .errorPanel {
+                    margin-top: 20px;
+                    border: solid 1px red;
+                    border-left-style: solid;
+                    border-left-width: 6px;
+                    border-left-color: red;
+                }
             </style>
             <iron-ajax id="referenceDataXhr"
                    url="[[baseUrl]]"
@@ -56,6 +84,14 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
                 <div class="horizontal layout center-justified">
                     <cs-button id="loginButton" disabled class="loginButton" on-tap="_login">Login</cs-button>
                 </div>
+
+                <div id="errorPanel" class="horizontal layout flex errorPanel hidden">
+                    <div id="errorIcon">
+                        <iron-icon icon="error"></iron-icon>
+                    </div>
+                    <div id="errorCaption">User Id or Password is invalid</div>
+                </div>        
+                
             </div>`;
     }
 
@@ -117,7 +153,8 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
         }
     } 
 
-    _login(e) {        
+    _login(e) {
+        this.$.errorPanel.classList.add("hidden");
         this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: true } }));
         this.$.referenceDataXhr.body = {
             "loginId": this.login,
@@ -133,7 +170,7 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
         if (e.detail.response.exception) {
             this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
             // TODO: SHOW FAILURE MESSAGE HERE
-
+            this.$.errorPanel.classList.remove("hidden");
         } else {
             e.detail.response.startDate = this.startDate;
             e.detail.response.endDate = this.endDate;

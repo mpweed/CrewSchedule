@@ -164,9 +164,11 @@
     <Content Include="components\desktop\views\cs-admin-view.js" />
     <Content Include="components\desktop\views\cs-notification-view.js" />
     <Content Include="components\desktop\views\cs-schedule-view.js" />
+    <Content Include="components\desktop\views\sections\regions\cs-edit-leave-region.js" />
+    <Content Include="components\desktop\views\sections\regions\cs-edit-pto-region.js" />
     <Content Include="components\desktop\views\sections\regions\cs-edit-preferences-region.js" />
     <Content Include="components\desktop\views\sections\regions\cs-filter-crew-chiefs-region.js" />
-    <Content Include="components\desktop\views\sections\regions\cs-edit-schedule-item-region.js" />
+    <Content Include="components\desktop\views\sections\regions\cs-edit-job-region.js" />
     <Content Include="components\desktop\views\sections\regions\cs-create-schedule-item-region.js" />
     <Content Include="components\mobile\cs-mobile-shell.js" />
     <Content Include="components\shared\controls\cs-content-switcher.js" />

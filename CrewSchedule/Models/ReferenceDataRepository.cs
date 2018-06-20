@@ -163,14 +163,26 @@ namespace CrewSchedule.Models
                                     newItem.ProjectManagerColor = (string)reader["ProjectManagerColor"];
                                     newItem.ProjectNumber = (string)reader["ProjectNumber"];
                                     newItem.ProjectName = (string)reader["ProjectName"];
+                                }
+                                if (!reader["AddressLine1"].Equals(DBNull.Value))
+                                {
                                     newItem.AddressLine1 = (string)reader["AddressLine1"];
-                                    newItem.City = (string)reader["City"];
-                                    newItem.State = (string)reader["State"];
-                                    newItem.Zip = (string)reader["Zip"];
                                 }
                                 if (!reader["AddressLine2"].Equals(DBNull.Value))
                                 {
                                     newItem.AddressLine2 = (string)reader["AddressLine2"];
+                                }
+                                if (!reader["City"].Equals(DBNull.Value))
+                                {
+                                    newItem.City = (string)reader["City"];
+                                }
+                                if (!reader["State"].Equals(DBNull.Value))
+                                {
+                                    newItem.State = (string)reader["State"];
+                                }
+                                if (!reader["Zip"].Equals(DBNull.Value))
+                                {
+                                    newItem.Zip = (string)reader["Zip"];
                                 }
                                 if (!reader["AffectedProjectManagerId"].Equals(DBNull.Value))
                                 {

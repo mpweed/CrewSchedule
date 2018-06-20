@@ -185,10 +185,10 @@ class CsColorPicker extends GestureEventListeners(PolymerElement) {
                 "name": "#c62828",
                 "color": "#c62828"
             },
-            {
+            /*{
                 "name": "#b71c1c",
                 "color": "#b71c1c"
-            },
+            },*/
             {
                 "name": "#ff8a80",
                 "color": "#ff8a80"
@@ -969,10 +969,10 @@ class CsColorPicker extends GestureEventListeners(PolymerElement) {
                 "name": "#ef6c00",
                 "color": "#ef6c00"
             },
-            {
+            /*{
                 "name": "#e65100",
                 "color": "#e65100"
-            },
+            },*/
             {
                 "name": "#ffd180",
                 "color": "#ffd180"

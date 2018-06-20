@@ -25,7 +25,7 @@ class CsEditPreferencesRegion extends GestureEventListeners(PolymerElement) {
     static get properties() {
         return {
             /** Public **/
-            applicationUser: {
+            referenceData: {
                 type: Object
             }
         }
