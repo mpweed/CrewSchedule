@@ -146,7 +146,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\BootstrapParameters.cs" />
+    <Compile Include="Models\ScheduleParameters.cs" />
     <Compile Include="Models\Branch.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\Employee.cs" />
@@ -159,6 +159,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\build_crewschedule1_script.sql" />
     <Content Include="App_Data\ScratchPad.html" />
     <Content Include="components\desktop\cs-desktop-shell.js" />
     <Content Include="components\desktop\views\cs-admin-view.js" />
@@ -452,7 +453,6 @@
     <Folder Include="components\mobile\views\sections\regions\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\crewschedule.bak" />
     <Content Include="App_Data\CSLogoDesign.design" />
     <None Include="packages.config" />
     <Content Include="Views\Mobile\Index.cshtml" />

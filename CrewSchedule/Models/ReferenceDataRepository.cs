@@ -9,7 +9,7 @@ namespace CrewSchedule.Models
 {
     internal class ReferenceDataRepository : Repository
     {
-        internal static ReferenceData GetBootstrapData(BootstrapParameters bootstrapParameters)
+        internal static ReferenceData GetReferenceData(ScheduleParameters scheduleParameters)
         {
             ReferenceData retval = new ReferenceData();
             retval.ProjectManagers = new List<Employee>();
@@ -27,10 +27,11 @@ namespace CrewSchedule.Models
                         com.Connection = conn;
                         com.CommandType = CommandType.StoredProcedure;
                         com.CommandText = "GetBootstrapData_SP";
-                        com.Parameters.Add(new SqlParameter("@loginId", bootstrapParameters.LoginId));
-                        com.Parameters.Add(new SqlParameter("@password", bootstrapParameters.Password));
-                        com.Parameters.Add(new SqlParameter("@startDate", bootstrapParameters.StartDate));
-                        com.Parameters.Add(new SqlParameter("@endDate", bootstrapParameters.EndDate));
+                        com.Parameters.Add(new SqlParameter("@loginId", scheduleParameters.LoginId));
+                        com.Parameters.Add(new SqlParameter("@password", scheduleParameters.Password));
+                        com.Parameters.Add(new SqlParameter("@startDate", scheduleParameters.StartDate));
+                        com.Parameters.Add(new SqlParameter("@endDate", scheduleParameters.EndDate));
+                        com.Parameters.Add(new SqlParameter("@branchIdIn", scheduleParameters.BranchId));
                         conn.Open();
                         using (SqlDataReader reader = com.ExecuteReader())
                         {

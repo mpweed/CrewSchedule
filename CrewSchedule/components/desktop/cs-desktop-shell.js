@@ -32,14 +32,16 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
                               on-exception="_handleException"
                               on-dialogshown="_handleDialogShown"
                               on-dialoghidden="_handleDialogHidden"
-                              is-dialog-shown="{{isDialogShown}}"
+                              on-refresh="_handleRefresh"
+                              is-dialog-shown="{{isDialogShown}}"                            
                               reference-data="{{referenceData}}">
                 </cs-title-bar>
                 <div class="horizontal layout content flex">
                     <cs-nav-bar page="{{page}}"
                                 reference-data="{{referenceData}}">
                     </cs-nav-bar>
-                    <cs-content-switcher on-busy="_handleBusy"
+                    <cs-content-switcher id="contentSwitcher"
+                                         on-busy="_handleBusy"
                                          on-success="_handleSuccess"
                                          on-exception="_handleException"
                                          on-dialogshown="_handleDialogShown"
@@ -113,6 +115,10 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
 
     _handleDialogHidden(e) {
         this.isDialogShown = false;
+    }
+
+    _handleRefresh(e) {
+        this.$.contentSwitcher.refresh();
     }
 
     _hideLoginPanel(e) {

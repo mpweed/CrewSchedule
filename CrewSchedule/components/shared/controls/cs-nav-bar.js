@@ -89,8 +89,8 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
     }
 
     // Event Handlers
-    _referenceDataChanged(newValue, oldValue) {
-        if (this.referenceData.applicationUser && (this.referenceData.applicationUser.role == "System Administrator" || this.referenceData.applicationUser.role == "Company Administrator")) {
+    _referenceDataChanged(newValue, oldValue) {        
+        if (this.referenceData && this.referenceData.applicationUser && (this.referenceData.applicationUser.role == "System Administrator" || this.referenceData.applicationUser.role == "Company Administrator")) {
             this.isAdministrator = true;
         } else {
             this.isAdministrator = false;

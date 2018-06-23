@@ -178,7 +178,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     color: var(--paper-grey-400);
                 }
             </style>
-            <cs-parameter-panel on-filterupdated="_handleFilterUpdated"
+            <cs-parameter-panel id="parameterPanel"
+                                on-filterupdated="_handleFilterUpdated"
                                 is-dialog-shown="{{isDialogShown}}"
                                 reference-data="{{referenceData}}"
                                 start-date="{{startDate}}"
@@ -312,7 +313,6 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 this.$.crewPanel.classList.add("hidden");
             } else {
                 this.$.crewPanel.classList.remove("hidden");
-                this.regenerateTimeSpan();
             }
         }        
     }
@@ -726,6 +726,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         divider.classList = "hline";
         this.$.scheduleItemContainer.appendChild(divider);
         return (additionalTopOffset + 10);
+    }
+
+    // Public Methods
+    refresh() {
+        this.$.parameterPanel.refresh();
     }
 
 }

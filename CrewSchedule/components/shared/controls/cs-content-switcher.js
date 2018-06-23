@@ -61,10 +61,22 @@ class CsContentSwitcher extends GestureEventListeners(PolymerElement) {
                 case "notificationView":
                     break;
                 case "adminView":
-                    //this.$.adminView.refreshView();
                     break;
             }
         }
-    }    
+    }
+
+    // Public Methods
+    refresh() {
+        switch (this.page) {
+            case "scheduleView":
+                this.$.scheduleView.refreshView();
+                break;
+            case "notificationView":
+                break;
+            case "adminView":
+                break;
+        }
+    }
 }
 customElements.define('cs-content-switcher', CsContentSwitcher);

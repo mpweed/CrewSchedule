@@ -26,12 +26,13 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
                 }
             </style>
             <div class="viewPanel">
-                <cs-timeline is-dialog-shown="{{isDialogShown}}"
+                <cs-timeline id="timeline"
+                             is-dialog-shown="{{isDialogShown}}"
                              reference-data="{{referenceData}}" 
-                             on-addclick="_showAddDialog" 
+                             on-createclick="_showCreateDialog" 
                              on-editclick="_showEditDialog"></cs-timeline>
-                <cs-dialog id="addDialog">
-                    <cs-create-schedule-item-region on-close="_hideAddDialog"
+                <cs-dialog id="createDialog">
+                    <cs-create-schedule-item-region on-close="_hideCreateDialog"
                                                     reference-data="{{referenceData}}">
                     </cs-create-schedule-item-region>
                 </cs-dialog>                
@@ -74,9 +75,9 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
     }
 
     // Event Handlers
-    _showAddDialog(e) {
+    _showCreateDialog(e) {
         if (!this.isDialogShown) {
-            this.$.addDialog.show();
+            this.$.createDialog.show();
         }        
     }    
 
@@ -103,8 +104,8 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
         }
     }
 
-    _hideAddDialog(e) {
-        this.$.addDialog.hide();
+    _hideCreateDialog(e) {
+        this.$.createDialog.hide();
     }   
 
     _hideEditJobDialog(e) {
@@ -117,6 +118,11 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
 
     _hideEditLeaveDialog(e) {
         this.$.editLeaveDialog.hide();
-    } 
+    }
+
+    // Public Methods
+    refreshView() {
+        this.$.timeline.refresh();
+    }
 }
 customElements.define('cs-schedule-view', CsScheduleView);

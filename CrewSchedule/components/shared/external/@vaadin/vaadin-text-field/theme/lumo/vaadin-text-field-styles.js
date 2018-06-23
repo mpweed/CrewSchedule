@@ -358,7 +358,8 @@ $_documentContainer.innerHTML = `<dom-module id="lumo-text-field" theme-for="vaa
             font-weight: 200;
             font-size: .9em;
             height: 26px;            
-            width: 100%;
+            width: 150px;
+            min-width: 150px;
             padding-left: 10px;
             padding-top: 0;
             padding-bottom: 0;           

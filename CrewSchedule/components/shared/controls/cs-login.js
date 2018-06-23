@@ -160,20 +160,20 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
             "loginId": this.login,
             "password": this.password,
             "startDate": this.startDate,
-            "endDate": this.endDate
+            "endDate": this.endDate,
+            "branchId": 0
         };
         this.$.referenceDataXhr.generateRequest();
     }
 
     _handleReferenceDataResponse(e, request) {
         this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
-        if (e.detail.response.exception) {
-            this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
-            // TODO: SHOW FAILURE MESSAGE HERE
+        if (e.detail.response.exception) {                       
             this.$.errorPanel.classList.remove("hidden");
         } else {
             e.detail.response.startDate = this.startDate;
             e.detail.response.endDate = this.endDate;
+            e.detail.response.refreshTimestamp = new Date(Date.now());
             this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
             this.dispatchEvent(new CustomEvent('loginsuccess', { bubbles: true, composed: true, detail: { referenceData: e.detail.response } }));
         }

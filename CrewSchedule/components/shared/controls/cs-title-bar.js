@@ -33,6 +33,14 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                     color: var(--paper-orange-300);
                 }
 
+                .refreshTimestamp {
+                    margin-top: 16px;
+                    margin-left: 10px;
+                    font-size: 12px;
+                    font-weight: 300;
+                    color: var(--paper-grey-400);
+                }
+
                 .userName {
                     margin-top: 16px;
                     margin-left: 10px;
@@ -92,6 +100,30 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                 }
 
                 .actionButton {
+                    width: 32px;
+                    height: 48px;
+                    min-width: 48px;
+                    min-height: 48px;
+                    color: var(--paper-lime-300);                    
+                    cursor: pointer;
+                }
+
+                .actionButton:hover {
+                    color: #ffffff;
+                }
+
+                paper-icon-button[disabled] {
+                    color: var(--paper-grey-800);
+                }
+
+                .actionButton {
+                    --paper-icon-button: {
+                        width: 30px;
+                        height: 30px;
+                    }
+                }
+
+                .userInfoActionButton {
                     width: 36px;
                     height: 36px;
                     margin-top: -6px;
@@ -99,13 +131,15 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                     cursor: pointer;
                 }
 
-                .actionButton:hover {
+                .userInfoActionButton:hover {
                     color: #ffffff;
                 }
             </style>            
             <div class="horizontal layout appTitleBar flex">
                 <img class="cslogo" src="[[logoUrl]]" />                
                 <div class="flex"></div>
+                <div id="refreshTimestamp" class="refreshTimestamp">[[referenceData.refreshTimestamp]]</div>
+                <paper-icon-button id="refreshData" icon="refresh" class="actionButton" on-tap="_refreshDataClick"></paper-icon-button>
                 <div id="userButton" class="horizontal layout end-justified userButton" on-click="_showUserInfoPanel">
                     <div class="userName">[[referenceData.applicationUser.name]]</div>
                     <div class="personIcon">
@@ -115,7 +149,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                         <div class="horizontal layout">
                             <div class="userInformationDialogJobTitle">[[referenceData.applicationUser.title]]</div>
                             <div class="horizontal layout flex end-justified">
-                                <paper-icon-button id="editPreferences" icon="settings" class="actionButton" on-tap="_editPreferencesClick"></paper-icon-button>
+                                <paper-icon-button id="editPreferences" icon="settings" class="userInfoActionButton" on-tap="_editPreferencesClick"></paper-icon-button>
                             </div>
                         </div>
                         <div class="horizontal layout flex">
@@ -195,6 +229,10 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
     }
 
     // Event Handlers
+    _refreshDataClick(e) {
+        this.dispatchEvent(new CustomEvent('refresh', { bubbles: true, composed: true }));
+    }
+
     _dialogShown(e) {
         this._hideUserInfoPanel(null);
     }

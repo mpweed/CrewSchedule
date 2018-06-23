@@ -62,7 +62,7 @@ class TextFieldElement extends ElementMixin(TextFieldMixin(ThemableMixin(Polymer
 
       <label part="label" on-click="focus" id="[[_labelId]]">[[label]]</label>
 
-      <div part="input-field">
+      <div part="input-field" style$="width:[[width]]">
 
         <slot name="prefix"></slot>
 
@@ -109,7 +109,12 @@ class TextFieldElement extends ElementMixin(TextFieldMixin(ThemableMixin(Polymer
        */
       title: {
         type: String
-      }
+        },
+
+        width: {
+            type: String,
+            notify: true
+        }
     };
   }
 }

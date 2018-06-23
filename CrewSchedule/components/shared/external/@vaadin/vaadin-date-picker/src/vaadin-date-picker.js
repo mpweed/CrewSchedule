@@ -134,7 +134,7 @@ class DatePickerElement extends
     </style>
 
 
-    <vaadin-text-field id="input" role="application" autocomplete="off" on-focus="_focus" value="{{_userInputValue}}" invalid="[[invalid]]" label="[[label]]" name="[[name]]" placeholder="[[placeholder]]" required="[[required]]" disabled="[[disabled]]" readonly="[[readonly]]" error-message="[[errorMessage]]" aria-label\$="[[label]]" part="text-field">
+    <vaadin-text-field id="input" width="{{width}}" role="application" autocomplete="off" on-focus="_focus" value="{{_userInputValue}}" invalid="[[invalid]]" label="[[label]]" name="[[name]]" placeholder="[[placeholder]]" required="[[required]]" disabled="[[disabled]]" readonly="[[readonly]]" error-message="[[errorMessage]]" aria-label\$="[[label]]" part="text-field">
       <slot name="prefix" slot="prefix"></slot>
       <div part="clear-button" slot="suffix" on-touchend="_clearTouchend" on-click="_clear" role="button" aria-label\$="[[i18n.clear]]"></div>
       <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button" aria-label\$="[[i18n.calendar]]" aria-expanded\$="[[_getAriaExpanded(opened)]]"></div>
@@ -198,7 +198,12 @@ class DatePickerElement extends
         reflectToAttribute: true,
         notify: true,
         value: false
-      },
+        },
+
+        width: {
+            type: String,
+            notify: true
+        },
 
       _userInputValue: String
     };

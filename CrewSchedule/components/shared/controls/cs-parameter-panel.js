@@ -104,6 +104,14 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                     margin-top: 10px;
                 }
             </style>
+            <iron-ajax id="refreshDataXhr"
+                   url="[[baseUrl]]"
+                   method="POST"
+                   content-type="application/json"
+                   handle-as="json"
+                   on-response="_handleRefreshDataResponse"
+                   on-error="_handleXhrError">
+            </iron-ajax>
             <div id="companyOfficePanel" class="horizontal layout companyOfficePanel">
                 <paper-icon-button id="zoomIn" icon="zoom-in" class="actionButton" on-tap="_zoomInClick"></paper-icon-button>
                 <div class="dataLabel horizontalDataLabel companyLabel">Company</div>
@@ -122,11 +130,11 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 <paper-icon-button id="zoomOut" icon="zoom-out" class="actionButton" on-tap="_zoomOutClick"></paper-icon-button>
                 <div class="dataLabel horizontalDataLabel startDateLabel">Start Date</div>
                 <div class="horizontalDataField">
-                    <vaadin-date-picker value="{{startDate}}"></vaadin-date-picker>
+                    <vaadin-date-picker width="192px" value="{{startDate}}"></vaadin-date-picker>
                 </div>
                 <div class="dataLabel horizontalDataLabel">End Date</div>
                 <div class="horizontalDataFieldSmallMargin endDateContainer">
-                    <vaadin-date-picker value="{{endDate}}"></vaadin-date-picker>                    
+                    <vaadin-date-picker width="192px" value="{{endDate}}"></vaadin-date-picker>                    
                 </div>                
                 <div class="horizontal layout flex end-justified">
                     <div class="filterStatus">[[filterStatus]]</div>
@@ -168,7 +176,6 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
             },
             zoomLevel: {
                 type: Number,
-                value: 1,
                 notify: true,
                 observer: "_zoomLevelChanged"
             },
@@ -182,6 +189,10 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 notify: true
             },
             /** Private **/
+            baseUrl: {
+                type: String,
+                notify: true
+            },
             selectedCompany: {
                 type: Object,
                 notify: true
@@ -201,6 +212,9 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
             },
             filterStatus: {
                 type: String
+            },
+            initialized: {
+                type: Boolean
             }
         }
     }
@@ -208,42 +222,52 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
     // Lifecycle Callbacks
     connectedCallback() {
         super.connectedCallback();
+        this.baseUrl = window.location.href;
+        var trailingCharacter = this.baseUrl.slice(-1);
+        if (trailingCharacter === "/") {
+            this.baseUrl = this.baseUrl + "api/ReferenceData/";
+        } else {
+            this.baseUrl = this.baseUrl + "/api/ReferenceData/";
+        }
     }
 
     // Event Handlers
     _referenceDataChanged(newValue, oldValue) {
         this.filteredCrewChiefs = null;
         if (this.referenceData) {
-            this.zoomLevel = Number(this.referenceData.applicationUser.zoomLevel);                                   
-            if (this.referenceData.crewChiefs) {
-                this.crewChiefs = JSON.parse(JSON.stringify(this.referenceData.crewChiefs));
-                let filter = new Array();
+            if (!this.zoomLevel) {
+                this.zoomLevel = Number(this.referenceData.applicationUser.zoomLevel);  
+            } 
+            if (!this.startDate) {
+                this.startDate = this.referenceData.startDate;
+            }
+            if (!this.endDate) {
+                this.endDate = this.referenceData.endDate;
+            }
+            this.refreshCrewChiefFilter();
+        }        
+    }
+
+    refreshCrewChiefFilter() {
+        if (this.referenceData.crewChiefs) {
+            this.initialized = true;
+            this.crewChiefs = JSON.parse(JSON.stringify(this.referenceData.crewChiefs));
+            let filter = new Array();
+            if (!this.crewChiefFilter) {
                 for (var crewChief of this.crewChiefs) {
                     crewChief.checked = true;
                     filter.push(crewChief);
                 }
                 this.crewChiefFilter = filter;
-                this.startDate = this.referenceData.startDate;
-                this.endDate = this.referenceData.endDate;
+            } else {
+                this._crewChiefFilterChanged(this.crewChiefFilter, null);
             }
-        }        
+        }
     }
 
     _crewChiefFilterChanged(newValue, oldValue) {
         this.updateFilteredCrewChiefs();
         this.dispatchEvent(new CustomEvent('filterupdated', { bubbles: true, composed: true }));
-    }
-
-    _dateChanged(newValue, oldValue) {
-        //this.crewChiefs = null;
-        if (this.startDate && this.endDate && this.startDate != this.endDate) {
-            if (this.endDate < this.startDate) {
-                this.filteredCrewChiefs = null;
-                this.$.endDateErrorMessage.classList.remove("removed");
-            } else {
-                this.$.endDateErrorMessage.classList.add("removed");
-            }
-        }
     }
 
     updateFilteredCrewChiefs() {
@@ -262,6 +286,17 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
             this.filterStatus = "Off";
         } else {
             this.filterStatus = "On";
+        }
+    }
+
+    _dateChanged(newValue, oldValue) {
+        if (this.startDate && this.endDate && this.startDate != this.endDate) {
+            if (this.endDate < this.startDate) {
+                this.filteredCrewChiefs = null;
+                this.$.endDateErrorMessage.classList.remove("removed");
+            } else {
+                this.$.endDateErrorMessage.classList.add("removed");
+            }
         }
     }
 
@@ -287,7 +322,7 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
     }
 
     _createScheduleItemClick(e) {
-        this.dispatchEvent(new CustomEvent('addclick', { bubbles: true, composed: true }));
+        this.dispatchEvent(new CustomEvent('createclick', { bubbles: true, composed: true }));
     }
 
     _filterCrewsClick(e) {
@@ -318,6 +353,41 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 this.$.zoomIn.disabled = false;
             }
         }
-    } 
+    }
+
+    refreshReferenceData() {
+        this.dispatchEvent(new CustomEvent('busy', { detail: { status: true } }));
+        this.$.refreshDataXhr.body = {
+            "loginId": this.referenceData.applicationUser.loginId,
+            "password": this.referenceData.applicationUser.password,
+            "startDate": this.startDate,
+            "endDate": this.endDate,
+            "branchId": this.selectedBranch.id
+        };
+        this.$.refreshDataXhr.generateRequest();
+    }
+
+    _handleRefreshDataResponse(e, request) {
+        this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
+        if (e.detail.response.exception) {
+            this.dispatchEvent(new CustomEvent('exception', { bubbles: true, composed: true, detail: e.detail.response.exception.Message }));            
+        } else {
+            this.referenceData = null;
+            e.detail.response.refreshTimestamp = new Date(Date.now());
+            this.referenceData = e.detail.response;
+        }
+    }
+
+    _handleXhrError(e, request) {
+        this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
+        this.dispatchEvent(new CustomEvent('exception', { detail: e.detail.error.message }));
+    }
+
+    // Public Methods
+    refresh() {
+        if (this.initialized) {
+            this.refreshReferenceData();
+        }
+    }
 }
 customElements.define('cs-parameter-panel', CsParameterPanel);
