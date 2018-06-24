@@ -16,6 +16,10 @@ namespace CrewSchedule.Models
         public List<Employee> CrewChiefs { get; set; }
 
         public List<Employee> InstrumentOperators { get; set; }
+
+        public List<Task> Tasks { get; set; }
+
+        public List<Equipment> Equipment { get; set; }
         
         public Exception Exception { get; set; }
     }

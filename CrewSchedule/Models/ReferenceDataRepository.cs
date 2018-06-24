@@ -12,6 +12,8 @@ namespace CrewSchedule.Models
         internal static ReferenceData GetReferenceData(ScheduleParameters scheduleParameters)
         {
             ReferenceData retval = new ReferenceData();
+            retval.Tasks = new List<Task>();
+            retval.Equipment = new List<Equipment>();
             retval.ProjectManagers = new List<Employee>();
             retval.CrewChiefs = new List<Employee>();
             retval.InstrumentOperators = new List<Employee>();
@@ -26,7 +28,7 @@ namespace CrewSchedule.Models
                     {
                         com.Connection = conn;
                         com.CommandType = CommandType.StoredProcedure;
-                        com.CommandText = "GetBootstrapData_SP";
+                        com.CommandText = "GetReferenceData_SP";
                         com.Parameters.Add(new SqlParameter("@loginId", scheduleParameters.LoginId));
                         com.Parameters.Add(new SqlParameter("@password", scheduleParameters.Password));
                         com.Parameters.Add(new SqlParameter("@startDate", scheduleParameters.StartDate));
@@ -35,6 +37,7 @@ namespace CrewSchedule.Models
                         conn.Open();
                         using (SqlDataReader reader = com.ExecuteReader())
                         {
+                            // Get the Application User
                             while (reader.Read())
                             {
                                 retval.ApplicationUser = new Employee
@@ -63,6 +66,34 @@ namespace CrewSchedule.Models
                                 throw new Exception("Invalid Login Id or Password");
                             }
 
+                            // Get the list of Tasks for the Application User's primary Company
+                            reader.NextResult();
+                            while (reader.Read())
+                            {
+                                retval.Tasks.Add(new Task
+                                {
+                                    Id = (int)reader["Id"],
+                                    CompanyId = (int)reader["CompanyId"],
+                                    Name = (string)reader["Name"]
+                                });
+                            }
+
+                            // Get the list of Equipment for the Branch
+                            reader.NextResult();
+                            while (reader.Read())
+                            {
+                                retval.Equipment.Add(new Equipment
+                                {
+                                    Id = (int)reader["Id"],
+                                    EquipmentTypeId = (int)reader["EquipmentTypeId"],
+                                    CompanyId = (int)reader["CompanyId"],
+                                    BranchId = (int)reader["BranchId"],
+                                    Name = (string)reader["Name"]
+                                });
+                            }
+
+
+                            // Get the Project Managers for the Branch
                             reader.NextResult();
                             while (reader.Read())
                             {
@@ -89,6 +120,7 @@ namespace CrewSchedule.Models
                                 });
                             }
 
+                            // Get the Crew Chiefs for the Branch
                             reader.NextResult();
                             while (reader.Read())
                             {
@@ -114,6 +146,7 @@ namespace CrewSchedule.Models
                                 });
                             }
 
+                            // Get the Instrument Operators for the Branch
                             reader.NextResult();
                             while (reader.Read())
                             {
@@ -139,6 +172,7 @@ namespace CrewSchedule.Models
                                 });
                             }
 
+                            // Get the Schedule Items for each Crew Chief
                             reader.NextResult();
                             while (reader.Read())
                             {
@@ -194,6 +228,7 @@ namespace CrewSchedule.Models
                                 scheduleItems.Add(newItem);
                             }
 
+                            // Get the Companies for the Application User
                             reader.NextResult();
                             while (reader.Read())
                             {
@@ -203,7 +238,8 @@ namespace CrewSchedule.Models
                                     Name = (string)reader["Name"]
                                 });
                             }
-
+                            
+                            // Get the Branches for the Application User
                             reader.NextResult();
                             while (reader.Read())
                             {
@@ -215,9 +251,13 @@ namespace CrewSchedule.Models
                                 });
                             }
                         }
-                    }
+                    }                    
+                    
+                    // Link the assocated Tasks, Equipment, and Instrument Operators
+                    // to each Schedule Item
                     foreach (ScheduleItem item in scheduleItems)
                     {
+                        // Get the associated Tasks for the current Schedule Item 
                         item.Tasks = new List<Task>();
                         using (SqlCommand com = new SqlCommand())
                         {
@@ -232,14 +272,13 @@ namespace CrewSchedule.Models
                                     item.Tasks.Add(new Task
                                     {
                                         Id = (long)reader["Id"],
-                                        ScheduleItemId = (long)reader["ScheduleItemId"],
-                                        TaskItemTypeId = (int)reader["TaskItemTypeId"],
+                                        CompanyId = (int)reader["CompanyId"],
                                         Name = (string)reader["Name"]
                                     });
                                 }
                             }
                         }
-
+                        // Get the associated Equipment for the current Schedule Item
                         item.Equipment = new List<Equipment>();
                         using (SqlCommand com = new SqlCommand())
                         {
@@ -254,15 +293,13 @@ namespace CrewSchedule.Models
                                     item.Equipment.Add(new Equipment
                                     {
                                         Id = (long)reader["Id"],
-                                        ScheduleItemId = (long)reader["ScheduleItemId"],
-                                        EquipmentId = (int)reader["EquipmentId"],
                                         Name = (string)reader["Name"],
                                         Allocation = (int)reader["Allocation"]
                                     });
                                 }
                             }
                         }
-
+                        // Get the Crew (Instrument Operators) associated with the current Schedule Item
                         item.Crew = new List<Employee>();
                         using (SqlCommand com = new SqlCommand())
                         {
@@ -286,12 +323,14 @@ namespace CrewSchedule.Models
                         }
                     }
 
+                    // Link the Companies and Branches for the Application User
                     foreach(Company company in companies)
                     {
                         company.Branches = branches.Where(b => b.CompanyId == company.Id).ToList();
                     }
                     retval.ApplicationUser.Companies = companies;
 
+                    // Link the Crew Chiefs for the Branch to their associated Schedule Items
                     foreach(Employee crewChief in retval.CrewChiefs)
                     {
                         crewChief.ScheduleItems = scheduleItems.Where(s => s.EmployeeId == crewChief.Id).ToList();
