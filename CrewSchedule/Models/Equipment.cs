@@ -9,9 +9,11 @@ namespace CrewSchedule.Models
     {
         public long Id { get; set; }
 
-        public long ScheduleItemId { get; set; }
+        public int EquipmentTypeId { get; set; }
 
-        public int EquipmentId { get; set; }
+        public int CompanyId { get; set; }
+
+        public int BranchId { get; set; }
 
         public string Name { get; set; }
 

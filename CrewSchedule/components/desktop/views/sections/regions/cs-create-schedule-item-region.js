@@ -32,12 +32,27 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                             <vaadin-date-picker width="168px" value="{{endDate}}"></vaadin-date-picker>
                         </div>
                     </div>
+                    
                     <div class="dataLabel">Project Manager</div>
                     <cs-dropdown light label-field="name" items=[[referenceData.projectManagers]] selected="{{selectedProjectManager}}"></cs-dropdown>
-                    <div class="dataLabel">Crew Chief</div>
-                    <cs-dropdown light label-field="name" items=[[referenceData.crewChiefs]] selected="{{selectedCrewChief}}"></cs-dropdown>
+                    
+                    <div class="dataLabel">Crew Chief</div>                    
+                    <cs-dropdown class="flex" light label-field="name" items=[[referenceData.crewChiefs]] selected="{{selectedCrewChief}}"></cs-dropdown>
+                    <div class="dataLabel">Crew Chief Allocation (Hrs/Day)</div>
+                    <cs-dropdown light items=[[crewChiefAllocationHours]] selected="{{crewChiefSelectedAllocationHours}}"></cs-dropdown>
+                    
 
 
+                    <div id="jobFieldPanel" class="removed">
+                        <div class="dataLabel">Task</div>
+                        <cs-dropdown light label-field="name" items=[[referenceData.tasks]] selected="{{selectedTask}}"></cs-dropdown>
+
+                        <div class="dataLabel">Equipment</div>
+                        <cs-dropdown light label-field="name" items=[[referenceData.equipment]] selected="{{selectedEquipment}}"></cs-dropdown>
+
+                        <div class="dataLabel">Instrument Operator</div>
+                        <cs-dropdown light label-field="name" items=[[referenceData.instrumentOperators]] selected="{{selectedInstrumentOperator}}"></cs-dropdown>
+                    </div>
 
                 </div>
                 <div class="horizontal layout end-justified dialogButtons">
@@ -82,6 +97,25 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                 type: Object,
                 notify: true
             },
+            crewChiefAllocationHours: {
+                type: Array,
+                value: [1,2,3,4,5,6,7,8,9,10,11,12]
+            },
+            crewChiefSelectedAllocationHours: {
+                type: Number
+            },
+            selectedTask: {
+                type: Object,
+                notify: true
+            },
+            selectedEquipment: {
+                type: Object,
+                notify: true
+            },
+            selectedInstrumentOperator: {
+                type: Object,
+                notify: true
+            },
         }
     }
     
@@ -96,7 +130,17 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
     }
 
     _selectedTypeChanged(newValue, oldValue) {
-
+        if (this.selectedType) {
+            switch (this.selectedType.name) {
+                case "Job":
+                    this.crewChiefSelectedAllocationHours = this.crewChiefAllocationHours[11];
+                    break;
+                case "PTO":
+                case "Leave":
+                    this.crewChiefSelectedAllocationHours = this.crewChiefAllocationHours[7];
+                    break;
+            }
+        }        
     }
 
     _save(e) {
@@ -120,11 +164,11 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                 typeArray.push({ "id": 1, "name": "Job" });
             }
             this.types = typeArray;
+            this.selectedType = this.types[0];
             let defaultStartDate = new Date(Date.now());
             let defaultEndDate = new Date(Date.now());
             this.startDate = (defaultStartDate.getFullYear() + '-' + (defaultStartDate.getMonth() + 1) + '-' + defaultStartDate.getDate()).toString();
-            this.endDate = (defaultEndDate.getFullYear() + '-' + (defaultEndDate.getMonth() + 1) + '-' + defaultEndDate.getDate()).toString();
-
+            this.endDate = (defaultEndDate.getFullYear() + '-' + (defaultEndDate.getMonth() + 1) + '-' + defaultEndDate.getDate()).toString();            
         }        
     }
 }
