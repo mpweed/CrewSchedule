@@ -42,16 +42,21 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                     <cs-dropdown light items=[[crewChiefAllocationHours]] selected="{{crewChiefSelectedAllocationHours}}"></cs-dropdown>
                     
 
-
                     <div id="jobFieldPanel" class="removed">
-                        <div class="dataLabel">Task</div>
-                        <cs-dropdown light label-field="name" items=[[referenceData.tasks]] selected="{{selectedTask}}"></cs-dropdown>
+                        <cs-accordion caption="Tasks (0)">
+                            <div class="dataLabel">Task</div>
+                            <cs-dropdown light label-field="name" items=[[referenceData.tasks]] selected="{{selectedTask}}"></cs-dropdown>
+                        </cs-accordion>
 
-                        <div class="dataLabel">Equipment</div>
-                        <cs-dropdown light label-field="name" items=[[referenceData.equipment]] selected="{{selectedEquipment}}"></cs-dropdown>
+                        <cs-accordion caption="Equipment (0)">
+                            <div class="dataLabel">Equipment</div>
+                            <cs-dropdown light label-field="name" items=[[referenceData.equipment]] selected="{{selectedEquipment}}"></cs-dropdown>
+                        </cs-accordion>
 
-                        <div class="dataLabel">Instrument Operator</div>
-                        <cs-dropdown light label-field="name" items=[[referenceData.instrumentOperators]] selected="{{selectedInstrumentOperator}}"></cs-dropdown>
+                        <cs-accordion caption="Instrument Operators (0)">
+                            <div class="dataLabel">Instrument Operator</div>
+                            <cs-dropdown light label-field="name" items=[[referenceData.instrumentOperators]] selected="{{selectedInstrumentOperator}}"></cs-dropdown>
+                        </cs-accordion>
                     </div>
 
                 </div>
@@ -134,10 +139,12 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
             switch (this.selectedType.name) {
                 case "Job":
                     this.crewChiefSelectedAllocationHours = this.crewChiefAllocationHours[11];
+                    this.$.jobFieldPanel.classList.remove("removed");
                     break;
                 case "PTO":
                 case "Leave":
                     this.crewChiefSelectedAllocationHours = this.crewChiefAllocationHours[7];
+                    this.$.jobFieldPanel.classList.add("removed");
                     break;
             }
         }        
