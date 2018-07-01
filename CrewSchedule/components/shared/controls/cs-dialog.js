@@ -34,6 +34,7 @@ class CsDialog extends GestureEventListeners(PolymerElement) {
                     transition: left .5s ease-in-out;
                     z-index: 100;
                     overflow: auto;
+                    overflow-x: hidden;
                 }
 
                 .dialogShown {

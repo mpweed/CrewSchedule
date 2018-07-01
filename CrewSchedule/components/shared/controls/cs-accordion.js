@@ -15,7 +15,7 @@ class CsAccordion extends GestureEventListeners(PolymerElement) {
                     margin-top: 5px;
                     font-weight: 200;
                     font-size: 1.2em;
-                    color: var(--paper-grey-500);
+                    color: var(--paper-lime-300);
                 }
 
                 paper-icon-button {
@@ -27,11 +27,12 @@ class CsAccordion extends GestureEventListeners(PolymerElement) {
                 }
 
                 .collapsable {
-                    overflow: hidden;
+                    overflow: hidden;                    
                 }
 
                 .collapsed {
-                    height: 0px;                
+                    height: 0px;
+                    min-height: 0px;
                 }
             </style>
             <div class="accordionHeader horizontal layout flex">
@@ -62,7 +63,7 @@ class CsAccordion extends GestureEventListeners(PolymerElement) {
             accordionIcon: {
                 type: String,
                 value: "expand-more"
-            },
+            }
         }
     }
 

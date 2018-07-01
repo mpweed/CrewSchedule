@@ -6,56 +6,167 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
         return html`
             <style include="iron-flex iron-flex-alignment cs-shared-styles">
                 .dateField {
-                    width: 168px;
+                    width: 164px;
                 }
 
                 .dateField-w-margin {
                     margin-left: 20px;
+                }
+
+                .jobField {
+                    overflow: visible;
+                }
+
+                .jobFieldContainer {
+                    overflow: visible:
+                }
+
+                .jobFieldButton {
+                    margin-top: 28px;
+                }
+
+                .jobItemHeader {
+                    margin-top: 10px;
+                    color: var(--paper-lime-300);
+                    border-bottom: 1px solid var(--paper-orange-300);
+                }
+
+                .jobItem {
+                    margin-top: 10px;
+                    color: var(--paper-grey-600);
+                }
+
+                .secondaryField {
+                    margin-left: 20px;
+                }
+
+                .taskPanel {
+                    min-height: 165px;
+                }
+
+                .equipmentPanel {
+                    min-height: 235px;
+                }
+
+                .operatorPanel {
+                    min-height: 235px;
                 }
             </style>
             <div>
                 <div class="dialogHeader">
                     <span class="dialogCaption">Create Schedule Item</span>
                 </div>                
-                <div class="dialogBody">
-
-                    <!-- PLACE MAIN CONTENT HERE -->
+                <div class="dialogBody">                   
                     <div class="dataLabel">Type</div>
                     <cs-dropdown light label-field="name" items=[[types]] selected="{{selectedType}}"></cs-dropdown>
                     <div class="horizontal layout">
                         <div class="dateField">
                             <div class="dataLabel">Start Date</div>
-                            <vaadin-date-picker width="168px" value="{{startDate}}"></vaadin-date-picker>
+                            <vaadin-date-picker width="164px" value="{{startDate}}"></vaadin-date-picker>
                         </div>
                         <div class="dateField dateField-w-margin">
                             <div class="dataLabel">End Date</div>
-                            <vaadin-date-picker width="168px" value="{{endDate}}"></vaadin-date-picker>
+                            <vaadin-date-picker width="164px" value="{{endDate}}"></vaadin-date-picker>
                         </div>
-                    </div>
-                    
+                    </div>                    
                     <div class="dataLabel">Project Manager</div>
-                    <cs-dropdown light label-field="name" items=[[referenceData.projectManagers]] selected="{{selectedProjectManager}}"></cs-dropdown>
-                    
+                    <cs-dropdown id="projectManagersDD" light label-field="name" items=[[referenceData.projectManagers]] selected="{{selectedProjectManager}}"></cs-dropdown>                    
                     <div class="dataLabel">Crew Chief</div>                    
                     <cs-dropdown class="flex" light label-field="name" items=[[referenceData.crewChiefs]] selected="{{selectedCrewChief}}"></cs-dropdown>
                     <div class="dataLabel">Crew Chief Allocation (Hrs/Day)</div>
-                    <cs-dropdown light items=[[crewChiefAllocationHours]] selected="{{crewChiefSelectedAllocationHours}}"></cs-dropdown>
-                    
+                    <cs-dropdown light items=[[allocationHours]] selected="{{crewChiefSelectedAllocationHours}}"></cs-dropdown>                    
 
                     <div id="jobFieldPanel" class="removed">
-                        <cs-accordion caption="Tasks (0)">
-                            <div class="dataLabel">Task</div>
-                            <cs-dropdown light label-field="name" items=[[referenceData.tasks]] selected="{{selectedTask}}"></cs-dropdown>
+                        <div class="dataLabel">Project Number</div>
+                        <cs-input required max-length="50" light value="{{projectNumber}}"></cs-input>
+                        <div class="dataLabel">Project Name</div>
+                        <cs-input required max-length="60" light value="{{projectName}}"></cs-input>
+                        <div class="dataLabel">Address Line 1</div>
+                        <cs-input required max-length="60" light value="{{addressLine1}}"></cs-input>
+                        <div class="dataLabel">Address Line 2</div>
+                        <cs-input max-length="60" light value="{{addressLine2}}"></cs-input>
+                        <div class="dataLabel">City</div>
+                        <cs-input required max-length="60" light value="{{city}}"></cs-input>
+                        <div class="horizontal layout">
+                            <div class="flex">
+                                <div class="dataLabel">State</div>
+                                <cs-dropdown light items=[[states]] selected="{{state}}"></cs-dropdown>
+                            </div>
+                            <div class="secondaryField flex">
+                                <div class="dataLabel">Zip</div>
+                                <cs-input required max-length="10" light value="{{zip}}"></cs-input>
+                            </div>
+                        </div>
+
+                        <cs-accordion caption="Tasks ([[jobTasks.length]])">
+                            <div class="taskPanel">
+                                <div class="horizontal layout jobFieldContainer">
+                                    <div class="jobField flex">
+                                        <div class="dataLabel">Task</div>                            
+                                        <cs-dropdown light label-field="name" items=[[referenceData.tasks]] selected="{{selectedTask}}"></cs-dropdown>
+                                    </div>                            
+                                    <paper-icon-button id="addTask" icon="add" class="jobFieldButton" on-tap="_addTask"></paper-icon-button>
+                                </div>
+                                <paper-tooltip for="addTask">Add Task</paper-tooltip>
+                                <div class="jobItemHeader">Tasks for Job</div>
+                                <template is="dom-repeat" items="[[jobTasks]]" as="jobTask">
+                                    <div class="horizontal layout">
+                                        <div class="jobItem flex">[[jobTask.name]]</div>
+                                        <paper-icon-button id="removeTask" icon="remove-circle" on-tap="_removeTask"></paper-icon-button>
+                                    </div>
+                                </template>
+                            </div>
                         </cs-accordion>
 
-                        <cs-accordion caption="Equipment (0)">
-                            <div class="dataLabel">Equipment</div>
-                            <cs-dropdown light label-field="name" items=[[referenceData.equipment]] selected="{{selectedEquipment}}"></cs-dropdown>
+                        <cs-accordion caption="Equipment ([[jobEquipment.length]])">
+                            <div class="equipmentPanel">
+                                <div class="jobField flex">
+                                    <div class="dataLabel">Equipment</div>
+                                    <cs-dropdown light label-field="name" items=[[referenceData.equipment]] selected="{{selectedEquipment}}"></cs-dropdown>
+                                </div>
+                                <div class="horizontal layout jobFieldContainer">                                
+                                    <div class="jobField flex">
+                                        <div class="dataLabel">Allocation (Hrs/Day)</div>
+                                        <cs-dropdown light items=[[allocationHours]] selected="{{equipmentSelectedAllocationHours}}"></cs-dropdown> 
+                                    </div>
+                                    <paper-icon-button id="addEquipment" icon="add" class="jobFieldButton" on-tap="_addEquipment"></paper-icon-button>
+                                </div>
+                                <paper-tooltip for="addEquipment">Add Equipment</paper-tooltip>
+                                <div class="jobItemHeader">Equipment for Job</div>
+                                <template is="dom-repeat" items="[[jobEquipment]]" as="equipment">
+                                    <div class="horizontal layout">
+                                        <div class="jobItem flex">[[equipment.name]] ([[equipment.allocation]] h/d)</div>
+                                        <paper-icon-button id="removeEquipment" icon="remove-circle" on-tap="_removeEquipment"></paper-icon-button>
+                                    </div>
+                                </template>
+                            </div>
                         </cs-accordion>
 
-                        <cs-accordion caption="Instrument Operators (0)">
-                            <div class="dataLabel">Instrument Operator</div>
-                            <cs-dropdown light label-field="name" items=[[referenceData.instrumentOperators]] selected="{{selectedInstrumentOperator}}"></cs-dropdown>
+
+
+
+                        <cs-accordion caption="Instrument Operators ([[jobOperators.length]])">
+                            <div class="operatorPanel">
+                                <div class="jobField flex">
+                                    <div class="dataLabel">Instrument Operator</div>
+                                    <cs-dropdown light label-field="name" items=[[referenceData.instrumentOperators]] selected="{{selectedInstrumentOperator}}"></cs-dropdown>
+                                </div>
+                                <div class="horizontal layout jobFieldContainer">                                
+                                    <div class="jobField flex">
+                                        <div class="dataLabel">Allocation (Hrs/Day)</div>
+                                        <cs-dropdown light items=[[allocationHours]] selected="{{operatorSelectedAllocationHours}}"></cs-dropdown> 
+                                    </div>
+                                    <paper-icon-button id="addOperator" icon="add" class="jobFieldButton" on-tap="_addOperator"></paper-icon-button>
+                                </div>
+                                <paper-tooltip for="addOperator">Add Operator</paper-tooltip>
+                                <div class="jobItemHeader">Operators for Job</div>
+                                <template is="dom-repeat" items="[[jobOperators]]" as="operator">
+                                    <div class="horizontal layout">
+                                        <div class="jobItem flex">[[operator.name]] ([[operator.allocation]] h/d)</div>
+                                        <paper-icon-button id="removeOperator" icon="remove-circle" on-tap="_removeOperator"></paper-icon-button>
+                                    </div>
+                                </template>
+                            </div>
                         </cs-accordion>
                     </div>
 
@@ -102,12 +213,93 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                 type: Object,
                 notify: true
             },
-            crewChiefAllocationHours: {
+            allocationHours: {
                 type: Array,
                 value: [1,2,3,4,5,6,7,8,9,10,11,12]
             },
             crewChiefSelectedAllocationHours: {
                 type: Number
+            },
+            equipmentSelectedAllocationHours: {
+                type: Number
+            },
+            operatorSelectedAllocationHours: {
+                type: Number
+            },
+            states: {
+                type: Array,
+                value: [
+                    'AL',
+                    'AK',
+                    'AZ',
+                    'AR',
+                    'CA',
+                    'CO',
+                    'CT',
+                    'DE',
+                    'FL',
+                    'GA',
+                    'HI',
+                    'ID',
+                    'IL',
+                    'IN',
+                    'IA',
+                    'KS',
+                    'KY',
+                    'LA',
+                    'MD',
+                    'MA',
+                    'MI',
+                    'MN',
+                    'MS',
+                    'MO',
+                    'MT',
+                    'NE',
+                    'NV',
+                    'NH',
+                    'NJ',
+                    'NM',
+                    'NY',
+                    'NC',
+                    'ND',
+                    'OH',
+                    'OK',
+                    'OR',
+                    'PA',
+                    'RI',
+                    'SC',
+                    'SD',
+                    'TN',
+                    'TX',
+                    'UT',
+                    'VT',
+                    'VA',
+                    'WA',
+                    'WV',
+                    'WI',
+                    'WY'
+                ]
+            },
+            projectNumber: {
+                type: String
+            },
+            projectName: {
+                type: String
+            },
+            addressLine1: {
+                type: String
+            },
+            addressLine2: {
+                type: String
+            },
+            city: {
+                type: String
+            },
+            state: {
+                type: String
+            },
+            zip: {
+                type: String
             },
             selectedTask: {
                 type: Object,
@@ -121,6 +313,15 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                 type: Object,
                 notify: true
             },
+            jobTasks: {
+                type: Array
+            },
+            jobEquipment: {
+                type: Array
+            },
+            jobOperators: {
+                type: Array
+            }
         }
     }
     
@@ -138,17 +339,68 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
         if (this.selectedType) {
             switch (this.selectedType.name) {
                 case "Job":
-                    this.crewChiefSelectedAllocationHours = this.crewChiefAllocationHours[11];
+                    this.crewChiefSelectedAllocationHours = this.allocationHours[11];
                     this.$.jobFieldPanel.classList.remove("removed");
                     break;
                 case "PTO":
                 case "Leave":
-                    this.crewChiefSelectedAllocationHours = this.crewChiefAllocationHours[7];
+                    this.crewChiefSelectedAllocationHours = this.allocationHours[7];
                     this.$.jobFieldPanel.classList.add("removed");
                     break;
             }
         }        
     }
+
+    foundInArrayById(searchItem, arrayToSearch) {
+        let retval = false;
+        for (var item of arrayToSearch) {
+            if (item.id == searchItem.id) {
+                retval = true;
+                break;
+            }
+        }
+        return retval;
+    }
+
+    _addTask(e) {
+        if (this.selectedTask && !this.foundInArrayById(this.selectedTask, this.jobTasks)) {
+            this.push("jobTasks", this.selectedTask);
+        }
+    }
+
+    _removeTask(e) {
+        let removeItemIndex = this.jobTasks.indexOf(e.model.jobTask);
+        this.splice("jobTasks", removeItemIndex, 1);
+    }
+
+
+    _addEquipment(e) {
+        if (this.selectedEquipment && !this.foundInArrayById(this.selectedEquipment, this.jobEquipment) && this.equipmentSelectedAllocationHours) {
+            let equipmentToAdd = this.selectedEquipment;
+            equipmentToAdd.allocation = this.equipmentSelectedAllocationHours;
+            this.push("jobEquipment", equipmentToAdd);
+        }
+    }
+
+    _removeEquipment(e) {
+        let removeItemIndex = this.jobEquipment.indexOf(e.model.equipment);
+        this.splice("jobEquipment", removeItemIndex, 1);
+    }
+
+    _addOperator(e) {
+        if (this.selectedInstrumentOperator && !this.foundInArrayById(this.selectedInstrumentOperator, this.jobOperators) && this.operatorSelectedAllocationHours) {
+            let operatorToAdd = this.selectedInstrumentOperator;
+            operatorToAdd.allocation = this.operatorSelectedAllocationHours;
+            this.push("jobOperators", operatorToAdd);
+        }
+    }
+
+    _removeOperator(e) {
+        let removeItemIndex = this.jobEquipment.indexOf(e.model.operator);
+        this.splice("jobOperators", removeItemIndex, 1);
+    }
+
+
 
     _save(e) {
 
@@ -160,22 +412,44 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
     }
 
     // Public Methods
-    reset() {        
+    reset() {
+        this.$.projectManagersDD.disabled = true;
         if (this.referenceData && this.referenceData.applicationUser) {
             let typeArray = new Array();
             if (this.referenceData.applicationUser.roleId < 4) {
                 typeArray.push({ "id": 1, "name": "Job" });
                 typeArray.push({ "id": 2, "name": "PTO" });
                 typeArray.push({ "id": 3, "name": "Leave" });
+
+                if (this.referenceData.projectManagers) {
+                    for (var pm of this.referenceData.projectManagers) {
+                        if (pm.branchId == this.referenceData.applicationUser.branchId && pm.roleId == 3) {
+                            this.selectedProjectManager = pm;
+                            this.$.projectManagersDD.disabled = false;
+                            break;
+                        }
+                    }
+                }
             } else {
+                if (this.referenceData.projectManagers) {
+                    for (var pm of this.referenceData.projectManagers) {
+                        if (pm.id == this.referenceData.applicationUser.id) {
+                            this.selectedProjectManager = pm;
+                            break;
+                        }
+                    }
+                }
                 typeArray.push({ "id": 1, "name": "Job" });
-            }
+            }            
             this.types = typeArray;
             this.selectedType = this.types[0];
             let defaultStartDate = new Date(Date.now());
             let defaultEndDate = new Date(Date.now());
             this.startDate = (defaultStartDate.getFullYear() + '-' + (defaultStartDate.getMonth() + 1) + '-' + defaultStartDate.getDate()).toString();
-            this.endDate = (defaultEndDate.getFullYear() + '-' + (defaultEndDate.getMonth() + 1) + '-' + defaultEndDate.getDate()).toString();            
+            this.endDate = (defaultEndDate.getFullYear() + '-' + (defaultEndDate.getMonth() + 1) + '-' + defaultEndDate.getDate()).toString();
+            this.jobTasks = new Array();
+            this.jobEquipment = new Array();
+            this.jobOperators = new Array();
         }        
     }
 }

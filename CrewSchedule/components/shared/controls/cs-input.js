@@ -16,9 +16,9 @@ class CsInput extends GestureEventListeners(PolymerElement) {
                     font-weight: 200;
                     font-size: .9em;
                     height: 26px;
-                    width: calc(100% - 44px);
-                    padding-left: 20px;
-                    padding-right: 20px;
+                    width: calc(100% - 22px);
+                    padding-left: 10px;
+                    padding-right: 10px;
                     border: none;
                     border: 1px solid var(--paper-grey-900);
                     color: #ffffff;

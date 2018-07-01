@@ -183,6 +183,7 @@ styleElement.innerHTML =
             .dialogButtons {                
                 padding-top: 20px;
                 padding-right: 20px;
+                margin-bottom: 20px;
                 border-top: 1px solid var(--paper-grey-800);
             }
 
