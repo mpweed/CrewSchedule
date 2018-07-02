@@ -582,19 +582,6 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
             for (var swimlane of crewChief.swimlanes) {
                 for (var i = 0; i < swimlane.length; i++) {
                     currentScheduleItem = swimlane[i];
-                    currentScheduleItem.crewChief = crewChief.id;
-                    switch (currentScheduleItem.type) {
-                        case "Job":
-                            currentScheduleItem.color = currentScheduleItem.projectManagerColor;
-                            break;
-                        case "PTO":
-                            currentScheduleItem.color = "#e65100"; // --paper-orange-900
-                            break;
-                        case "Leave":
-                            currentScheduleItem.color = "#b71c1c"; // --paper-red-900
-                            break;
-                    }                    
-                    currentScheduleItem.scheduleItem = currentScheduleItem.id;
                     currentScheduleItem.top = topOffset;
                     currentScheduleItem.left = this.calculateLeftOffset(currentScheduleItem);
                     currentScheduleItem.width = this.calculateWidth(currentScheduleItem);
@@ -652,7 +639,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         newScheduleItemContainer.style.width = scheduleItem.width.toString() + "px";
         let newScheduleItem = document.createElement('div');
         let crewAttr = document.createAttribute('crewChief');
-        crewAttr.value = scheduleItem.employeeId;
+        crewAttr.value = scheduleItem.crewChief.id;
         newScheduleItem.setAttributeNode(crewAttr);
         let scheduleItemAttr = document.createAttribute('scheduleItem');
         scheduleItemAttr.value = scheduleItem.id;

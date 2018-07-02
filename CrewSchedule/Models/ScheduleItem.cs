@@ -23,23 +23,9 @@ namespace CrewSchedule.Models
 
         public DateTime CreationDateTime { get; set; }
 
-        public DateTime StatusUpdateDateTime { get; set; }
+        public DateTime StatusUpdateDateTime { get; set; }        
 
-        public int ProjectManagerId { get; set; }
-
-        public string ProjectManagerName { get; set; }
-
-        public string ProjectManagerColor { get; set; }
-
-        public int AffectedProjectManagerId { get; set; }
-
-        public string AffectedProjectManagerName { get; set; }
-
-        public int EmployeeId { get; set; }
-
-        public string EmployeeName { get; set; }
-
-        public int EmployeeAllocation { get; set; }
+        public string Color { get; set; }
 
         public string ProjectNumber { get; set; }
 
@@ -54,6 +40,12 @@ namespace CrewSchedule.Models
         public string State { get; set; }
 
         public string Zip { get; set; }
+
+        public Employee ProjectManager { get; set; }
+
+        public Employee AffectedProjectManager { get; set; }
+
+        public Employee CrewChief { get; set; }
 
         public List<Task> Tasks { get; set; }
 

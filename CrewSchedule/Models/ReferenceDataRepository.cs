@@ -186,45 +186,54 @@ namespace CrewSchedule.Models
                                     StartDate = (DateTime)reader["StartDate"],
                                     EndDate = (DateTime)reader["EndDate"],
                                     CreationDateTime = (DateTime)reader["CreationDateTime"],
-                                    StatusUpdateDateTime = (DateTime)reader["StatusUpdateDateTime"],
-                                    EmployeeId = (int)reader["EmployeeId"],
-                                    EmployeeName = (string)reader["EmployeeFirstName"] + " " + (string)reader["EmployeeLastName"],
-                                    EmployeeAllocation = (int)reader["EmployeeAllocation"]
+                                    StatusUpdateDateTime = (DateTime)reader["StatusUpdateDateTime"]
                                 };
-                                if (!reader["ProjectManagerId"].Equals(DBNull.Value))
+                                newItem.CrewChief = new Employee
                                 {
-                                    newItem.ProjectManagerId = (int)reader["ProjectManagerId"];
-                                    newItem.ProjectManagerName = (string)reader["ProjectManagerFirstName"] + " " + (string)reader["ProjectManagerLastName"];
-                                    newItem.ProjectManagerColor = (string)reader["ProjectManagerColor"];
-                                    newItem.ProjectNumber = (string)reader["ProjectNumber"];
-                                    newItem.ProjectName = (string)reader["ProjectName"];
-                                }
-                                if (!reader["AddressLine1"].Equals(DBNull.Value))
+                                    Id = (int)reader["EmployeeId"],
+                                    Name = (string)reader["EmployeeFirstName"] + " " + (string)reader["EmployeeLastName"],
+                                    Allocation = (int)reader["EmployeeAllocation"]
+                                };
+                                newItem.ProjectManager = new Employee
                                 {
-                                    newItem.AddressLine1 = (string)reader["AddressLine1"];
-                                }
-                                if (!reader["AddressLine2"].Equals(DBNull.Value))
+                                    Id = (int)reader["ProjectManagerId"],
+                                    Name = (string)reader["ProjectManagerFirstName"] + " " + (string)reader["ProjectManagerLastName"],
+                                    Color = (string)reader["ProjectManagerColor"]
+                                };
+                                switch (newItem.Type)
                                 {
-                                    newItem.AddressLine2 = (string)reader["AddressLine2"];
-                                }
-                                if (!reader["City"].Equals(DBNull.Value))
-                                {
-                                    newItem.City = (string)reader["City"];
-                                }
-                                if (!reader["State"].Equals(DBNull.Value))
-                                {
-                                    newItem.State = (string)reader["State"];
-                                }
-                                if (!reader["Zip"].Equals(DBNull.Value))
-                                {
-                                    newItem.Zip = (string)reader["Zip"];
-                                }
-                                if (!reader["AffectedProjectManagerId"].Equals(DBNull.Value))
-                                {
-                                    newItem.AffectedProjectManagerId = (int)reader["AffectedProjectManagerId"];
-                                    newItem.AffectedProjectManagerName = (string)reader["AffectedProjectManagerFirstName"] + " " + (string)reader["ProjectManagerLastName"];
-                                }
+                                    case "Job":                                       
+                                        newItem.Color = newItem.ProjectManager.Color;
+                                        newItem.ProjectNumber = (string)reader["ProjectNumber"];
+                                        newItem.ProjectName = (string)reader["ProjectName"];
+                                        newItem.AddressLine1 = (string)reader["AddressLine1"];
+                                        newItem.City = (string)reader["City"];
+                                        newItem.State = (string)reader["State"];
+                                        newItem.Zip = (string)reader["Zip"];
+                                        if (!reader["AddressLine2"].Equals(DBNull.Value))
+                                        {
+                                            newItem.AddressLine2 = (string)reader["AddressLine2"];
+                                        }
+                                        if (!reader["AffectedProjectManagerId"].Equals(DBNull.Value))
+                                        {
+                                            newItem.AffectedProjectManager = new Employee
+                                            {
+                                                Id = (int)reader["AffectedProjectManagerId"],
+                                                Name = (string)reader["AffectedProjectManagerFirstName"] + " " + (string)reader["ProjectManagerLastName"]
+                                            };
 
+                                        }
+                                        break;
+                                    case "PTO":
+                                        newItem.Color = "#e65100";
+                                        newItem.ProjectNumber = "PTO";
+                                        break;
+                                    case "Leave":
+                                        newItem.Color = "#b71c1c";
+                                        newItem.ProjectNumber = "Leave";
+                                        break;
+                                }
+                                
                                 scheduleItems.Add(newItem);
                             }
 
@@ -333,7 +342,7 @@ namespace CrewSchedule.Models
                     // Link the Crew Chiefs for the Branch to their associated Schedule Items
                     foreach(Employee crewChief in retval.CrewChiefs)
                     {
-                        crewChief.ScheduleItems = scheduleItems.Where(s => s.EmployeeId == crewChief.Id).ToList();
+                        crewChief.ScheduleItems = scheduleItems.Where(s => s.CrewChief.Id == crewChief.Id).ToList();
                     }
                 }
             } catch (Exception ex)
