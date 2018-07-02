@@ -78,15 +78,15 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
 
                     <div id="jobFieldPanel" class="removed">
                         <div class="dataLabel">Project Number</div>
-                        <cs-input required max-length="50" light value="{{projectNumber}}"></cs-input>
+                        <cs-input id="projectNumber" required max-length="50" light value="{{projectNumber}}"></cs-input>
                         <div class="dataLabel">Project Name</div>
-                        <cs-input required max-length="60" light value="{{projectName}}"></cs-input>
+                        <cs-input id="projectName" required max-length="60" light value="{{projectName}}"></cs-input>
                         <div class="dataLabel">Address Line 1</div>
-                        <cs-input required max-length="60" light value="{{addressLine1}}"></cs-input>
+                        <cs-input id="addressLine1" required max-length="60" light value="{{addressLine1}}"></cs-input>
                         <div class="dataLabel">Address Line 2</div>
                         <cs-input max-length="60" light value="{{addressLine2}}"></cs-input>
                         <div class="dataLabel">City</div>
-                        <cs-input required max-length="60" light value="{{city}}"></cs-input>
+                        <cs-input id="city" required max-length="60" light value="{{city}}"></cs-input>
                         <div class="horizontal layout">
                             <div class="flex">
                                 <div class="dataLabel">State</div>
@@ -94,10 +94,9 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                             </div>
                             <div class="secondaryField flex">
                                 <div class="dataLabel">Zip</div>
-                                <cs-input required max-length="10" light value="{{zip}}"></cs-input>
+                                <cs-input id="zip" required max-length="10" light value="{{zip}}"></cs-input>
                             </div>
                         </div>
-
                         <cs-accordion caption="Tasks ([[jobTasks.length]])">
                             <div class="taskPanel">
                                 <div class="horizontal layout jobFieldContainer">
@@ -117,7 +116,6 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                                 </template>
                             </div>
                         </cs-accordion>
-
                         <cs-accordion caption="Equipment ([[jobEquipment.length]])">
                             <div class="equipmentPanel">
                                 <div class="jobField flex">
@@ -141,10 +139,6 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                                 </template>
                             </div>
                         </cs-accordion>
-
-
-
-
                         <cs-accordion caption="Instrument Operators ([[jobOperators.length]])">
                             <div class="operatorPanel">
                                 <div class="jobField flex">
@@ -169,7 +163,6 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                             </div>
                         </cs-accordion>
                     </div>
-
                 </div>
                 <div class="horizontal layout end-justified dialogButtons">
                     <cs-button id="saveButton" disabled class="saveButton" on-tap="_save">Save</cs-button>
@@ -281,25 +274,30 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                 ]
             },
             projectNumber: {
-                type: String
+                type: String,
+                observer: "_validateInput"
             },
             projectName: {
-                type: String
+                type: String,
+                observer: "_validateInput"
             },
             addressLine1: {
-                type: String
+                type: String,
+                observer: "_validateInput"
             },
             addressLine2: {
                 type: String
             },
             city: {
-                type: String
+                type: String,
+                observer: "_validateInput"
             },
             state: {
                 type: String
             },
             zip: {
-                type: String
+                type: String,
+                observer: "_validateInput"
             },
             selectedTask: {
                 type: Object,
@@ -348,6 +346,7 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                     this.$.jobFieldPanel.classList.add("removed");
                     break;
             }
+            this._validateInput();
         }        
     }
 
@@ -371,8 +370,8 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
     _removeTask(e) {
         let removeItemIndex = this.jobTasks.indexOf(e.model.jobTask);
         this.splice("jobTasks", removeItemIndex, 1);
+        this._validateInput();
     }
-
 
     _addEquipment(e) {
         if (this.selectedEquipment && !this.foundInArrayById(this.selectedEquipment, this.jobEquipment) && this.equipmentSelectedAllocationHours) {
@@ -385,6 +384,7 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
     _removeEquipment(e) {
         let removeItemIndex = this.jobEquipment.indexOf(e.model.equipment);
         this.splice("jobEquipment", removeItemIndex, 1);
+        this._validateInput();
     }
 
     _addOperator(e) {
@@ -400,7 +400,27 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
         this.splice("jobOperators", removeItemIndex, 1);
     }
 
-
+    _validateInput(newValue, oldValue) {
+        this.$.saveButton.disabled = true;
+        switch (this.selectedType.name) {
+            case "Job":
+                if (this.$.projectNumber.isValid &&
+                    this.$.projectName.isValid &&
+                    this.$.addressLine1.isValid &&
+                    this.$.city.isValid &&
+                    this.$.zip.isValid &&
+                    this.jobTasks && this.jobTasks.length > 0 &&
+                    this.jobEquipment && this.jobEquipment.length > 0)
+                    this.$.saveButton.disabled = false;
+                break;
+            case "PTO":
+                this.$.saveButton.disabled = false;
+                break;
+            case "Leave":
+                this.$.saveButton.disabled = false;
+                break;
+        }
+    }
 
     _save(e) {
 
