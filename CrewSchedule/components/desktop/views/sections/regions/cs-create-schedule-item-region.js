@@ -52,13 +52,21 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                     min-height: 235px;
                 }
             </style>
+            <iron-ajax id="scheduleItemXhr"
+                   url="[[baseUrl]]"
+                   method="POST"
+                   content-type="application/json"
+                   handle-as="json"
+                   on-response="_handleSaveScheduleItemResponse"
+                   on-error="_handleXhrError">
+            </iron-ajax>
             <div>
                 <div class="dialogHeader">
                     <span class="dialogCaption">Create Schedule Item</span>
                 </div>                
                 <div class="dialogBody">                   
                     <div class="dataLabel">Type</div>
-                    <cs-dropdown light label-field="name" items=[[types]] selected="{{selectedType}}"></cs-dropdown>
+                    <cs-dropdown id="typeDD" light label-field="name" items=[[types]] selected="{{selectedType}}"></cs-dropdown>
                     <div class="horizontal layout">
                         <div class="dateField">
                             <div class="dataLabel">Start Date</div>
@@ -84,7 +92,7 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                         <div class="dataLabel">Address Line 1</div>
                         <cs-input id="addressLine1" required max-length="60" light value="{{addressLine1}}"></cs-input>
                         <div class="dataLabel">Address Line 2</div>
-                        <cs-input max-length="60" light value="{{addressLine2}}"></cs-input>
+                        <cs-input id="addressLine2" max-length="60" light value="{{addressLine2}}"></cs-input>
                         <div class="dataLabel">City</div>
                         <cs-input id="city" required max-length="60" light value="{{city}}"></cs-input>
                         <div class="horizontal layout">
@@ -97,7 +105,7 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                                 <cs-input id="zip" required max-length="10" light value="{{zip}}"></cs-input>
                             </div>
                         </div>
-                        <cs-accordion caption="Tasks ([[jobTasks.length]])">
+                        <cs-accordion id="taskSection" caption="Tasks ([[jobTasks.length]])">
                             <div class="taskPanel">
                                 <div class="horizontal layout jobFieldContainer">
                                     <div class="jobField flex">
@@ -116,7 +124,7 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                                 </template>
                             </div>
                         </cs-accordion>
-                        <cs-accordion caption="Equipment ([[jobEquipment.length]])">
+                        <cs-accordion id="equipmentSection" caption="Equipment ([[jobEquipment.length]])">
                             <div class="equipmentPanel">
                                 <div class="jobField flex">
                                     <div class="dataLabel">Equipment</div>
@@ -139,7 +147,7 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                                 </template>
                             </div>
                         </cs-accordion>
-                        <cs-accordion caption="Instrument Operators ([[jobOperators.length]])">
+                        <cs-accordion id="operatorsSection" caption="Instrument Operators ([[jobOperators.length]])">
                             <div class="operatorPanel">
                                 <div class="jobField flex">
                                     <div class="dataLabel">Instrument Operator</div>
@@ -181,6 +189,10 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                 observer: "_referenceDataChanged"
             },
             /** Private **/
+            baseUrl: {
+                type: String,
+                notify: true
+            },
             types: {
                 type: Array,
                 notify: true
@@ -326,6 +338,13 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
     // Lifecycle Callbacks
     connectedCallback() {
         super.connectedCallback();
+        this.baseUrl = window.location.href;
+        var trailingCharacter = this.baseUrl.slice(-1);
+        if (trailingCharacter === "/") {
+            this.baseUrl = this.baseUrl + "api/ScheduleItem/";
+        } else {
+            this.baseUrl = this.baseUrl + "/api/ScheduleItem/";
+        }
     }
 
     // Event Handlers
@@ -423,7 +442,47 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
     }
 
     _save(e) {
+        switch (this.selectedType.name) {
+            case "Job":
+                this.saveJob();
+                break;
+            case "PTO":
+            case "Leave":
+                this.saveTimeOff();
+                break;
+        }
+    }
 
+    saveJob() {
+        this.dispatchEvent(new CustomEvent('busy', { detail: { status: true } }));
+        this.$.scheduleItemXhr.body = {
+
+        };
+        this.$.scheduleItemXhr.generateRequest();
+    }
+
+    saveTimeOff() {
+        this.dispatchEvent(new CustomEvent('busy', { detail: { status: true } }));
+        this.$.scheduleItemXhr.body = {
+
+        };
+        this.$.scheduleItemXhr.generateRequest();
+    }
+
+    _handleSaveScheduleItemResponse(e, request) {
+        this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
+        if (e.detail.response.exception) {
+            this.$.errorPanel.classList.remove("hidden");
+        } else {
+            
+            this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
+            this.dispatchEvent(new CustomEvent('loginsuccess', { bubbles: true, composed: true, detail: { referenceData: e.detail.response } }));
+        }
+    }
+
+    _handleXhrError(e, request) {
+        this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
+        this.dispatchEvent(new CustomEvent('exception', { detail: e.detail.error.message }));
     }
 
     _closeDialog(e) {
@@ -436,8 +495,8 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
         this.$.projectManagersDD.disabled = true;
         if (this.referenceData && this.referenceData.applicationUser) {
             let typeArray = new Array();
+            typeArray.push({ "id": 1, "name": "Job" });
             if (this.referenceData.applicationUser.roleId < 4) {
-                typeArray.push({ "id": 1, "name": "Job" });
                 typeArray.push({ "id": 2, "name": "PTO" });
                 typeArray.push({ "id": 3, "name": "Leave" });
 
@@ -459,7 +518,6 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                         }
                     }
                 }
-                typeArray.push({ "id": 1, "name": "Job" });
             }            
             this.types = typeArray;
             this.selectedType = this.types[0];
@@ -470,6 +528,16 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
             this.jobTasks = new Array();
             this.jobEquipment = new Array();
             this.jobOperators = new Array();
+            this.$.projectNumber.reset();
+            this.$.projectName.reset();
+            this.$.addressLine1.reset();
+            this.$.addressLine2.reset();
+            this.$.city.reset();
+            this.$.zip.reset();
+            this.$.taskSection.isAccordionVisible = false;
+            this.$.equipmentSection.isAccordionVisible = false;
+            this.$.operatorsSection.isAccordionVisible = false;
+            this.$.typeDD.focus();
         }        
     }
 }

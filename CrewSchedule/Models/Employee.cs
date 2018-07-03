@@ -14,6 +14,8 @@ namespace CrewSchedule.Models
 
         public string BranchName { get; set; }
 
+        public string State { get; set; }
+
         public int RoleId { get; set; }
 
         public string RoleName { get; set; }

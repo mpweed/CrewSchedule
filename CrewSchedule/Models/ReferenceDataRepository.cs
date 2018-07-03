@@ -58,7 +58,8 @@ namespace CrewSchedule.Models
                                     ZoomLevel = (int)reader["ZoomLevel"],
                                     RefreshInterval = (int)reader["RefreshInterval"],
                                     StatusId = (int)reader["StatusId"],
-                                    StatusName = (string)reader["StatusName"]
+                                    StatusName = (string)reader["StatusName"],
+                                    State = (string)reader["State"]
                                 };
                             }
                             if (retval.ApplicationUser == null)
@@ -116,7 +117,8 @@ namespace CrewSchedule.Models
                                     Color = (string)reader["Color"],
                                     RefreshInterval = (int)reader["RefreshInterval"],
                                     StatusId = (int)reader["StatusId"],
-                                    StatusName = (string)reader["StatusName"]
+                                    StatusName = (string)reader["StatusName"],
+                                    State = (string)reader["State"]
                                 });
                             }
 
@@ -142,7 +144,8 @@ namespace CrewSchedule.Models
                                     ZoomLevel = (int)reader["ZoomLevel"],
                                     RefreshInterval = (int)reader["RefreshInterval"],
                                     StatusId = (int)reader["StatusId"],
-                                    StatusName = (string)reader["StatusName"]
+                                    StatusName = (string)reader["StatusName"],
+                                    State = (string)reader["State"]
                                 });
                             }
 
@@ -168,7 +171,8 @@ namespace CrewSchedule.Models
                                     ZoomLevel = (int)reader["ZoomLevel"],
                                     RefreshInterval = (int)reader["RefreshInterval"],
                                     StatusId = (int)reader["StatusId"],
-                                    StatusName = (string)reader["StatusName"]
+                                    StatusName = (string)reader["StatusName"],
+                                    State = (string)reader["State"]
                                 });
                             }
 

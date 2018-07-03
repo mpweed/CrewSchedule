@@ -54,12 +54,12 @@ class CsAccordion extends GestureEventListeners(PolymerElement) {
             caption: {
                 type: String
             },
-            /** Private **/
             isAccordionVisible: {
                 type: Boolean,
                 value: false,
                 observer: "_isAccordionVisibleChanged"
             },
+            /** Private **/            
             accordionIcon: {
                 type: String,
                 value: "expand-more"

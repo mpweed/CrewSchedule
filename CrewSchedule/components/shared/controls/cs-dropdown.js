@@ -273,6 +273,11 @@ class CsDropdown extends GestureEventListeners(PolymerElement) {
             }
         }
         return retval;
-    }    
+    }
+
+    // Public Methods
+    focus() {
+        this.$.dropdownBody.focus();
+    }
 }
 customElements.define('cs-dropdown', CsDropdown);
