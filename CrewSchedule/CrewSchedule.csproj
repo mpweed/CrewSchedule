@@ -142,10 +142,12 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MobileController.cs" />
+    <Compile Include="Controllers\ScheduleItemController.cs" />
     <Compile Include="Controllers\ReferenceDataController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ScheduleItemRepository.cs" />
     <Compile Include="Models\ScheduleParameters.cs" />
     <Compile Include="Models\Branch.cs" />
     <Compile Include="Models\Company.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="Models\Repository.cs" />
     <Compile Include="Models\ScheduleItem.cs" />
     <Compile Include="Models\Task.cs" />
+    <Compile Include="Models\UpdateParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

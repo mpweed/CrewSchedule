@@ -41,6 +41,10 @@ namespace CrewSchedule.Models
 
         public string Zip { get; set; }
 
+        public int ProjectManagerId { get; set; }
+
+        public int EmployeeId { get; set; }
+
         public Employee ProjectManager { get; set; }
 
         public Employee AffectedProjectManager { get; set; }
@@ -51,6 +55,6 @@ namespace CrewSchedule.Models
 
         public List<Equipment> Equipment { get; set; }
 
-        public List<Employee> Crew { get; set; }
+        public List<Employee> Operators { get; set; }
     }
 }

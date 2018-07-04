@@ -199,7 +199,8 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
             },
             selectedBranch: {
                 type: Object,
-                notify: true
+                notify: true,
+                observer: "_selectedBranchChanged"
             },
             crewChiefs: {
                 type: Array,
@@ -265,6 +266,12 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
         }
     }
 
+    _selectedBranchChanged(newValue, oldValue) {
+        if (this.selectedBranch) {
+            this.referenceData.branchId = this.selectedBranch.id;
+        }        
+    }
+
     _crewChiefFilterChanged(newValue, oldValue) {
         this.updateFilteredCrewChiefs();
         this.dispatchEvent(new CustomEvent('filterupdated', { bubbles: true, composed: true }));
@@ -297,6 +304,8 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
             } else {
                 this.$.endDateErrorMessage.classList.add("removed");
             }
+            this.referenceData.startDate = this.startDate;
+            this.referenceData.endDate = this.endDate;
         }
     }
 
@@ -374,6 +383,9 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
         } else {
             this.referenceData = null;
             e.detail.response.refreshTimestamp = new Date(Date.now());
+            e.detail.response.startDate = this.startDate;
+            e.detail.response.endDate = this.endDate;
+            e.detail.response.branchId = this.selectedBranch.id;
             this.referenceData = e.detail.response;
         }
     }

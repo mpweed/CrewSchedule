@@ -313,7 +313,7 @@ namespace CrewSchedule.Models
                             }
                         }
                         // Get the Crew (Instrument Operators) associated with the current Schedule Item
-                        item.Crew = new List<Employee>();
+                        item.Operators = new List<Employee>();
                         using (SqlCommand com = new SqlCommand())
                         {
                             com.Connection = conn;
@@ -324,7 +324,7 @@ namespace CrewSchedule.Models
                             {
                                 while (reader.Read())
                                 {
-                                    item.Crew.Add(new Employee
+                                    item.Operators.Add(new Employee
                                     {
                                         Id = (int)reader["Id"],
                                         RoleName = (string)reader["RoleName"],

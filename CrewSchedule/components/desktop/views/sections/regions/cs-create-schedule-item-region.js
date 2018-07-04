@@ -442,41 +442,68 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
     }
 
     _save(e) {
+        this.dispatchEvent(new CustomEvent('busy', { detail: { status: true } }));
+        this.selectedCrewChief.allocation = this.crewChiefSelectedAllocationHours;
+        let scheduleParameters = {
+            "loginId": this.referenceData.applicationUser.loginId,
+            "password": this.referenceData.applicationUser.password,
+            "startDate": this.referenceData.startDate,
+            "endDate": this.referenceData.endDate,
+            "branchId": this.referenceData.branchId
+        };
+        let scheduleItem = {
+            "typeId": this.selectedType.id,
+            "startDate": this.startDate,
+            "endDate": this.endDate,
+            "projectManager": this.selectedProjectManager,
+            "crewChief": this.selectedCrewChief
+        };
+        let body = {
+            "scheduleParameters": scheduleParameters,
+            "scheduleItem": scheduleItem
+        };
         switch (this.selectedType.name) {
             case "Job":
-                this.saveJob();
+                this.saveJob(body);
                 break;
             case "PTO":
             case "Leave":
-                this.saveTimeOff();
+                this.saveTimeOff(body);
                 break;
         }
     }
 
-    saveJob() {
-        this.dispatchEvent(new CustomEvent('busy', { detail: { status: true } }));
-        this.$.scheduleItemXhr.body = {
-
-        };
+    saveJob(body) {
+        body.projectNumber = this.projectNumber;
+        body.projectName = this.projectName;
+        body.addressLine1 = this.addressLine1;
+        body.city = this.city;
+        body.state = this.state;
+        body.zip = this.zip;
+        body.tasks = this.jobTasks;
+        body.equipment = this.jobEquipment;
+        body.operators = this.jobOperators;
+        if (this.addressLine2) {
+            body.addressLine2 = this.addressLine2;
+        }
+        this.$.scheduleItemXhr.body = body;
         this.$.scheduleItemXhr.generateRequest();
     }
 
-    saveTimeOff() {
-        this.dispatchEvent(new CustomEvent('busy', { detail: { status: true } }));
-        this.$.scheduleItemXhr.body = {
-
-        };
+    saveTimeOff(body) {
+        this.$.scheduleItemXhr.body = body;
         this.$.scheduleItemXhr.generateRequest();
     }
 
     _handleSaveScheduleItemResponse(e, request) {
+        this._closeDialog();
         this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
         if (e.detail.response.exception) {
-            this.$.errorPanel.classList.remove("hidden");
-        } else {
-            
-            this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
-            this.dispatchEvent(new CustomEvent('loginsuccess', { bubbles: true, composed: true, detail: { referenceData: e.detail.response } }));
+            this.dispatchEvent(new CustomEvent('exception', { detail: e.detail.response.exception }));
+        } else {            
+            this.referenceData = null;
+            e.detail.response.refreshTimestamp = new Date(Date.now());
+            this.referenceData = e.detail.response;
         }
     }
 
@@ -494,6 +521,7 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
     reset() {
         this.$.projectManagersDD.disabled = true;
         if (this.referenceData && this.referenceData.applicationUser) {
+            this.state = this.referenceData.applicationUser.state;
             let typeArray = new Array();
             typeArray.push({ "id": 1, "name": "Job" });
             if (this.referenceData.applicationUser.roleId < 4) {
