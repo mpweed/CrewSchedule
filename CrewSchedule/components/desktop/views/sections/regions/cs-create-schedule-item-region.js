@@ -383,6 +383,7 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
     _addTask(e) {
         if (this.selectedTask && !this.foundInArrayById(this.selectedTask, this.jobTasks)) {
             this.push("jobTasks", this.selectedTask);
+            this._validateInput();
         }
     }
 
@@ -397,6 +398,7 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
             let equipmentToAdd = this.selectedEquipment;
             equipmentToAdd.allocation = this.equipmentSelectedAllocationHours;
             this.push("jobEquipment", equipmentToAdd);
+            this._validateInput();
         }
     }
 
@@ -411,12 +413,14 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
             let operatorToAdd = this.selectedInstrumentOperator;
             operatorToAdd.allocation = this.operatorSelectedAllocationHours;
             this.push("jobOperators", operatorToAdd);
+            this._validateInput();
         }
     }
 
     _removeOperator(e) {
         let removeItemIndex = this.jobEquipment.indexOf(e.model.operator);
         this.splice("jobOperators", removeItemIndex, 1);
+        this._validateInput();
     }
 
     _validateInput(newValue, oldValue) {
@@ -474,17 +478,17 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
     }
 
     saveJob(body) {
-        body.projectNumber = this.projectNumber;
-        body.projectName = this.projectName;
-        body.addressLine1 = this.addressLine1;
-        body.city = this.city;
-        body.state = this.state;
-        body.zip = this.zip;
-        body.tasks = this.jobTasks;
-        body.equipment = this.jobEquipment;
-        body.operators = this.jobOperators;
+        body.scheduleItem.projectNumber = this.projectNumber;
+        body.scheduleItem.projectName = this.projectName;
+        body.scheduleItem.addressLine1 = this.addressLine1;
+        body.scheduleItem.city = this.city;
+        body.scheduleItem.state = this.state;
+        body.scheduleItem.zip = this.zip;
+        body.scheduleItem.tasks = this.jobTasks;
+        body.scheduleItem.equipment = this.jobEquipment;
+        body.scheduleItem.operators = this.jobOperators;
         if (this.addressLine2) {
-            body.addressLine2 = this.addressLine2;
+            body.scheduleItem.addressLine2 = this.addressLine2;
         }
         this.$.scheduleItemXhr.body = body;
         this.$.scheduleItemXhr.generateRequest();
