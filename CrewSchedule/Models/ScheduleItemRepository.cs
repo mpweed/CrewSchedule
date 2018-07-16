@@ -10,44 +10,85 @@ namespace CrewSchedule.Models
 {
     internal class ScheduleItemRepository : Repository
     {
+        private static DataTable GetScheduleItem(ScheduleItem scheduleItem)
+        {
+            DataTable retval = new DataTable();
+            retval.Columns.Add("Id", typeof(int));
+            retval.Columns.Add("TypeId", typeof(int));
+            retval.Columns.Add("StatusId", typeof(int));
+            retval.Columns.Add("StartDate", typeof(DateTime));
+            retval.Columns.Add("EndDate", typeof(DateTime));
+            retval.Columns.Add("ProjectManagerId", typeof(int));
+            retval.Columns.Add("EmployeeId", typeof(int));
+            retval.Columns.Add("EmployeeAllocation", typeof(int));
+            retval.Columns.Add("ProjectNumber", typeof(string));
+            retval.Columns.Add("ProjectName", typeof(string));
+            retval.Columns.Add("AddressLine1", typeof(string));
+            retval.Columns.Add("AddressLine2", typeof(string));
+            retval.Columns.Add("City", typeof(string));
+            retval.Columns.Add("State", typeof(string));
+            retval.Columns.Add("Zip", typeof(string));
+            DataRow row = retval.NewRow();
+            row.SetField(0, scheduleItem.Id);
+            row.SetField(1, scheduleItem.TypeId);
+            row.SetField(2, scheduleItem.StatusId);
+            row.SetField(3, scheduleItem.StartDate);
+            row.SetField(4, scheduleItem.EndDate);
+            row.SetField(5, scheduleItem.ProjectManager.Id);
+            row.SetField(6, scheduleItem.CrewChief.Id);
+            row.SetField(7, scheduleItem.CrewChief.Allocation);
+            row.SetField(8, scheduleItem.ProjectNumber);
+            row.SetField(9, scheduleItem.ProjectName);
+            row.SetField(10, scheduleItem.AddressLine1);
+            row.SetField(11, scheduleItem.AddressLine2);
+            row.SetField(12, scheduleItem.City);
+            row.SetField(13, scheduleItem.State);
+            row.SetField(14, scheduleItem.Zip);
+            retval.Rows.Add(row);
+            return retval;
+        }
+
+        private static DataTable GetTasks(List<Task> list) {
+            DataTable retval = new DataTable();
+            retval.Columns.Add("Id", typeof(int));
+            retval.Columns.Add("Allocation", typeof(int));
+            foreach(var r in list) {
+                DataRow row = retval.NewRow();
+                row.SetField(0, r.Id);
+                row.SetField(1, 0);
+            }
+            return retval;
+        }
+
+        private static DataTable GetEquipment(List<Equipment> list)
+        {
+            DataTable retval = new DataTable();
+            retval.Columns.Add("Id", typeof(int));
+            retval.Columns.Add("Allocation", typeof(int));
+            foreach (var r in list) {
+                DataRow row = retval.NewRow();
+                row.SetField(0, r.Id);
+                row.SetField(1, r.Allocation);
+            }
+            return retval;
+        }
+
+        private static DataTable GetOperators(List<Employee> list)
+        {
+            DataTable retval = new DataTable();
+            retval.Columns.Add("Id", typeof(int));
+            retval.Columns.Add("Allocation", typeof(int));
+            foreach (var r in list) {
+                DataRow row = retval.NewRow();
+                row.SetField(0, r.Id);
+                row.SetField(1, r.Allocation);
+            }
+            return retval;
+        }
+
         internal static ReferenceData CreateScheduleItem(UpdateParameter updateParameter)
         {
             ReferenceData retval = new ReferenceData();
-            SqlDataRecord scheduleItemRecord = new SqlDataRecord(new SqlMetaData[] 
-                                              { new SqlMetaData("Id", SqlDbType.Int),
-                                                new SqlMetaData("TypeId", SqlDbType.Int),
-                                                new SqlMetaData("StatusId", SqlDbType.Int),
-                                                new SqlMetaData("StartDate", SqlDbType.Date),
-                                                new SqlMetaData("EndDate", SqlDbType.Date),
-                                                new SqlMetaData("ProjectManagerId", SqlDbType.Int),
-                                                new SqlMetaData("EmployeeId", SqlDbType.Int),
-                                                new SqlMetaData("EmployeeAllocation", SqlDbType.Int),
-                                                new SqlMetaData("ProjectNumber", SqlDbType.NVarChar, 50),
-                                                new SqlMetaData("ProjectName", SqlDbType.NVarChar, 60),
-                                                new SqlMetaData("AddressLine1", SqlDbType.NVarChar, 60),
-                                                new SqlMetaData("AddressLine2", SqlDbType.NVarChar, 60),
-                                                new SqlMetaData("City", SqlDbType.NVarChar, 60),
-                                                new SqlMetaData("State", SqlDbType.NVarChar, 2),
-                                                new SqlMetaData("Zip", SqlDbType.NVarChar, 10)});
-
-
-            scheduleItemRecord.SetInt32(1, updateParameter.ScheduleItem.TypeId);
-            scheduleItemRecord.SetDateTime(3, updateParameter.ScheduleItem.StartDate);
-            scheduleItemRecord.SetDateTime(4, updateParameter.ScheduleItem.EndDate);
-            scheduleItemRecord.SetInt32(5, updateParameter.ScheduleItem.ProjectManager.Id);
-            scheduleItemRecord.SetInt32(6, updateParameter.ScheduleItem.CrewChief.Id);
-            scheduleItemRecord.SetInt32(7, updateParameter.ScheduleItem.CrewChief.Allocation);
-            scheduleItemRecord.SetString(8, updateParameter.ScheduleItem.ProjectNumber);
-            scheduleItemRecord.SetString(9, updateParameter.ScheduleItem.ProjectName);
-            scheduleItemRecord.SetString(10, updateParameter.ScheduleItem.AddressLine1);
-            if(updateParameter.ScheduleItem.AddressLine2 != null)
-            {
-                scheduleItemRecord.SetString(11, updateParameter.ScheduleItem.AddressLine2);
-            }            
-            scheduleItemRecord.SetString(12, updateParameter.ScheduleItem.City);
-            scheduleItemRecord.SetString(13, updateParameter.ScheduleItem.State);
-            scheduleItemRecord.SetString(14, updateParameter.ScheduleItem.Zip);
-
             updateParameter.ScheduleItem.ProjectManagerId = updateParameter.ScheduleItem.ProjectManager.Id;
             updateParameter.ScheduleItem.EmployeeId = updateParameter.ScheduleItem.CrewChief.Id;
             try
@@ -62,17 +103,17 @@ namespace CrewSchedule.Models
                         com.Parameters.Add(new SqlParameter("@loginId", updateParameter.ScheduleParameters.LoginId));
                         com.Parameters.Add(new SqlParameter("@password", updateParameter.ScheduleParameters.Password));
 
-                        SqlParameter tvpParam1 = com.Parameters.AddWithValue("@tvpScheduleItem", scheduleItemRecord);
+                        SqlParameter tvpParam1 = com.Parameters.AddWithValue("@tvpScheduleItem", GetScheduleItem(updateParameter.ScheduleItem));
                         tvpParam1.SqlDbType = SqlDbType.Structured;
                         tvpParam1.TypeName = "dbo.ScheduleItemTableType";
 
-                        SqlParameter tvpParam2 = com.Parameters.AddWithValue("@tvpTasks", updateParameter.ScheduleItem.Tasks);
+                        SqlParameter tvpParam2 = com.Parameters.AddWithValue("@tvpTasks", GetTasks(updateParameter.ScheduleItem.Tasks));
                         tvpParam2.SqlDbType = SqlDbType.Structured;
                         tvpParam2.TypeName = "dbo.ScheduleItemParmTableType";
-                        SqlParameter tvpParam3 = com.Parameters.AddWithValue("@tvpEquipment", updateParameter.ScheduleItem.Equipment);
+                        SqlParameter tvpParam3 = com.Parameters.AddWithValue("@tvpEquipment", GetEquipment(updateParameter.ScheduleItem.Equipment));
                         tvpParam3.SqlDbType = SqlDbType.Structured;
                         tvpParam3.TypeName = "dbo.ScheduleItemParmTableType";
-                        SqlParameter tvpParam4 = com.Parameters.AddWithValue("@tvpOperators", updateParameter.ScheduleItem.Operators);
+                        SqlParameter tvpParam4 = com.Parameters.AddWithValue("@tvpOperators", GetOperators(updateParameter.ScheduleItem.Operators));
                         tvpParam4.SqlDbType = SqlDbType.Structured;
                         tvpParam4.TypeName = "dbo.ScheduleItemParmTableType";
 
