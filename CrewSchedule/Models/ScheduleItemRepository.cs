@@ -56,6 +56,7 @@ namespace CrewSchedule.Models
                 DataRow row = retval.NewRow();
                 row.SetField(0, r.Id);
                 row.SetField(1, 0);
+                retval.Rows.Add(row);
             }
             return retval;
         }
@@ -69,6 +70,7 @@ namespace CrewSchedule.Models
                 DataRow row = retval.NewRow();
                 row.SetField(0, r.Id);
                 row.SetField(1, r.Allocation);
+                retval.Rows.Add(row);
             }
             return retval;
         }
@@ -82,6 +84,7 @@ namespace CrewSchedule.Models
                 DataRow row = retval.NewRow();
                 row.SetField(0, r.Id);
                 row.SetField(1, r.Allocation);
+                retval.Rows.Add(row);
             }
             return retval;
         }
@@ -102,11 +105,9 @@ namespace CrewSchedule.Models
                         com.CommandText = "CreateScheduleItem_SP";
                         com.Parameters.Add(new SqlParameter("@loginId", updateParameter.ScheduleParameters.LoginId));
                         com.Parameters.Add(new SqlParameter("@password", updateParameter.ScheduleParameters.Password));
-
                         SqlParameter tvpParam1 = com.Parameters.AddWithValue("@tvpScheduleItem", GetScheduleItem(updateParameter.ScheduleItem));
                         tvpParam1.SqlDbType = SqlDbType.Structured;
                         tvpParam1.TypeName = "dbo.ScheduleItemTableType";
-
                         SqlParameter tvpParam2 = com.Parameters.AddWithValue("@tvpTasks", GetTasks(updateParameter.ScheduleItem.Tasks));
                         tvpParam2.SqlDbType = SqlDbType.Structured;
                         tvpParam2.TypeName = "dbo.ScheduleItemParmTableType";
@@ -116,7 +117,6 @@ namespace CrewSchedule.Models
                         SqlParameter tvpParam4 = com.Parameters.AddWithValue("@tvpOperators", GetOperators(updateParameter.ScheduleItem.Operators));
                         tvpParam4.SqlDbType = SqlDbType.Structured;
                         tvpParam4.TypeName = "dbo.ScheduleItemParmTableType";
-
                         conn.Open();
                         com.ExecuteNonQuery();
                         retval = ReferenceDataRepository.GetReferenceData(updateParameter.ScheduleParameters);

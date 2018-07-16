@@ -98,9 +98,17 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     background-color: var(--paper-grey-900);
                     color: #FFFFFF;                    
                     border: 1px solid var(--paper-grey-600);
-                    top: -760%;
+                    /* top: -760%; */
                     position: absolute;
                     z-index: 1;
+                }
+
+                .scheduleItemContainer .tooltiptext-top-align {
+                    top: -760%;
+                }
+
+                .scheduleItemContainer .tooltiptext-bottom-align {
+                    bottom: -760%;
                 }
 
                 .scheduleItemContainer .tooltiptext-left-align {
@@ -698,6 +706,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 } else {
                     newTooltip.classList = "tooltiptext tooltiptext-center-align";
                 }
+            }
+            if (scheduleItem.top < 222) {
+                newTooltip.classList = newTooltip.classList + " tooltiptext-bottom-align";
+            } else {
+                newTooltip.classList = newTooltip.classList + " tooltiptext-top-align";
             }
             newScheduleItemContainer.appendChild(newTooltip);
         }
