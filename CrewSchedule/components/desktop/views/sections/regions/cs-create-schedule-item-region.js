@@ -204,11 +204,13 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
             },
             startDate: {
                 type: Date,
-                notify: true
+                notify: true,
+                observer: "_validateInput"
             },
             endDate: {
                 type: Date,
-                notify: true
+                notify: true,
+                observer: "_validateInput"
             },
             selectedProjectManager: {
                 type: Object,
@@ -425,24 +427,26 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
 
     _validateInput(newValue, oldValue) {
         this.$.saveButton.disabled = true;
-        switch (this.selectedType.name) {
-            case "Job":
-                if (this.$.projectNumber.isValid &&
-                    this.$.projectName.isValid &&
-                    this.$.addressLine1.isValid &&
-                    this.$.city.isValid &&
-                    this.$.zip.isValid &&
-                    this.jobTasks && this.jobTasks.length > 0 &&
-                    this.jobEquipment && this.jobEquipment.length > 0)
+        if (this.startDate && this.endDate && this.startDate <= this.endDate) {
+            switch (this.selectedType.name) {
+                case "Job":
+                    if (this.$.projectNumber.isValid &&
+                        this.$.projectName.isValid &&
+                        this.$.addressLine1.isValid &&
+                        this.$.city.isValid &&
+                        this.$.zip.isValid &&
+                        this.jobTasks && this.jobTasks.length > 0 &&
+                        this.jobEquipment && this.jobEquipment.length > 0)
+                        this.$.saveButton.disabled = false;
+                    break;
+                case "PTO":
                     this.$.saveButton.disabled = false;
-                break;
-            case "PTO":
-                this.$.saveButton.disabled = false;
-                break;
-            case "Leave":
-                this.$.saveButton.disabled = false;
-                break;
-        }
+                    break;
+                case "Leave":
+                    this.$.saveButton.disabled = false;
+                    break;
+            }
+        }        
     }
 
     _save(e) {

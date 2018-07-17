@@ -11,12 +11,16 @@ class CsFilterCrewChiefsRegion extends GestureEventListeners(PolymerElement) {
                     --paper-checkbox-unchecked-color: var(--paper-grey-800);
                     margin-bottom: 20px;
                 }
+
+                .dialogBodyTopPadded {
+                    padding-top: 10px;
+                }
             </style>
             <div>
                 <div class="dialogHeader">
                     <span class="dialogCaption">Filter Crew Chiefs</span>
                 </div>                
-                <div class="dialogBody">
+                <div class="dialogBody dialogBodyTopPadded">
                     <template is="dom-repeat" items="[[crewChiefFilter]]" as="crewChief">
                         <div class="horizontal layout">
                             <paper-checkbox checked="{{crewChief.checked}}" class="styled">[[crewChief.name]]</paper-checkbox>

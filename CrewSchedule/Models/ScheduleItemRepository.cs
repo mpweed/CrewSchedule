@@ -28,23 +28,25 @@ namespace CrewSchedule.Models
             retval.Columns.Add("City", typeof(string));
             retval.Columns.Add("State", typeof(string));
             retval.Columns.Add("Zip", typeof(string));
-            DataRow row = retval.NewRow();
-            row.SetField(0, scheduleItem.Id);
-            row.SetField(1, scheduleItem.TypeId);
-            row.SetField(2, scheduleItem.StatusId);
-            row.SetField(3, scheduleItem.StartDate);
-            row.SetField(4, scheduleItem.EndDate);
-            row.SetField(5, scheduleItem.ProjectManager.Id);
-            row.SetField(6, scheduleItem.CrewChief.Id);
-            row.SetField(7, scheduleItem.CrewChief.Allocation);
-            row.SetField(8, scheduleItem.ProjectNumber);
-            row.SetField(9, scheduleItem.ProjectName);
-            row.SetField(10, scheduleItem.AddressLine1);
-            row.SetField(11, scheduleItem.AddressLine2);
-            row.SetField(12, scheduleItem.City);
-            row.SetField(13, scheduleItem.State);
-            row.SetField(14, scheduleItem.Zip);
-            retval.Rows.Add(row);
+            if(scheduleItem != null) {
+                DataRow row = retval.NewRow();
+                row.SetField(0, scheduleItem.Id);
+                row.SetField(1, scheduleItem.TypeId);
+                row.SetField(2, scheduleItem.StatusId);
+                row.SetField(3, scheduleItem.StartDate);
+                row.SetField(4, scheduleItem.EndDate);
+                row.SetField(5, scheduleItem.ProjectManager.Id);
+                row.SetField(6, scheduleItem.CrewChief.Id);
+                row.SetField(7, scheduleItem.CrewChief.Allocation);
+                row.SetField(8, scheduleItem.ProjectNumber);
+                row.SetField(9, scheduleItem.ProjectName);
+                row.SetField(10, scheduleItem.AddressLine1);
+                row.SetField(11, scheduleItem.AddressLine2);
+                row.SetField(12, scheduleItem.City);
+                row.SetField(13, scheduleItem.State);
+                row.SetField(14, scheduleItem.Zip);
+                retval.Rows.Add(row);
+            }           
             return retval;
         }
 
@@ -52,12 +54,14 @@ namespace CrewSchedule.Models
             DataTable retval = new DataTable();
             retval.Columns.Add("Id", typeof(int));
             retval.Columns.Add("Allocation", typeof(int));
-            foreach(var r in list) {
-                DataRow row = retval.NewRow();
-                row.SetField(0, r.Id);
-                row.SetField(1, 0);
-                retval.Rows.Add(row);
-            }
+            if(list != null) {
+                foreach (var r in list) {
+                    DataRow row = retval.NewRow();
+                    row.SetField(0, r.Id);
+                    row.SetField(1, 0);
+                    retval.Rows.Add(row);
+                }
+            }            
             return retval;
         }
 
@@ -66,12 +70,14 @@ namespace CrewSchedule.Models
             DataTable retval = new DataTable();
             retval.Columns.Add("Id", typeof(int));
             retval.Columns.Add("Allocation", typeof(int));
-            foreach (var r in list) {
-                DataRow row = retval.NewRow();
-                row.SetField(0, r.Id);
-                row.SetField(1, r.Allocation);
-                retval.Rows.Add(row);
-            }
+            if(list != null) {
+                foreach (var r in list) {
+                    DataRow row = retval.NewRow();
+                    row.SetField(0, r.Id);
+                    row.SetField(1, r.Allocation);
+                    retval.Rows.Add(row);
+                }
+            }            
             return retval;
         }
 
@@ -80,12 +86,14 @@ namespace CrewSchedule.Models
             DataTable retval = new DataTable();
             retval.Columns.Add("Id", typeof(int));
             retval.Columns.Add("Allocation", typeof(int));
-            foreach (var r in list) {
-                DataRow row = retval.NewRow();
-                row.SetField(0, r.Id);
-                row.SetField(1, r.Allocation);
-                retval.Rows.Add(row);
-            }
+            if(list != null) {
+                foreach (var r in list) {
+                    DataRow row = retval.NewRow();
+                    row.SetField(0, r.Id);
+                    row.SetField(1, r.Allocation);
+                    retval.Rows.Add(row);
+                }
+            }            
             return retval;
         }
 
