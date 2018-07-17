@@ -269,7 +269,11 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
     _selectedBranchChanged(newValue, oldValue) {
         if (this.selectedBranch) {
             this.referenceData.branchId = this.selectedBranch.id;
-        }        
+        }
+        if (oldValue) { // selectedBranch was previously set
+            this.crewChiefFilter = null;
+            this.refreshReferenceData();
+        }
     }
 
     _crewChiefFilterChanged(newValue, oldValue) {
@@ -289,7 +293,7 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
             }
         }
         this.filteredCrewChiefs = filteredCrewChiefs;
-        if (this.crewChiefFilter.length == filteredCrewChiefs.length) {
+        if (this.crewChiefFilter && this.crewChiefFilter.length == filteredCrewChiefs.length) {
             this.filterStatus = "Off";
         } else {
             this.filterStatus = "On";
@@ -298,14 +302,15 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
 
     _dateChanged(newValue, oldValue) {
         if (this.startDate && this.endDate && this.startDate != this.endDate) {
+            this.referenceData.startDate = this.startDate;
+            this.referenceData.endDate = this.endDate;
             if (this.endDate < this.startDate) {
                 this.filteredCrewChiefs = null;
                 this.$.endDateErrorMessage.classList.remove("removed");
             } else {
                 this.$.endDateErrorMessage.classList.add("removed");
-            }
-            this.referenceData.startDate = this.startDate;
-            this.referenceData.endDate = this.endDate;
+                this.refreshReferenceData();
+            }            
         }
     }
 
@@ -365,34 +370,51 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
     }
 
     refreshReferenceData() {
-        this.dispatchEvent(new CustomEvent('busy', { detail: { status: true } }));
-        this.$.refreshDataXhr.body = {
-            "loginId": this.referenceData.applicationUser.loginId,
-            "password": this.referenceData.applicationUser.password,
-            "startDate": this.startDate,
-            "endDate": this.endDate,
-            "branchId": this.selectedBranch.id
-        };
-        this.$.refreshDataXhr.generateRequest();
+        if (this.referenceData && this.referenceData.applicationUser && this.startDate && this.endDate && this.selectedBranch) {
+            this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: true } }));
+            this.$.refreshDataXhr.body = {
+                "loginId": this.referenceData.applicationUser.loginId,
+                "password": this.referenceData.applicationUser.password,
+                "startDate": this.startDate,
+                "endDate": this.endDate,
+                "branchId": this.selectedBranch.id
+            };
+            this.$.refreshDataXhr.generateRequest();
+        }        
     }
 
     _handleRefreshDataResponse(e, request) {
-        this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
+        this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
         if (e.detail.response.exception) {
             this.dispatchEvent(new CustomEvent('exception', { bubbles: true, composed: true, detail: e.detail.response.exception.Message }));            
         } else {
+            let companyId = this.selectedCompany.id;
+            let branchId = this.selectedBranch.id;
             e.detail.response.refreshTimestamp = new Date(Date.now());
             e.detail.response.startDate = this.startDate;
-            e.detail.response.endDate = this.endDate;
-            e.detail.response.branchId = this.selectedBranch.id;
+            e.detail.response.endDate = this.endDate;            
             this.referenceData = null;           
             this.referenceData = e.detail.response;
+            for (let company of this.referenceData.applicationUser.companies) {
+                if (company.id == companyId) {
+                    this.selectedCompany = company;
+                    break;
+                }
+            }
+            for (let branch of this.selectedCompany.branches) {
+                if (branch.id == branchId) {
+                    this.selectedBranch = branch;
+                    break;
+                }
+            }
+            e.detail.response.companyId = companyId;
+            e.detail.response.branchId = branchId;
         }
     }
 
     _handleXhrError(e, request) {
-        this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
-        this.dispatchEvent(new CustomEvent('exception', { detail: e.detail.error.message }));
+        this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
+        this.dispatchEvent(new CustomEvent('exception', { bubbles: true, composed: true, detail: e.detail.error.message }));
     }
 
     // Public Methods

@@ -529,10 +529,12 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     }
 
     sortScheduleItems(crewChief) {
-        crewChief.scheduleItems.sort(
-            (a, b) => {
-                return (new Date(a.startDate)) - (new Date(b.startDate));
-            });              
+        if (crewChief && crewChief.scheduleItems) {
+            crewChief.scheduleItems.sort(
+                (a, b) => {
+                    return (new Date(a.startDate)) - (new Date(b.startDate));
+                });
+        }                      
     }
 
     generateSwimlanes(crewChief) {        

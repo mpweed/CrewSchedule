@@ -450,7 +450,7 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
     }
 
     _save(e) {
-        this.dispatchEvent(new CustomEvent('busy', { detail: { status: true } }));
+        this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: true } }));
         this.selectedCrewChief.allocation = this.crewChiefSelectedAllocationHours;
         let scheduleParameters = {
             "loginId": this.referenceData.applicationUser.loginId,
@@ -505,9 +505,9 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
 
     _handleSaveScheduleItemResponse(e, request) {
         this._closeDialog();
-        this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
+        this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
         if (e.detail.response.exception) {
-            this.dispatchEvent(new CustomEvent('exception', { detail: e.detail.response.exception }));
+            this.dispatchEvent(new CustomEvent('exception', { bubbles: true, composed: true, detail: e.detail.response.exception.Message }));
         } else {            
             this.referenceData = null;
             e.detail.response.refreshTimestamp = new Date(Date.now());
@@ -516,8 +516,8 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
     }
 
     _handleXhrError(e, request) {
-        this.dispatchEvent(new CustomEvent('busy', { detail: { status: false } }));
-        this.dispatchEvent(new CustomEvent('exception', { detail: e.detail.error.message }));
+        this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
+        this.dispatchEvent(new CustomEvent('exception', { bubbles: true, composed: true, detail: e.detail.error.message }));
     }
 
     _closeDialog(e) {
