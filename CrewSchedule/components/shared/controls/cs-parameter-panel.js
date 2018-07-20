@@ -116,7 +116,7 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 <paper-icon-button id="zoomIn" icon="zoom-in" class="actionButton" on-tap="_zoomInClick"></paper-icon-button>
                 <div class="dataLabel horizontalDataLabel companyLabel">Company</div>
                 <div class="horizontalDataField companyField">
-                    <cs-dropdown light items="{{referenceData.applicationUser.companies}}" label-field="name" selected="{{selectedCompany}}"></cs-dropdown>
+                    <cs-dropdown light items="{{companies}}" label-field="name" selected="{{selectedCompany}}"></cs-dropdown>
                 </div>
                 <div class="dataLabel horizontalDataLabel">Branch</div>
                 <div class="horizontalDataField officeField">
@@ -163,6 +163,10 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 type: Object,
                 notify: true,
                 observer: "_referenceDataChanged"
+            },
+            companies: {
+                type: Array,
+                notify: true
             },
             startDate: {
                 type: String,
@@ -235,16 +239,21 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
     // Event Handlers
     _referenceDataChanged(newValue, oldValue) {
         this.filteredCrewChiefs = null;
-        if (this.referenceData) {
-            if (!this.zoomLevel) {
-                this.zoomLevel = Number(this.referenceData.applicationUser.zoomLevel);  
-            } 
-            if (!this.startDate) {
-                this.startDate = this.referenceData.startDate;
-            }
-            if (!this.endDate) {
-                this.endDate = this.referenceData.endDate;
-            }
+        if (this.referenceData && this.referenceData.applicationUser.companies) {
+            if (!this.initialized) {
+                if (!this.zoomLevel) {
+                    this.zoomLevel = Number(this.referenceData.applicationUser.zoomLevel);
+                }
+                if (!this.startDate) {
+                    this.startDate = this.referenceData.startDate;
+                }
+                if (!this.endDate) {
+                    this.endDate = this.referenceData.endDate;
+                }
+                if (!this.companies) {
+                    this.companies = this.referenceData.applicationUser.companies;
+                }
+            }            
             this.refreshCrewChiefFilter();
         }        
     }
@@ -255,7 +264,7 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
             this.crewChiefs = JSON.parse(JSON.stringify(this.referenceData.crewChiefs));
             let filter = new Array();
             if (!this.crewChiefFilter) {
-                for (var crewChief of this.crewChiefs) {
+                for (let crewChief of this.crewChiefs) {
                     crewChief.checked = true;
                     filter.push(crewChief);
                 }
@@ -264,17 +273,7 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
                 this._crewChiefFilterChanged(this.crewChiefFilter, null);
             }
         }
-    }
-
-    _selectedBranchChanged(newValue, oldValue) {
-        if (this.selectedBranch) {
-            this.referenceData.branchId = this.selectedBranch.id;
-        }
-        if (oldValue) { // selectedBranch was previously set
-            this.crewChiefFilter = null;
-            this.refreshReferenceData();
-        }
-    }
+    }    
 
     _crewChiefFilterChanged(newValue, oldValue) {
         this.updateFilteredCrewChiefs();
@@ -285,7 +284,7 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
         let filteredCrewChiefs = new Array();
         if (this.crewChiefFilter) {
             let counter = 0;
-            for (var crewChief of this.crewChiefFilter) {
+            for (let crewChief of this.crewChiefFilter) {
                 if (crewChief.checked) {
                     filteredCrewChiefs.push(this.crewChiefs[counter]);
                 }
@@ -293,10 +292,20 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
             }
         }
         this.filteredCrewChiefs = filteredCrewChiefs;
-        if (this.crewChiefFilter && this.crewChiefFilter.length == filteredCrewChiefs.length) {
+        if (this.crewChiefFilter && this.crewChiefFilter.length === filteredCrewChiefs.length) {
             this.filterStatus = "Off";
         } else {
             this.filterStatus = "On";
+        }
+    }
+
+    _selectedBranchChanged(newValue, oldValue) {
+        if (this.selectedBranch) {
+            this.referenceData.branchId = this.selectedBranch.id;
+        }
+        if (oldValue) { // selectedBranch was previously set
+            this.crewChiefFilter = null;
+            this.refreshReferenceData();
         }
     }
 
@@ -387,28 +396,12 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
         this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
         if (e.detail.response.exception) {
             this.dispatchEvent(new CustomEvent('exception', { bubbles: true, composed: true, detail: e.detail.response.exception.Message }));            
-        } else {
-            let companyId = this.selectedCompany.id;
-            let branchId = this.selectedBranch.id;
+        } else {            
             e.detail.response.refreshTimestamp = new Date(Date.now());
             e.detail.response.startDate = this.startDate;
             e.detail.response.endDate = this.endDate;            
             this.referenceData = null;           
             this.referenceData = e.detail.response;
-            for (let company of this.referenceData.applicationUser.companies) {
-                if (company.id == companyId) {
-                    this.selectedCompany = company;
-                    break;
-                }
-            }
-            for (let branch of this.selectedCompany.branches) {
-                if (branch.id == branchId) {
-                    this.selectedBranch = branch;
-                    break;
-                }
-            }
-            e.detail.response.companyId = companyId;
-            e.detail.response.branchId = branchId;
         }
     }
 

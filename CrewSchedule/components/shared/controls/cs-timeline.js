@@ -282,7 +282,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 type: Object,
                 observer: "_selectedScheduleItemChanged"
             }
-        }
+        };
     }
 
     constructor() {
@@ -297,7 +297,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
 
     ready() {
         super.ready();       
-        window.addEventListener("resize", this._boundResizeListener)
+        window.addEventListener("resize", this._boundResizeListener);
     }
 
     disconnectedCallback() {
@@ -315,7 +315,7 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     }
 
     _dateChanged(newValue, oldValue) {
-        if (this.startDate && this.endDate && this.startDate != this.endDate) {
+        if (this.startDate && this.endDate && this.startDate !== this.endDate) {
             if (this.endDate < this.startDate) {
                 this.clearTimeline();
                 this.$.crewPanel.classList.add("hidden");
@@ -394,11 +394,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         this.clearScheduleItems();
         this.timelineArray = new Array();
         let timeSpanStart = new Date(this.startDate);
-        if (timeSpanStart.getHours() != 0) {
+        if (timeSpanStart.getHours() !== 0) {
             this.setUtcAdjustedDate(timeSpanStart);
         }
         let timeSpanEnd = new Date(this.endDate);
-        if (timeSpanEnd.getHours() != 0) {
+        if (timeSpanEnd.getHours() !== 0) {
             this.setUtcAdjustedDate(timeSpanEnd);
         }
         let currentDate = timeSpanStart;
@@ -423,17 +423,17 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 currentDay.headerClassList = "dayHeader";
                 currentDay.dayClassList = "day";
             }
-            if (previousYear != currentDay.year) {
+            if (previousYear !== currentDay.year) {
                 previousYear = currentDay.year;
-                if (yearHeaderClass == "yearHeader") {
+                if (yearHeaderClass === "yearHeader") {
                     yearHeaderClass = "alternateYearHeader";
                 } else {
                     yearHeaderClass = "yearHeader";
                 }
             }
-            if (previousMonth != currentDay.month) {
+            if (previousMonth !== currentDay.month) {
                 previousMonth = currentDay.month;
-                if (monthHeaderClass == "monthHeader") {
+                if (monthHeaderClass === "monthHeader") {
                     monthHeaderClass = "alternateMonthHeader";
                 } else {                    
                     monthHeaderClass = "monthHeader";
@@ -471,22 +471,22 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
 
     removeOutOfRangeScheduleItems(crewChief) {
         let startDate = new Date(this.startDate);
-        if (startDate.getHours() != 0) {
+        if (startDate.getHours() !== 0) {
             this.setUtcAdjustedDate(startDate);
         }
         let endDate = new Date(this.endDate);
-        if (endDate.getHours() != 0) {
+        if (endDate.getHours() !== 0) {
             this.setUtcAdjustedDate(endDate);
         }        
         if (crewChief.scheduleItems && crewChief.scheduleItems.length > 0) {
             let deletionList = new Array();
             for (var i = 0; i < crewChief.scheduleItems.length; i++) {
                 let currentStartDate = new Date(crewChief.scheduleItems[i].startDate);
-                if (currentStartDate.getHours() != 0) {
+                if (currentStartDate.getHours() !== 0) {
                     this.setUtcAdjustedDate(currentStartDate);
                 }
                 let currentEndDate = new Date(crewChief.scheduleItems[i].endDate);
-                if (currentEndDate.getHours() != 0) {
+                if (currentEndDate.getHours() !== 0) {
                     this.setUtcAdjustedDate(currentEndDate);
                 }
                 if (currentEndDate < startDate) { // ScheduleItem ends before start of timeline range
@@ -496,8 +496,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                     deletionList.push(crewChief.scheduleItems[i]);
                 }
             }
-            for (var i = 0; i < deletionList.length; i++) {
-                var indexToDelete = crewChief.scheduleItems.indexOf(deletionList[i]);
+            for (var index = 0; index < deletionList.length; index++) {
+                var indexToDelete = crewChief.scheduleItems.indexOf(deletionList[index]);
                 crewChief.scheduleItems.splice(indexToDelete, 1);
             }
         }
@@ -509,11 +509,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         if (crewChief.scheduleItems && crewChief.scheduleItems.length > 0) {
             for (var scheduleItem of crewChief.scheduleItems) {
                 let currentStartDate = new Date(scheduleItem.startDate);
-                if (currentStartDate.getHours() != 0) {
+                if (currentStartDate.getHours() !== 0) {
                     this.setUtcAdjustedDate(currentStartDate);
                 }
                 let currentEndDate = new Date(scheduleItem.endDate);
-                if (currentEndDate.getHours() != 0) {
+                if (currentEndDate.getHours() !== 0) {
                     this.setUtcAdjustedDate(currentEndDate);
                 }
                 scheduleItem.originalStartDate = scheduleItem.startDate;
@@ -558,11 +558,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                         deletionList.push(currentScheduleItem);
                     } else {
                         previousScheduleItemEndDate = new Date(previousScheduleItem.endDate);
-                        if (previousScheduleItemEndDate.getHours() != 0) {
+                        if (previousScheduleItemEndDate.getHours() !== 0) {
                             this.setUtcAdjustedDate(previousScheduleItemEndDate);
                         }
                         currentScheduleItemStartDate = new Date(currentScheduleItem.startDate);
-                        if (currentScheduleItemStartDate.getHours() != 0) {
+                        if (currentScheduleItemStartDate.getHours() !== 0) {
                             this.setUtcAdjustedDate(currentScheduleItemStartDate);
                         }
                         if (currentScheduleItemStartDate > previousScheduleItemEndDate) {
@@ -572,8 +572,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                         }                        
                     }
                 }
-                for (var i = 0; i < deletionList.length; i++) {
-                    var indexToDelete = clonedScheduleItemsArray.indexOf(deletionList[i]);
+                for (var index = 0; index < deletionList.length; index++) {
+                    var indexToDelete = clonedScheduleItemsArray.indexOf(deletionList[index]);
                     clonedScheduleItemsArray.splice(indexToDelete, 1);
                 }                
                 crewChief.swimlanes.push(currentSwimlane);
@@ -601,11 +601,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 crewChiefHeight = crewChiefHeight + SCHEDULE_ITEM_TOP_MARGIN + SCHEDULE_ITEM_HEIGHT;
             }            
         }
-        if (crewChiefHeight == 0) {
+        if (crewChiefHeight === 0) {
             crewChiefHeight = 34;
         }
         crewChief.height = crewChiefHeight;
-        if (topOffset == (STARTING_TOP_OFFSET + additionalTopOffset)) {
+        if (topOffset === (STARTING_TOP_OFFSET + additionalTopOffset)) {
             topOffset = topOffset + 34;
         }
         return (topOffset - STARTING_TOP_OFFSET);
@@ -614,12 +614,12 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     calculateLeftOffset(scheduleItem) {
         const MILLISECONDS_IN_DAY = 86400000;
         let timeSpanStart = new Date(this.startDate);
-        if (timeSpanStart.getHours() != 0) {
+        if (timeSpanStart.getHours() !== 0) {
             this.setUtcAdjustedDate(timeSpanStart);
         }
         let scheduleItemStartDate = new Date(scheduleItem.startDate);
-        if (scheduleItemStartDate.getHours() != 0) {
-            this.setUtcAdjustedDate(scheduleItemStartDate)
+        if (scheduleItemStartDate.getHours() !== 0) {
+            this.setUtcAdjustedDate(scheduleItemStartDate);
         }        
         let leftOffsetDays = Math.round((scheduleItemStartDate - timeSpanStart) / MILLISECONDS_IN_DAY);
         return (leftOffsetDays * this.dayWidth);
@@ -628,11 +628,11 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
     calculateWidth(scheduleItem) {
         const MILLISECONDS_IN_DAY = 86400000;
         let scheduleItemStartDate = new Date(scheduleItem.startDate);
-        if (scheduleItemStartDate.getHours() != 0) {
+        if (scheduleItemStartDate.getHours() !== 0) {
             this.setUtcAdjustedDate(scheduleItemStartDate);
         }
         let jobEndDate = new Date(scheduleItem.endDate);
-        if (jobEndDate.getHours() != 0) {
+        if (jobEndDate.getHours() !== 0) {
             this.setUtcAdjustedDate(jobEndDate);
         }        
         // Adjust end date so that the full day is included in the width calculation
