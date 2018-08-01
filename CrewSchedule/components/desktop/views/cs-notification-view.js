@@ -21,7 +21,7 @@ class CsNotificationView extends GestureEventListeners(PolymerElement) {
                 }
             </style>
             <div class="viewPanel">
-                Notification View Placeholder
+                Notification View - UNDER CONSTRUCTION
             </div>`;
     }
 

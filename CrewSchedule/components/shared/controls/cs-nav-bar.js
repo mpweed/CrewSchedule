@@ -42,7 +42,7 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
                 <paper-icon-button id="scheduleView" icon="list" class="appNavButton" on-tap="_NavButtonClick"></paper-icon-button>
                 <paper-icon-button id="notificationView" icon="communication:chat-bubble" class="appNavButton" on-tap="_NavButtonClick"></paper-icon-button>
                 <paper-icon-button id="adminView" icon="settings" class="appNavButton" on-tap="_NavButtonClick"></paper-icon-button>
-                <div id="notifcationBadge" class="notifcationBadge" style$="color:[[badgeColor]]">[[notifcationCount]]</div>
+                <div id="notifcationBadge" class="notifcationBadge" style$="color:[[badgeColor]]">[[notificationCount]]</div>
             </div>`;
     }
 
@@ -59,7 +59,7 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
                 value: "scheduleView",
                 notify: true
             },            
-            notifcationCount: {
+            notificationCount: {
                 type: String
             },
             /** Private **/
@@ -85,7 +85,7 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
         this.badgeColor = "#ffb74d";
 
         //***** TEMPORARY FOR LAYOUT PURPOSES *****
-        this.notifcationCount = "25";
+        this.notificationCount = "0";
     }
 
     // Event Handlers

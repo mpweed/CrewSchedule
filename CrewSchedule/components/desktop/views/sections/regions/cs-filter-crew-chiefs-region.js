@@ -13,7 +13,7 @@ class CsFilterCrewChiefsRegion extends GestureEventListeners(PolymerElement) {
                 }
 
                 .dialogBodyTopPadded {
-                    padding-top: 10px;
+                    padding-top: 20px;
                 }
             </style>
             <div>
