@@ -111,6 +111,7 @@ namespace CrewSchedule.Models
                         com.Connection = conn;
                         com.CommandType = CommandType.StoredProcedure;
                         com.CommandText = "CreateScheduleItem_SP";
+                        com.CommandTimeout = 0; // Means unlimited
                         com.Parameters.Add(new SqlParameter("@loginId", updateParameter.ScheduleParameters.LoginId));
                         com.Parameters.Add(new SqlParameter("@password", updateParameter.ScheduleParameters.Password));
                         SqlParameter tvpParam1 = com.Parameters.AddWithValue("@tvpScheduleItem", GetScheduleItem(updateParameter.ScheduleItem));
