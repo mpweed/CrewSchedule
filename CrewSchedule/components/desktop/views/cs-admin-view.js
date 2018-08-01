@@ -21,7 +21,7 @@ class CsAdminView extends GestureEventListeners(PolymerElement) {
                 }
             </style>
             <div class="viewPanel">
-                Admin View Placeholder
+                Admin View - UNDER CONSTRUCTION
             </div>`;
     }
 
