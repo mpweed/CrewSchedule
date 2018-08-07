@@ -359,6 +359,8 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
             switch (this.selectedType.name) {
                 case "Job":
                     this.crewChiefSelectedAllocationHours = this.allocationHours[11];
+                    this.equipmentSelectedAllocationHours = this.allocationHours[11];
+                    this.operatorSelectedAllocationHours = this.allocationHours[11];
                     this.$.jobFieldPanel.classList.remove("removed");
                     break;
                 case "PTO":

@@ -85,7 +85,7 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
         this.badgeColor = "#ffb74d";
 
         //***** TEMPORARY FOR LAYOUT PURPOSES *****
-        this.notifcationCount = "0";
+        this.notificationCount = "0";
     }
 
     // Event Handlers
