@@ -115,7 +115,7 @@ class CsNotificationPanel extends GestureEventListeners(PolymerElement) {
                     margin: 100px auto;
                     width: 80%;
                     height: 20%;
-                    border: solid 1px var(--paper-blue-grey-300);
+                    border: solid 1px var(--paper-lime-300);
                     background-color: var(--paper-grey-900);
                     opacity: 0;
                     -webkit-transition: opacity .3s ease-in-out;
@@ -125,13 +125,18 @@ class CsNotificationPanel extends GestureEventListeners(PolymerElement) {
                 }
 
                 .dialogTitleBar {
-                    background-color: var(--paper-blue-grey-300);
+                    background-color: var(--paper-lime-300);
                     font-weight: 400;
                 }
 
-                .dialogCaption {                
+                .errorDetailsDialogCaption {                
                     margin-left: 8px;
+                    font-size: 1.5em;
+                    font-weight: 100;
+                    color: #ffffff;
                 }
+
+
 
                 .errorMessage {
                     height: calc(100% - 60px);
@@ -180,7 +185,7 @@ class CsNotificationPanel extends GestureEventListeners(PolymerElement) {
             <div class="horizontal layout center-justified">
                 <div id="errorDetailDialog" class="errorDetailDialog noPointerEvents">
                     <div class="horizontal layout flex dialogTitleBar">
-                        <div class="dialogCaption flex self-center">Error Details</div>
+                        <div class="errorDetailsDialogCaption flex self-center">Error Details</div>
                         <paper-icon-button icon="close" on-tap="_CloseErrorDetail"></paper-icon-button>
                     </div>
                     <div class="errorMessage scroll">[[errorMessage]]</div>

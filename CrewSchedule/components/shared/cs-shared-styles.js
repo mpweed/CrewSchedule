@@ -194,6 +194,14 @@ styleElement.innerHTML =
                 --cs-button-active-color: var(--paper-lime-600);
             }
 
+            .deleteButton {
+                --cs-button-color: var(--paper-red-400);
+                --cs-button-focus-color: var(--paper-red-300);
+                --cs-button-hover-color: var(--paper-red-300);
+                --cs-button-active-color: var(--paper-red-600);
+                margin-left: 10px;
+            }
+
             .cancelButton {
                 margin-left: 10px;
             }

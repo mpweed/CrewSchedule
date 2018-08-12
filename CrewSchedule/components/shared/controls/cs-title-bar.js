@@ -149,7 +149,7 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                         <div class="horizontal layout">
                             <div class="userInformationDialogJobTitle">[[referenceData.applicationUser.title]]</div>
                             <div class="horizontal layout flex end-justified">
-                                <paper-icon-button id="editPreferences" icon="settings" class="userInfoActionButton" on-tap="_editPreferencesClick"></paper-icon-button>
+                                <!--<paper-icon-button id="editPreferences" icon="settings" class="userInfoActionButton" on-tap="_editPreferencesClick"></paper-icon-button>-->
                             </div>
                         </div>
                         <div class="horizontal layout flex">

@@ -43,7 +43,8 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
                 </cs-dialog>
                 <cs-dialog id="editPtoDialog">
                     <cs-edit-pto-region on-close="_hideEditPtoDialog"
-                                        reference-data="{{referenceData}}">
+                                        reference-data="{{referenceData}}"
+                                        schedule-item="{{scheduleItem}}">
                     </cs-edit-pto-region>
                 </cs-dialog>
                 <cs-dialog id="editLeaveDialog">
@@ -65,6 +66,10 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
             referenceData: {
                 type: Object,
                 notify: true
+            },
+            scheduleItem: {
+                type: Object,
+                notify: true
             }
         }
     }
@@ -83,8 +88,8 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
 
     _showEditDialog(e) {
         if (!this.isDialogShown) {
-            let scheduleItem = e.detail.scheduleItem;
-            switch (scheduleItem.type) {
+            this.scheduleItem = e.detail.scheduleItem;
+            switch (this.scheduleItem.type) {
                 case "Job":
                     if (this.referenceData.applicationUser.roleId < 4 || scheduleItem.projectManager.id == this.referenceData.applicationUser.id) {
                         this.$.editJobDialog.show();

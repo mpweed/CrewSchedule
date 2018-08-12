@@ -399,7 +399,8 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
         } else {            
             e.detail.response.refreshTimestamp = new Date(Date.now());
             e.detail.response.startDate = this.startDate;
-            e.detail.response.endDate = this.endDate;            
+            e.detail.response.endDate = this.endDate;
+            e.detail.response.branchId = this.selectedBranch.id;
             this.referenceData = null;           
             this.referenceData = e.detail.response;
         }

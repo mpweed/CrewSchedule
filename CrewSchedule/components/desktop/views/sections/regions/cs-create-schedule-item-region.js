@@ -202,6 +202,12 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                 notify: true,
                 observer: "_selectedTypeChanged"
             },
+            timelineStartDate: {
+                type: Date
+            },
+            timelineEndDate: {
+                type: Date
+            },
             startDate: {
                 type: Date,
                 notify: true,
@@ -513,6 +519,8 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
         } else {            
             this.referenceData = null;
             e.detail.response.refreshTimestamp = new Date(Date.now());
+            e.detail.response.startDate = this.timelineStartDate;
+            e.detail.response.endDate = this.timelineEndDate;
             this.referenceData = e.detail.response;
         }
     }
@@ -540,7 +548,7 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
 
                 if (this.referenceData.projectManagers) {
                     for (var pm of this.referenceData.projectManagers) {
-                        if (pm.branchId == this.referenceData.applicationUser.branchId && pm.roleId == 3) {
+                        if (pm.branchId == this.referenceData.branchId && pm.roleId == 3) {
                             this.selectedProjectManager = pm;
                             this.$.projectManagersDD.disabled = false;
                             break;
@@ -561,6 +569,8 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
             this.selectedType = this.types[0];
             let defaultStartDate = new Date(Date.now());
             let defaultEndDate = new Date(Date.now());
+            this.timelineStartDate = this.referenceData.startDate;
+            this.timelineEndDate = this.referenceData.endDate;
             this.startDate = (defaultStartDate.getFullYear() + '-' + (defaultStartDate.getMonth() + 1) + '-' + defaultStartDate.getDate()).toString();
             this.endDate = (defaultEndDate.getFullYear() + '-' + (defaultEndDate.getMonth() + 1) + '-' + defaultEndDate.getDate()).toString();
             this.jobTasks = new Array();
