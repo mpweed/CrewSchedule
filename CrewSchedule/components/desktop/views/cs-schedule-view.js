@@ -91,7 +91,7 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
             this.scheduleItem = e.detail.scheduleItem;
             switch (this.scheduleItem.type) {
                 case "Job":
-                    if (this.referenceData.applicationUser.roleId < 4 || scheduleItem.projectManager.id == this.referenceData.applicationUser.id) {
+                    if (this.referenceData.applicationUser.roleId < 4 || this.scheduleItem.projectManager.id === this.referenceData.applicationUser.id) {
                         this.$.editJobDialog.show();
                     }
                     break;
