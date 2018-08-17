@@ -6,8 +6,16 @@ class CsEditPtoRegion extends GestureEventListeners(PolymerElement) {
         return html`
             <style include="iron-flex iron-flex-alignment cs-shared-styles">                
             </style>
-            <iron-ajax id="ptoItemXhr"
-                   url="[[baseUrl]]"
+            <iron-ajax id="ptoUpdateXhr"
+                   url="[[ptoUpdateUrl]]"
+                   method="PUT"
+                   content-type="application/json"
+                   handle-as="json"
+                   on-response="_handleUpdatePtoResponse"
+                   on-error="_handleXhrError">
+            </iron-ajax>
+            <iron-ajax id="ptoDeleteXhr"
+                   url="[[ptoUpdateUrl]]"
                    method="PUT"
                    content-type="application/json"
                    handle-as="json"
@@ -62,6 +70,9 @@ class CsEditPtoRegion extends GestureEventListeners(PolymerElement) {
             baseUrl: {
                 type: String,
                 notify: true
+            },
+            ptoUpdateUrl: {
+                type: String
             },
             timelineStartDate: {
                 type: Date
@@ -125,7 +136,7 @@ class CsEditPtoRegion extends GestureEventListeners(PolymerElement) {
                     if (this.scheduleItem.crewChief.id === cc.id) {
                         this.selectedCrewChief = cc;
                         this.crewChiefSelectedAllocationHours = this.allocationHours[this.scheduleItem.crewChief.allocation - 1];
-                        break
+                        break;
                     }
                 }
             }
@@ -144,11 +155,34 @@ class CsEditPtoRegion extends GestureEventListeners(PolymerElement) {
     }
 
     _save(e) {
-
+        this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: true } }));
+        this.selectedCrewChief.allocation = this.crewChiefSelectedAllocationHours;
+        let scheduleParameters = {
+            "loginId": this.referenceData.applicationUser.loginId,
+            "password": this.referenceData.applicationUser.password,
+            "startDate": this.referenceData.startDate,
+            "endDate": this.referenceData.endDate,
+            "branchId": this.referenceData.branchId
+        };
+        let scheduleItem = {
+            "typeId": this.scheduleItem.typeId,
+            "startDate": this.startDate,
+            "endDate": this.endDate,
+            "projectManager": this.selectedProjectManager,
+            "crewChief": this.selectedCrewChief
+        };
+        let body = {
+            "scheduleParameters": scheduleParameters,
+            "scheduleItem": scheduleItem
+        };
+        this.ptoUpdateUrl = this.baseUrl + this.scheduleItem.id;
+        this.$.ptoUpdateXhr.body = body;
+        this.$.ptoUpdateXhr.generateRequest();
     }
 
     _delete(e) {
-
+        this.ptoUpdateUrl = this.baseUrl + this.scheduleItem.id;
+        this.$.ptoDeleteXhr.generateRequest();
     }
 
     _handleUpdatePtoResponse(e, request) {
@@ -157,10 +191,12 @@ class CsEditPtoRegion extends GestureEventListeners(PolymerElement) {
         if (e.detail.response.exception) {
             this.dispatchEvent(new CustomEvent('exception', { bubbles: true, composed: true, detail: e.detail.response.exception.Message }));
         } else {
+            let branchId = this.referenceData.branchId;
             this.referenceData = null;
             e.detail.response.refreshTimestamp = new Date(Date.now());
             e.detail.response.startDate = this.timelineStartDate;
             e.detail.response.endDate = this.timelineEndDate;
+            e.detail.response.branchId = branchId;
             this.referenceData = e.detail.response;
         }
     }

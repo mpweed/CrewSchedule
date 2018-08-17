@@ -382,7 +382,7 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
     foundInArrayById(searchItem, arrayToSearch) {
         let retval = false;
         for (var item of arrayToSearch) {
-            if (item.id == searchItem.id) {
+            if (item.id === searchItem.id) {
                 retval = true;
                 break;
             }
@@ -516,11 +516,13 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
         this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: false } }));
         if (e.detail.response.exception) {
             this.dispatchEvent(new CustomEvent('exception', { bubbles: true, composed: true, detail: e.detail.response.exception.Message }));
-        } else {            
+        } else {
+            let branchId = this.referenceData.branchId;
             this.referenceData = null;
             e.detail.response.refreshTimestamp = new Date(Date.now());
             e.detail.response.startDate = this.timelineStartDate;
             e.detail.response.endDate = this.timelineEndDate;
+            e.detail.response.branchId = branchId;
             this.referenceData = e.detail.response;
         }
     }
@@ -547,8 +549,8 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                 typeArray.push({ "id": 3, "name": "Leave" });
 
                 if (this.referenceData.projectManagers) {
-                    for (var pm of this.referenceData.projectManagers) {
-                        if (pm.branchId == this.referenceData.branchId && pm.roleId == 3) {
+                    for (let pm of this.referenceData.projectManagers) {
+                        if (pm.branchId === this.referenceData.branchId && pm.roleId === 3) {
                             this.selectedProjectManager = pm;
                             this.$.projectManagersDD.disabled = false;
                             break;
@@ -557,9 +559,9 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                 }
             } else {
                 if (this.referenceData.projectManagers) {
-                    for (var pm of this.referenceData.projectManagers) {
-                        if (pm.id == this.referenceData.applicationUser.id) {
-                            this.selectedProjectManager = pm;
+                    for (let pm1 of this.referenceData.projectManagers) {
+                        if (pm1.id === this.referenceData.applicationUser.id) {
+                            this.selectedProjectManager = pm1;
                             break;
                         }
                     }
