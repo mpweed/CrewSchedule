@@ -221,7 +221,7 @@ class CsParameterPanel extends GestureEventListeners(PolymerElement) {
             initialized: {
                 type: Boolean
             }
-        }
+        };
     }
 
     // Lifecycle Callbacks

@@ -11,5 +11,7 @@
         public string EndDate { get; set; }
 
         public int BranchId { get; set; }
+
+        public string Operation { get; set; }
     }
 }

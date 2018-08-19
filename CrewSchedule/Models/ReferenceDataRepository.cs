@@ -11,12 +11,14 @@ namespace CrewSchedule.Models
     {
         internal static ReferenceData GetReferenceData(ScheduleParameters scheduleParameters)
         {
-            ReferenceData retval = new ReferenceData();
-            retval.Tasks = new List<Task>();
-            retval.Equipment = new List<Equipment>();
-            retval.ProjectManagers = new List<Employee>();
-            retval.CrewChiefs = new List<Employee>();
-            retval.InstrumentOperators = new List<Employee>();
+            ReferenceData retval = new ReferenceData
+            {
+                Tasks = new List<Task>(),
+                Equipment = new List<Equipment>(),
+                ProjectManagers = new List<Employee>(),
+                CrewChiefs = new List<Employee>(),
+                InstrumentOperators = new List<Employee>()
+            };
             List<ScheduleItem> scheduleItems = new List<ScheduleItem>();
             List<Company> companies = new List<Company>();
             List<Branch> branches = new List<Branch>();
@@ -190,7 +192,9 @@ namespace CrewSchedule.Models
                                     StartDate = (DateTime)reader["StartDate"],
                                     EndDate = (DateTime)reader["EndDate"],
                                     CreationDateTime = (DateTime)reader["CreationDateTime"],
-                                    StatusUpdateDateTime = (DateTime)reader["StatusUpdateDateTime"]
+                                    StatusUpdateDateTime = (DateTime)reader["StatusUpdateDateTime"],
+                                    EmployeeStatusId = (int)reader["EmployeeStatusId"],
+                                    ResourceStatusId = (int)reader["ResourceStatusId"]
                                 };
                                 newItem.CrewChief = new Employee
                                 {
@@ -203,7 +207,7 @@ namespace CrewSchedule.Models
                                     Id = (int)reader["ProjectManagerId"],
                                     Name = (string)reader["ProjectManagerFirstName"] + " " + (string)reader["ProjectManagerLastName"],
                                     Color = (string)reader["ProjectManagerColor"]
-                                };
+                                };                            
                                 switch (newItem.Type)
                                 {
                                     case "Job":                                       
@@ -223,9 +227,19 @@ namespace CrewSchedule.Models
                                             newItem.AffectedProjectManager = new Employee
                                             {
                                                 Id = (int)reader["AffectedProjectManagerId"],
-                                                Name = (string)reader["AffectedProjectManagerFirstName"] + " " + (string)reader["ProjectManagerLastName"]
+                                                Name = (string)reader["AffectedProjectManagerFirstName"] + " " + (string)reader["AffectedProjectManagerLastName"],
+                                                Color = (string)reader["AffectedProjectManagerColor"]
                                             };
 
+                                        }
+                                        if (!reader["ApprovedById"].Equals(DBNull.Value))
+                                        {
+                                            newItem.ApprovedBy = new Employee
+                                            {
+                                                Id = (int)reader["ApprovedById"],
+                                                Name = (string)reader["ApprovedByFirstName"] + " " + (string)reader["ApprovedByLastName"]                                                
+                                            };
+                                            newItem.ApprovalDateTime = (DateTime)reader["ApprovalDateTime"];
                                         }
                                         break;
                                     case "PTO":
@@ -284,7 +298,7 @@ namespace CrewSchedule.Models
                                 {
                                     item.Tasks.Add(new Task
                                     {
-                                        Id = (long)reader["Id"],
+                                        Id = (int)reader["TaskItemTypeId"],
                                         CompanyId = (int)reader["CompanyId"],
                                         Name = (string)reader["Name"]
                                     });
@@ -305,7 +319,8 @@ namespace CrewSchedule.Models
                                 {
                                     item.Equipment.Add(new Equipment
                                     {
-                                        Id = (long)reader["Id"],
+                                        Id = (int)reader["EquipmentId"],
+                                        StatusId = (int)reader["StatusId"],
                                         Name = (string)reader["Name"],
                                         Allocation = (int)reader["Allocation"]
                                     });
@@ -326,7 +341,8 @@ namespace CrewSchedule.Models
                                 {
                                     item.Operators.Add(new Employee
                                     {
-                                        Id = (int)reader["Id"],
+                                        Id = (int)reader["EmployeeId"],
+                                        StatusId = (int)reader["StatusId"],
                                         RoleName = (string)reader["RoleName"],
                                         Name = (string)reader["FirstName"] + " " + (string)reader["LastName"],
                                         Allocation = (int)reader["Allocation"]

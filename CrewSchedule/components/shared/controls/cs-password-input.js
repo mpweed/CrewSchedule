@@ -118,7 +118,7 @@ class CsPasswordInput extends GestureEventListeners(PolymerElement) {
                 type: Boolean,
                 observer: "_centerTextChanged"
             }
-        }
+        };
     }
 
     // Lifecycle Callbacks

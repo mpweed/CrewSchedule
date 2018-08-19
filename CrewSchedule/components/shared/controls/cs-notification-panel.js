@@ -229,7 +229,7 @@ class CsNotificationPanel extends GestureEventListeners(PolymerElement) {
                 value: false,
                 observer: "_isErrorDetailVisibleChanged"
             }
-        }
+        };
     }
 
     // Lifecycle Callbacks

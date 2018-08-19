@@ -162,18 +162,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\build_crewschedule1_script.sql" />
-    <Content Include="App_Data\crewschedule1.mdf" />
-    <Content Include="App_Data\crewschedule1_log.ldf">
-      <DependentUpon>crewschedule1.mdf</DependentUpon>
-    </Content>
-    <Content Include="App_Data\generate_crewschedule1_data_script.sql" />
+    <Content Include="App_Data\CREATE_CREWSCHEDULE1_DB.sql" />
     <Content Include="App_Data\ScratchPad.html" />
     <Content Include="components\desktop\cs-desktop-shell.js" />
     <Content Include="components\desktop\views\cs-admin-view.js" />
     <Content Include="components\desktop\views\cs-notification-view.js" />
     <Content Include="components\desktop\views\cs-schedule-view.js" />
-    <Content Include="components\desktop\views\sections\regions\cs-edit-leave-region.js" />
     <Content Include="components\desktop\views\sections\regions\cs-edit-pto-region.js" />
     <Content Include="components\desktop\views\sections\regions\cs-edit-preferences-region.js" />
     <Content Include="components\desktop\views\sections\regions\cs-filter-crew-chiefs-region.js" />

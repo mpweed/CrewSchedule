@@ -149,8 +149,8 @@ class CsDropdown extends GestureEventListeners(PolymerElement) {
             /** Private **/
             internalItems: {
                 type: Array
-            }            
-        }
+            }
+        };
     }
 
     // Lifecycle Callbacks           

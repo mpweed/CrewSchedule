@@ -42,7 +42,7 @@ class CsFilterCrewChiefsRegion extends GestureEventListeners(PolymerElement) {
                 type: Array,
                 notify: true
             }
-        }
+        };
     }
     
     // Lifecycle Callbacks

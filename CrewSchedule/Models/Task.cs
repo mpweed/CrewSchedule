@@ -7,7 +7,7 @@ namespace CrewSchedule.Models
 {
     public class Task
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         public int CompanyId { get; set; }       
 

@@ -1,5 +1,6 @@
 ﻿import { PolymerElement, html } from '../../../../shared/external/@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '../../../../shared/external/@polymer/polymer/lib/mixins/gesture-event-listeners.js';
+import '../../../../shared/controls/cs-confirm.js';
 import '../../../../shared/cs-shared-styles.js';
 class CsEditPtoRegion extends GestureEventListeners(PolymerElement) {    
     static get template() {
@@ -14,20 +15,11 @@ class CsEditPtoRegion extends GestureEventListeners(PolymerElement) {
                    on-response="_handleUpdatePtoResponse"
                    on-error="_handleXhrError">
             </iron-ajax>
-            <iron-ajax id="ptoDeleteXhr"
-                   url="[[ptoUpdateUrl]]"
-                   method="PUT"
-                   content-type="application/json"
-                   handle-as="json"
-                   on-response="_handleUpdatePtoResponse"
-                   on-error="_handleXhrError">
-            </iron-ajax>
             <div>
                 <div class="dialogHeader">
-                    <span class="dialogCaption">Edit PTO</span>
+                    <span class="dialogCaption">[[caption]]</span>
                 </div>                
-                <div class="dialogBody">
-                    <!-- PLACE MAIN CONTENT HERE -->
+                <div class="dialogBody">                    
                     <div class="horizontal layout">
                         <div class="dateField">
                             <div class="dataLabel">Start Date</div>
@@ -49,7 +41,7 @@ class CsEditPtoRegion extends GestureEventListeners(PolymerElement) {
                     <cs-button id="saveButton" class="saveButton" on-tap="_save">Save</cs-button>
                     <cs-button id="deleteButton" class="deleteButton" on-tap="_delete">Delete</cs-button>
                     <cs-button class="cancelButton" on-tap="_closeDialog">Cancel</cs-button>
-                </div>
+                </div>               
             </div>`;
     }
 
@@ -73,6 +65,10 @@ class CsEditPtoRegion extends GestureEventListeners(PolymerElement) {
             },
             ptoUpdateUrl: {
                 type: String
+            },
+            caption: {
+                type: String,
+                notify: true
             },
             timelineStartDate: {
                 type: Date
@@ -105,7 +101,7 @@ class CsEditPtoRegion extends GestureEventListeners(PolymerElement) {
             crewChiefSelectedAllocationHours: {
                 type: Number
             }
-        }
+        };
     }
     
     // Lifecycle Callbacks
@@ -123,6 +119,12 @@ class CsEditPtoRegion extends GestureEventListeners(PolymerElement) {
     // Event Handlers
     _scheduleItemChanged(newValue, oldValue) {
         if (this.referenceData && this.scheduleItem) {
+            if (this.scheduleItem.typeId === 2) {
+                this.caption = "Edit PTO";
+            } else {
+                this.caption = "Edit Leave";
+            }
+
             if (this.referenceData.projectManagers) {
                 for (let pm of this.referenceData.projectManagers) {
                     if (this.scheduleItem.projectManager.id === pm.id) {
@@ -162,9 +164,11 @@ class CsEditPtoRegion extends GestureEventListeners(PolymerElement) {
             "password": this.referenceData.applicationUser.password,
             "startDate": this.referenceData.startDate,
             "endDate": this.referenceData.endDate,
-            "branchId": this.referenceData.branchId
+            "branchId": this.referenceData.branchId,
+            "operation": "UPDATE"
         };
         let scheduleItem = {
+            "id": this.scheduleItem.id,
             "typeId": this.scheduleItem.typeId,
             "startDate": this.startDate,
             "endDate": this.endDate,
@@ -181,8 +185,25 @@ class CsEditPtoRegion extends GestureEventListeners(PolymerElement) {
     }
 
     _delete(e) {
+        this.dispatchEvent(new CustomEvent('busy', { bubbles: true, composed: true, detail: { status: true } }));
+        let scheduleParameters = {
+            "loginId": this.referenceData.applicationUser.loginId,
+            "password": this.referenceData.applicationUser.password,
+            "startDate": this.referenceData.startDate,
+            "endDate": this.referenceData.endDate,
+            "branchId": this.referenceData.branchId,
+            "operation": "DELETE"
+        };
+        let scheduleItem = {
+            "id": this.scheduleItem.id
+        };
+        let body = {
+            "scheduleParameters": scheduleParameters,
+            "scheduleItem": scheduleItem
+        };
         this.ptoUpdateUrl = this.baseUrl + this.scheduleItem.id;
-        this.$.ptoDeleteXhr.generateRequest();
+        this.$.ptoUpdateXhr.body = body;
+        this.$.ptoUpdateXhr.generateRequest();        
     }
 
     _handleUpdatePtoResponse(e, request) {
@@ -208,12 +229,6 @@ class CsEditPtoRegion extends GestureEventListeners(PolymerElement) {
 
     _closeDialog(e) {
         this.dispatchEvent(new CustomEvent("close"));
-        this.reset();
-    }
-
-    // Public Methods
-    reset() {       
-        
     }
 }
 customElements.define('cs-edit-pto-region', CsEditPtoRegion);

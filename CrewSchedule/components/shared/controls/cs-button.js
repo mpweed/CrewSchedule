@@ -53,7 +53,7 @@ class CsButton extends GestureEventListeners(PolymerElement) {
                 type: Boolean,
                 observer: "_disabledChanged"
             }
-        }
+        };
     }
 
     // Event Handlers

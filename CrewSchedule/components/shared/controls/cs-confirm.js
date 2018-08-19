@@ -96,8 +96,8 @@ class CsConfirm extends GestureEventListeners(PolymerElement) {
                         <div class="message">[[message]]</div>
                     </div>
                     <div class="horizontal layout end-justified dialogButtons">
-                        <jic-button class="yesButton" on-tap="_yes">Yes</jic-button>
-                        <jic-button class="noButton" on-tap="_no">No</jic-button>
+                        <cs-button class="yesButton" on-tap="_yes">Yes</cs-button>
+                        <cs-button class="noButton" on-tap="_no">No</cs-button>
                     </div>
                 </div>
             </div>
@@ -110,7 +110,7 @@ class CsConfirm extends GestureEventListeners(PolymerElement) {
             message: {
                 type: String
             }
-        }
+        };
     }
 
     // Event Handlers

@@ -28,7 +28,7 @@ class CsEditPreferencesRegion extends GestureEventListeners(PolymerElement) {
             referenceData: {
                 type: Object
             }
-        }
+        };
     }
     
     // Lifecycle Callbacks

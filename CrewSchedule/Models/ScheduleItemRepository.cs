@@ -1,10 +1,7 @@
-﻿using Microsoft.SqlServer.Server;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace CrewSchedule.Models
 {
@@ -99,9 +96,7 @@ namespace CrewSchedule.Models
 
         internal static ReferenceData CreateScheduleItem(UpdateParameter updateParameter)
         {
-            ReferenceData retval = new ReferenceData();
-            updateParameter.ScheduleItem.ProjectManagerId = updateParameter.ScheduleItem.ProjectManager.Id;
-            updateParameter.ScheduleItem.EmployeeId = updateParameter.ScheduleItem.CrewChief.Id;
+            ReferenceData retval = new ReferenceData();           
             try
             {
                 using (SqlConnection conn = new SqlConnection(GetConnectionString()))
@@ -137,5 +132,80 @@ namespace CrewSchedule.Models
             }            
             return retval;
         }
+
+        internal static ReferenceData UpdateScheduleItem(UpdateParameter updateParameter)
+        {
+            ReferenceData retval = new ReferenceData();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(GetConnectionString()))
+                {
+                    switch(updateParameter.ScheduleParameters.Operation)
+                    {
+                        case "UPDATE":
+                            using (SqlCommand com = new SqlCommand())
+                            {
+                                com.Connection = conn;
+                                com.CommandType = CommandType.StoredProcedure;
+                                com.CommandText = "UpdateScheduleItem_SP";
+                                com.CommandTimeout = 0; // Means unlimited
+                                com.Parameters.Add(new SqlParameter("@loginId", updateParameter.ScheduleParameters.LoginId));
+                                com.Parameters.Add(new SqlParameter("@password", updateParameter.ScheduleParameters.Password));
+                                SqlParameter tvpParam1 = com.Parameters.AddWithValue("@tvpScheduleItem", GetScheduleItem(updateParameter.ScheduleItem));
+                                tvpParam1.SqlDbType = SqlDbType.Structured;
+                                tvpParam1.TypeName = "dbo.ScheduleItemTableType";
+                                SqlParameter tvpParam2 = com.Parameters.AddWithValue("@tvpTasks", GetTasks(updateParameter.ScheduleItem.Tasks));
+                                tvpParam2.SqlDbType = SqlDbType.Structured;
+                                tvpParam2.TypeName = "dbo.ScheduleItemParmTableType";
+                                SqlParameter tvpParam3 = com.Parameters.AddWithValue("@tvpEquipment", GetEquipment(updateParameter.ScheduleItem.Equipment));
+                                tvpParam3.SqlDbType = SqlDbType.Structured;
+                                tvpParam3.TypeName = "dbo.ScheduleItemParmTableType";
+                                SqlParameter tvpParam4 = com.Parameters.AddWithValue("@tvpOperators", GetOperators(updateParameter.ScheduleItem.Operators));
+                                tvpParam4.SqlDbType = SqlDbType.Structured;
+                                tvpParam4.TypeName = "dbo.ScheduleItemParmTableType";
+                                conn.Open();
+                                com.ExecuteNonQuery();
+                                retval = ReferenceDataRepository.GetReferenceData(updateParameter.ScheduleParameters);
+                            }
+                            break;
+                        case "APPROVE":
+                            using (SqlCommand com = new SqlCommand())
+                            {
+                                com.Connection = conn;
+                                com.CommandType = CommandType.StoredProcedure;
+                                com.CommandText = "ApproveScheduleItem_SP";
+                                com.CommandTimeout = 0; // Means unlimited
+                                com.Parameters.Add(new SqlParameter("@loginId", updateParameter.ScheduleParameters.LoginId));
+                                com.Parameters.Add(new SqlParameter("@password", updateParameter.ScheduleParameters.Password));
+                                com.Parameters.Add(new SqlParameter("@id", updateParameter.ScheduleItem.Id));
+                                conn.Open();
+                                com.ExecuteNonQuery();
+                                retval = ReferenceDataRepository.GetReferenceData(updateParameter.ScheduleParameters);
+                            }
+                            break;
+                        case "DELETE":
+                            using (SqlCommand com = new SqlCommand())
+                            {
+                                com.Connection = conn;
+                                com.CommandType = CommandType.StoredProcedure;
+                                com.CommandText = "DeleteScheduleItem_SP";
+                                com.CommandTimeout = 0; // Means unlimited
+                                com.Parameters.Add(new SqlParameter("@loginId", updateParameter.ScheduleParameters.LoginId));
+                                com.Parameters.Add(new SqlParameter("@password", updateParameter.ScheduleParameters.Password));
+                                com.Parameters.Add(new SqlParameter("@id", updateParameter.ScheduleItem.Id));
+                                conn.Open();
+                                com.ExecuteNonQuery();
+                                retval = ReferenceDataRepository.GetReferenceData(updateParameter.ScheduleParameters);
+                            }
+                            break;
+                    }                    
+                }
+            }
+            catch (Exception ex)
+            {                
+                retval.Exception = ex;
+            }
+            return retval;
+        }        
     }
 }

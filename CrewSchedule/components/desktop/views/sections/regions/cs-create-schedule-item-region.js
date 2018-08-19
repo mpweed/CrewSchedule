@@ -82,8 +82,7 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
                     <div class="dataLabel">Crew Chief</div>                    
                     <cs-dropdown class="flex" light label-field="name" items=[[referenceData.crewChiefs]] selected="{{selectedCrewChief}}"></cs-dropdown>
                     <div class="dataLabel">Crew Chief Allocation (Hrs/Day)</div>
-                    <cs-dropdown light items=[[allocationHours]] selected="{{crewChiefSelectedAllocationHours}}"></cs-dropdown>                    
-
+                    <cs-dropdown light items=[[allocationHours]] selected="{{crewChiefSelectedAllocationHours}}"></cs-dropdown>
                     <div id="jobFieldPanel" class="removed">
                         <div class="dataLabel">Project Number</div>
                         <cs-input id="projectNumber" required max-length="50" light value="{{projectNumber}}"></cs-input>
@@ -228,7 +227,7 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
             },
             allocationHours: {
                 type: Array,
-                value: [1,2,3,4,5,6,7,8,9,10,11,12]
+                value: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
             },
             crewChiefSelectedAllocationHours: {
                 type: Number
@@ -340,7 +339,7 @@ class CsCreateScheduleItemRegion extends GestureEventListeners(PolymerElement) {
             jobOperators: {
                 type: Array
             }
-        }
+        };
     }
     
     // Lifecycle Callbacks

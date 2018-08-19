@@ -41,6 +41,14 @@ namespace CrewSchedule.Models
 
         public string Zip { get; set; }
 
+        public int EmployeeStatusId { get; set; }
+
+        public int ResourceStatusId { get; set; }
+
+        public Employee ApprovedBy { get; set; }
+
+        public DateTime ApprovalDateTime { get; set; }
+
         public int ProjectManagerId { get; set; }
 
         public int EmployeeId { get; set; }

@@ -145,8 +145,8 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
                 }
 
                 .scheduleItemPending {
-                    border-left: 2px solid #b71c1c;
-                    border-right: 2px solid #b71c1c;
+                    border-left: 4px solid;
+                    border-right: 4px solid;
                 }
 
                 .hline {
@@ -654,10 +654,16 @@ class CsTimeline extends GestureEventListeners(PolymerElement) {
         scheduleItemAttr.value = scheduleItem.id;
         newScheduleItem.setAttributeNode(scheduleItemAttr);
         newScheduleItem.style.backgroundColor = scheduleItem.color;
+        if (scheduleItem.typeId === 1) {
+            newScheduleItem.style.color = "#212121";
+        }
         newScheduleItem.style.width = scheduleItem.width.toString() + "px";
         if (scheduleItem.statusId === 2) {
             newScheduleItem.classList = "scheduleItem scheduleItemPending";
-            newScheduleItem.style.width = (scheduleItem.width - 3).toString() + "px";
+            newScheduleItem.style.width = (scheduleItem.width - 7).toString() + "px";
+            newScheduleItem.style.borderLeftColor = scheduleItem.affectedProjectManager.color;
+            newScheduleItem.style.borderRightColor = scheduleItem.affectedProjectManager.color;
+            newScheduleItem.style.color = "#d32f2f";
         } else {
             newScheduleItem.classList = "scheduleItem";
             newScheduleItem.style.width = (scheduleItem.width - 1).toString() + "px";

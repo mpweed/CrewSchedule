@@ -5,7 +5,6 @@ import '../../shared/controls/cs-dialog.js';
 import '../../desktop/views/sections/regions/cs-create-schedule-item-region.js';
 import '../../desktop/views/sections/regions/cs-edit-job-region.js';
 import '../../desktop/views/sections/regions/cs-edit-pto-region.js';
-import '../../desktop/views/sections/regions/cs-edit-leave-region.js';
 class CsScheduleView extends GestureEventListeners(PolymerElement) {    
     static get template() {
         return html`
@@ -38,7 +37,8 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
                 </cs-dialog>                
                 <cs-dialog id="editJobDialog">
                     <cs-edit-job-region on-close="_hideEditJobDialog"
-                                        reference-data="{{referenceData}}">
+                                        reference-data="{{referenceData}}"
+                                        schedule-item="{{scheduleItem}}">
                     </cs-edit-job-region>
                 </cs-dialog>
                 <cs-dialog id="editPtoDialog">
@@ -46,11 +46,6 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
                                         reference-data="{{referenceData}}"
                                         schedule-item="{{scheduleItem}}">
                     </cs-edit-pto-region>
-                </cs-dialog>
-                <cs-dialog id="editLeaveDialog">
-                    <cs-edit-leave-region on-close="_hideEditLeaveDialog"
-                                          reference-data="{{referenceData}}">
-                    </cs-edit-leave-region>
                 </cs-dialog>
             </div>`;
     }
@@ -88,21 +83,23 @@ class CsScheduleView extends GestureEventListeners(PolymerElement) {
 
     _showEditDialog(e) {
         if (!this.isDialogShown) {
+            this.scheduleItem = null;
             this.scheduleItem = e.detail.scheduleItem;
             switch (this.scheduleItem.type) {
                 case "Job":
-                    if (this.referenceData.applicationUser.roleId < 4 || this.scheduleItem.projectManager.id === this.referenceData.applicationUser.id) {
+                    if (this.referenceData.applicationUser.roleId < 4 ||
+                        this.scheduleItem.projectManager.id === this.referenceData.applicationUser.id) {
+                        this.$.editJobDialog.show();
+                    } else if (this.scheduleItem.affectedProjectManager &&
+                        this.scheduleItem.affectedProjectManager.id === this.referenceData.applicationUser.id &&
+                        this.scheduleItem.statusId === 2) {
                         this.$.editJobDialog.show();
                     }
                     break;
                 case "PTO":
-                    if (this.referenceData.applicationUser.roleId < 4) {
-                        this.$.editPtoDialog.show();
-                    }
-                    break;
                 case "Leave":
                     if (this.referenceData.applicationUser.roleId < 4) {
-                        this.$.editLeaveDialog.show();
+                        this.$.editPtoDialog.show();
                     }
                     break;
             }            

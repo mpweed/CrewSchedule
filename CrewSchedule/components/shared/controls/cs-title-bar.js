@@ -204,11 +204,11 @@ class CsTitleBar extends GestureEventListeners(PolymerElement) {
                         return "Construction"
                     }
                 }
-            },            
+            },
             logoUrl: {
                 type: String
-            }           
-        }
+            }
+        };
     }
 
     // Lifecycle Callbacks

@@ -58,7 +58,7 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
                 type: String,
                 value: "scheduleView",
                 notify: true
-            },            
+            },
             notificationCount: {
                 type: String
             },
@@ -73,7 +73,7 @@ class CsNavBar extends GestureEventListeners(PolymerElement) {
                 type: Boolean,
                 notify: true
             }
-        }
+        };
     }
 
     // Lifecycle Callbacks

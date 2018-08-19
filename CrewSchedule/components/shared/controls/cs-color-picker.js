@@ -140,8 +140,8 @@ class CsColorPicker extends GestureEventListeners(PolymerElement) {
             /** Private **/
             internalItems: {
                 type: Array
-            }            
-        }
+            }
+        };
     }
 
     // Lifecycle Callbacks           

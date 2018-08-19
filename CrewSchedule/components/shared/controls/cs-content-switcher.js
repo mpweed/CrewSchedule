@@ -47,8 +47,8 @@ class CsContentSwitcher extends GestureEventListeners(PolymerElement) {
                 type: String,
                 notify: true,
                 observer: "_pageChanged"
-            }            
-        }
+            }
+        };
     }
 
     // Event Handlers

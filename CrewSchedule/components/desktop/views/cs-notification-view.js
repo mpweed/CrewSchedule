@@ -37,7 +37,7 @@ class CsNotificationView extends GestureEventListeners(PolymerElement) {
                 type: Object,
                 notify: true
             }
-        }
+        };
     }
     
     // Lifecycle Callbacks

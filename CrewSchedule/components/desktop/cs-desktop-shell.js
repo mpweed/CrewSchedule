@@ -87,7 +87,7 @@ class CsDesktopShell extends GestureEventListeners(PolymerElement) {
                 type: Object,
                 notify: true
             }
-        }
+        };
     }
     
     // Lifecycle Callbacks

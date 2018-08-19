@@ -9,5 +9,8 @@ namespace CrewSchedule.Controllers
     {
         // POST: api/ScheduleItem
         public ReferenceData Post([FromBody] UpdateParameter updateParameter) => ScheduleItemRepository.CreateScheduleItem(updateParameter);
+
+        // PUT: api/ScheduleItem/5
+        public ReferenceData Put(long id, [FromBody] UpdateParameter updateParameter) => ScheduleItemRepository.UpdateScheduleItem(updateParameter);
     }
 }

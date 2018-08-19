@@ -117,7 +117,7 @@ class CsLogin extends GestureEventListeners(PolymerElement) {
             endDate: {
                 type: String
             }
-        }
+        };
     }
 
     // Lifecycle Callbacks

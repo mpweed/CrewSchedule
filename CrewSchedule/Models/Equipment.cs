@@ -7,7 +7,9 @@ namespace CrewSchedule.Models
 {
     public class Equipment
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
+
+        public int StatusId { get; set; }
 
         public int EquipmentTypeId { get; set; }
 

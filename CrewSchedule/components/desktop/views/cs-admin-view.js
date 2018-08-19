@@ -37,7 +37,7 @@ class CsAdminView extends GestureEventListeners(PolymerElement) {
                 type: Object,
                 notify: true
             }
-        }
+        };
     }
     
     // Lifecycle Callbacks

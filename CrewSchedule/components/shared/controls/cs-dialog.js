@@ -68,7 +68,7 @@ class CsDialog extends GestureEventListeners(PolymerElement) {
                 type: String,
                 notify: true
             }
-        }
+        };
     }
 
     // Public Methods

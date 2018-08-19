@@ -108,7 +108,7 @@ class CsTextarea extends GestureEventListeners(PolymerElement) {
                 value: false,
                 observer: "_lightChanged"
             }
-        }
+        };
     }
 
     // Lifecycle Callbacks           
