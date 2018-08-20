@@ -342,7 +342,7 @@ $_documentContainer.innerHTML = `<dom-module id="lumo-text-field" theme-for="vaa
         box-sizing: border-box !important;
       }
 
-        /* CS Style Overrides */
+        /******** CS Style Overrides ********/
         
         :host {
             padding: 0;

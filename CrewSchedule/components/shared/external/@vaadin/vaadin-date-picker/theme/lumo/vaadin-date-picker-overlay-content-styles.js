@@ -213,6 +213,34 @@ $_documentContainer.innerHTML = `<dom-module id="lumo-date-picker-overlay-conten
           padding-left: 50px;
         }
       }
+
+        /******** CS Style Overrides ********/
+        
+        /* Year scroller position indicator */
+	      [part="years"]::before {
+	        border: none;
+	        width: 1em;
+	        height: 1em;
+	        background-color: #f57c00;
+	        /*background-image: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));*/
+	        transform: translate(-75%, -50%) rotate(45deg);
+	        border-top-right-radius: calc(var(--lumo-border-radius) / 2);
+	        box-shadow: 2px -2px 6px 0 var(--lumo-shade-5pct);
+	        z-index: 1;
+	      }
+
+        /* Current year */
+	
+	      [part="years"] [part="year-number"][current] {
+	        color: #f57c00;
+            font-weight: 600;
+	      }
+
+        /* Other years */
+        [part="years"] [part="year-number"] {
+	        color: #dce775;
+	      }
+        
     </style>
   </template>
 </dom-module>`;

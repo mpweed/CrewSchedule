@@ -68,6 +68,26 @@ $_documentContainer.innerHTML = `<dom-module id="lumo-overlay">
           opacity: 1;
         }
       }
+
+        /******** CS Style Overrides ********/
+        	[part="overlay"] {
+	        background-color: #000000;
+	        /*background-image: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));*/
+	        border-radius: 0;
+	        box-shadow: 0 0 0 1px var(--lumo-shade-5pct), var(--lumo-box-shadow-m);
+	        color: var(--lumo-body-text-color);
+	        font-family: var(--lumo-font-family);
+	        font-size: var(--lumo-font-size-m);
+	        font-weight: 400;
+	        line-height: var(--lumo-line-height-m);
+	        letter-spacing: 0;
+	        text-transform: none;
+	        -webkit-text-size-adjust: 100%;
+	        -webkit-font-smoothing: antialiased;
+	        -moz-osx-font-smoothing: grayscale;
+	      }
+
+
     </style>
   </template>
 </dom-module>`;

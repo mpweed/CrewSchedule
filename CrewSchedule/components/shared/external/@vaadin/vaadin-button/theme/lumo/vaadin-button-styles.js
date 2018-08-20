@@ -51,7 +51,7 @@ $_documentContainer.innerHTML = `<dom-module id="lumo-button" theme-for="vaadin-
         font-family: var(--lumo-font-family);
         font-size: var(--lumo-font-size-m);
         font-weight: 500;
-        color: var(--lumo-primary-text-color);
+        color: #f57c00; /*var(--lumo-primary-text-color);*/
         background-color: var(--lumo-contrast-5pct);
         border-radius: var(--lumo-border-radius);
         cursor: default;

@@ -138,6 +138,58 @@ $_documentContainer.innerHTML = `<dom-module id="lumo-month-calendar" theme-for=
       :host([disabled]) * {
         color: var(--lumo-disabled-text-color) !important;
       }
+
+
+      /******** CS Style Overrides ********/
+      	:host {
+	        -moz-user-select: none;
+	        -ms-user-select: none;
+	        -webkit-user-select: none;
+	        -webkit-tap-highlight-color: transparent;
+	        user-select: none;
+	        font-size: var(--lumo-font-size-m);
+	        color: #ffb74d;
+	        text-align: center;
+	        padding: 0 var(--lumo-space-xs);
+	      }
+  
+        	[part="month-header"] {
+	        color: #ffb74d;
+	        font-size: var(--lumo-font-size-l);
+	        line-height: 1;
+	        font-weight: 500;
+	        margin-bottom: var(--lumo-space-m);
+	        }
+
+        [part="weekdays"],
+	    [part="weekday"],
+	    [part="week-numbers"] {
+	        font-size: var(--lumo-font-size-xs);
+	        line-height: 1;
+	        color: #dce775;
+	    }
+
+        [part="date"][role="button"]:not([disabled]):not([selected]):hover::before {
+	        background-color: #dce775;
+	    }
+
+
+        [part="date"][focused]::before {
+	        box-shadow: 0 0 0 2px #dce775;
+	    }
+
+        [part="date"][selected]::before {
+	        background-color: #dce775;
+	    }
+
+        [part="date"][today] {
+		color: #dce775;
+	    }
+
+        [part="date"][selected] {
+		color: #f57c00; /* paper-orange-700 */
+	    }
+
     </style>
   </template>
 </dom-module><custom-style>
