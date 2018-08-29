@@ -456,7 +456,11 @@ class CsEditJobRegion extends GestureEventListeners(PolymerElement) {
             this.timelineEndDate = this.referenceData.endDate;
             this.startDate = (this.scheduleItem.startDate.split('T', 1))[0];
             this.endDate = (this.scheduleItem.endDate.split('T', 1))[0];
-            this.crewChiefSelectedAllocationHours = this.allocationHours[11];
+            if (this.scheduleItem.crewChief) {
+                this.crewChiefSelectedAllocationHours = this.allocationHours[this.scheduleItem.crewChief.allocation - 1];
+            } else {
+                this.crewChiefSelectedAllocationHours = this.allocationHours[11];
+            }            
             this.equipmentSelectedAllocationHours = this.allocationHours[11];
             this.operatorSelectedAllocationHours = this.allocationHours[11];
             this.projectNumber = this.scheduleItem.projectNumber;
